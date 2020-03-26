@@ -59,8 +59,26 @@
     <Filter Include="src\Meshes\headers">
       <UniqueIdentifier>{c89868b9-6683-4565-94b3-ad89d32f7349}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Window">
+    <Filter Include="src\Simulator">
+      <UniqueIdentifier>{e0bc3341-b6c2-4bc7-83f1-ade4f9599d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Context">
       <UniqueIdentifier>{08f3ae8c-8c4b-4a27-9007-558e8a3c1e8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\SpaceUtils">
+      <UniqueIdentifier>{405e3cd1-2eae-4445-b310-35ef81503fdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Components\sources">
+      <UniqueIdentifier>{8e6035db-7656-4981-9f21-0d6341e539ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Components\headers">
+      <UniqueIdentifier>{bfa6af9a-7abf-452b-9bb4-3bf7a404add4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\SpaceUtils\sources">
+      <UniqueIdentifier>{61e018f7-4c7a-4130-9bb1-122126959340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\SpaceUtils\headers">
+      <UniqueIdentifier>{615b525d-dd8a-4a48-8464-42ac048f5173}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,8 +136,41 @@
     <ClCompile Include="src\Meshes\SphereMeshBuilder.cpp">
       <Filter>src\Meshes\sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window\Window.cpp">
-      <Filter>src\Window</Filter>
+    <ClCompile Include="src\Simulator\Simulator.cpp">
+      <Filter>src\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Context\Context.cpp">
+      <Filter>src\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Camera.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Orbit.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Planet.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Rendezvous.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Satellite.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\SimData.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\Transform.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp">
+      <Filter>src\SpaceUtils\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\Lambert.cpp">
+      <Filter>src\SpaceUtils\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\Orbit.cpp">
+      <Filter>src\SpaceUtils\sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,8 +279,44 @@
     <ClInclude Include="src\Meshes\SphereMeshBuilder.h">
       <Filter>src\Meshes\headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window\Window.h">
-      <Filter>src\Window</Filter>
+    <ClInclude Include="src\Simulator\Simulator.h">
+      <Filter>src\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Context\Context.h">
+      <Filter>src\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\BaseComponent.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Camera.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Orbit.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Planet.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Rendezvous.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Satellite.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\SimData.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\Transform.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\ClohessyWiltshire.h">
+      <Filter>src\SpaceUtils\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\Lambert.h">
+      <Filter>src\SpaceUtils\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\Orbit.h">
+      <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,6 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\Camera.cpp" />
+    <ClCompile Include="src\Components\Orbit.cpp" />
+    <ClCompile Include="src\Components\Planet.cpp" />
+    <ClCompile Include="src\Components\Rendezvous.cpp" />
+    <ClCompile Include="src\Components\Satellite.cpp" />
+    <ClCompile Include="src\Components\SimData.cpp" />
+    <ClCompile Include="src\Components\Transform.cpp" />
+    <ClCompile Include="src\Context\Context.cpp" />
     <ClCompile Include="src\glWrap\Buffer\Buffer.cpp" />
     <ClCompile Include="src\glWrap\Framebuffer\Framebuffer.cpp" />
     <ClCompile Include="src\glWrap\ID\Id.cpp" />
@@ -37,9 +45,21 @@
     <ClCompile Include="src\Meshes\SphereMesh.cpp" />
     <ClCompile Include="src\Meshes\SphereMeshBuilder.cpp" />
     <ClCompile Include="src\Mesh\Mesh.cpp" />
-    <ClCompile Include="src\Window\Context.cpp" />
+    <ClCompile Include="src\Simulator\Simulator.cpp" />
+    <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp" />
+    <ClCompile Include="src\SpaceUtils\Lambert.cpp" />
+    <ClCompile Include="src\SpaceUtils\Orbit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\BaseComponent.h" />
+    <ClInclude Include="src\Components\Camera.h" />
+    <ClInclude Include="src\Components\Orbit.h" />
+    <ClInclude Include="src\Components\Planet.h" />
+    <ClInclude Include="src\Components\Rendezvous.h" />
+    <ClInclude Include="src\Components\Satellite.h" />
+    <ClInclude Include="src\Components\SimData.h" />
+    <ClInclude Include="src\Components\Transform.h" />
+    <ClInclude Include="src\Context\Context.h" />
     <ClInclude Include="src\Functions\Functions.h" />
     <ClInclude Include="src\Function\FunctionWrapper.h" />
     <ClInclude Include="src\Function\IFunction.h" />
@@ -71,11 +91,14 @@
     <ClInclude Include="src\Mesh\IMesh.h" />
     <ClInclude Include="src\Mesh\IMeshBuilder.h" />
     <ClInclude Include="src\Mesh\Mesh.h" />
+    <ClInclude Include="src\Simulator\Simulator.h" />
     <ClInclude Include="src\Solvers\NumSolvers.h" />
     <ClInclude Include="src\Solver\ISolver.h" />
     <ClInclude Include="src\Solver\ISolverBuilder.h" />
     <ClInclude Include="src\Solver\SolverWrapper.h" />
-    <ClInclude Include="src\Window\Context.h" />
+    <ClInclude Include="src\SpaceUtils\ClohessyWiltshire.h" />
+    <ClInclude Include="src\SpaceUtils\Lambert.h" />
+    <ClInclude Include="src\SpaceUtils\Orbit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
