@@ -1,22 +1,235 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="src">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="src\Function">
+      <UniqueIdentifier>{4c2e4969-caf9-477b-accc-3f9595aaae7c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="src\Interface">
+      <UniqueIdentifier>{d4076731-0e0e-4996-a19d-a53786b0f4fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Solver">
+      <UniqueIdentifier>{916e4526-a1df-413e-9a0f-f4cc4ba3a894}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Solvers">
+      <UniqueIdentifier>{52058692-241c-44ac-a7be-30ccae88ec37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\glWrap">
+      <UniqueIdentifier>{1ef2ce13-d361-4d79-85da-cd4990fb93fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Functions">
+      <UniqueIdentifier>{3174ec58-2f2e-4c38-a976-70a8e7088c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Components">
+      <UniqueIdentifier>{6fb51d67-c50e-43c1-b454-f602272ad321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Math">
+      <UniqueIdentifier>{c49dd7a3-a8d9-43d6-9c1a-829afff7775b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\glWrap\headers">
+      <UniqueIdentifier>{c60f7697-fccd-4a88-815c-3b936be21b39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\glWrap\sources">
+      <UniqueIdentifier>{b2c81842-1860-483e-a7d9-15f6db5fce5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Mesh">
+      <UniqueIdentifier>{4bbed224-5d21-431c-94dc-ad6840cf61b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\GraphicsEngine">
+      <UniqueIdentifier>{5978ccf8-bf09-4d75-8d2b-6ed02c2eff7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\GraphicsEngine\ResourceLoaders">
+      <UniqueIdentifier>{dd3d8062-92b1-4b6b-ab78-03a8c21bbd8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\GraphicsEngine\ResourceLoaders\headers">
+      <UniqueIdentifier>{6b558fa5-3a9e-44ba-b40a-2ecb71555dbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\GraphicsEngine\ResourceLoaders\sources">
+      <UniqueIdentifier>{70f85f31-f057-4272-a553-a648b52d6660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Meshes">
+      <UniqueIdentifier>{11f22d9e-0fcc-4c29-8a5f-ae5e34e067c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Meshes\sources">
+      <UniqueIdentifier>{2693dc58-4cd6-482b-b64a-dc9f90c2a277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Meshes\headers">
+      <UniqueIdentifier>{c89868b9-6683-4565-94b3-ad89d32f7349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Window">
+      <UniqueIdentifier>{08f3ae8c-8c4b-4a27-9007-558e8a3c1e8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Math\MathLib.cpp">
+      <Filter>src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\Buffer\Buffer.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\Framebuffer\Framebuffer.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\ID\Id.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\OpenGL.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\Shader\Shader.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\Shader\ShaderProgram.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\Texture\Texture.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glWrap\VertexArray\VertexArray.cpp">
+      <Filter>src\glWrap\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsEngine\ResourceLoaders\ShaderLoaders\ShaderLoader.cpp">
+      <Filter>src\GraphicsEngine\ResourceLoaders\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsEngine\GraphicsEngine.cpp">
+      <Filter>src\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsEngine\ResourceLoaders\TextureBuilders\Texture2D_Builder.cpp">
+      <Filter>src\GraphicsEngine\ResourceLoaders\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh\Mesh.cpp">
+      <Filter>src\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Meshes\BoxMesh.cpp">
+      <Filter>src\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Meshes\BoxMeshBuilder.cpp">
+      <Filter>src\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Meshes\SphereMesh.cpp">
+      <Filter>src\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Meshes\SphereMeshBuilder.cpp">
+      <Filter>src\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\Window.cpp">
+      <Filter>src\Window</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Solvers\NumSolvers.h">
+      <Filter>src\Solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Solver\ISolver.h">
+      <Filter>src\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Solver\ISolverBuilder.h">
+      <Filter>src\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Solver\SolverWrapper.h">
+      <Filter>src\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interface\ICopy.h">
+      <Filter>src\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Function\FunctionWrapper.h">
+      <Filter>src\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Function\IFunction.h">
+      <Filter>src\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Function\IFunctionBuilder.h">
+      <Filter>src\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\MathLib.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\Buffer\Buffer.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\Framebuffer\Framebuffer.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\ID\Id.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\OpenGL.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\Shader\Shader.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\Shader\ShaderProgram.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\Texture\Texture.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glWrap\VertexArray\VertexArray.h">
+      <Filter>src\glWrap\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Functions\Functions.h">
+      <Filter>src\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\CommonAttributes.h">
+      <Filter>src\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\GraphicsEngine.h">
+      <Filter>src\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\FramebufferBuilders\ColorBufferBuilder.h">
+      <Filter>src\GraphicsEngine\ResourceLoaders\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\FramebufferBuilders\NColorFramebufferBuilder.h">
+      <Filter>src\GraphicsEngine\ResourceLoaders\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\ShaderLoaders\ShaderLoader.h">
+      <Filter>src\GraphicsEngine\ResourceLoaders\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\ShaderProgramBuilders\ShaderProgramBuilder.h">
+      <Filter>src\GraphicsEngine\ResourceLoaders\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\FramebufferBuilders\SimpleFramebufferBuilder.h">
+      <Filter>src\GraphicsEngine\ResourceLoaders\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\Attachment.h">
+      <Filter>src\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\Attribs.h">
+      <Filter>src\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\TextureBuilders\Texture2D_Builder.h">
+      <Filter>src\GraphicsEngine\ResourceLoaders\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\IMesh.h">
+      <Filter>src\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\Mesh.h">
+      <Filter>src\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\IMeshBuilder.h">
+      <Filter>src\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Meshes\BoxMesh.h">
+      <Filter>src\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Meshes\BoxMeshBuilder.h">
+      <Filter>src\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Meshes\SphereMesh.h">
+      <Filter>src\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Meshes\SphereMeshBuilder.h">
+      <Filter>src\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\Window.h">
+      <Filter>src\Window</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

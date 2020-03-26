@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,7 +19,63 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\glWrap\Buffer\Buffer.cpp" />
+    <ClCompile Include="src\glWrap\Framebuffer\Framebuffer.cpp" />
+    <ClCompile Include="src\glWrap\ID\Id.cpp" />
+    <ClCompile Include="src\glWrap\OpenGL.cpp" />
+    <ClCompile Include="src\glWrap\Shader\Shader.cpp" />
+    <ClCompile Include="src\glWrap\Shader\ShaderProgram.cpp" />
+    <ClCompile Include="src\glWrap\Texture\Texture.cpp" />
+    <ClCompile Include="src\glWrap\VertexArray\VertexArray.cpp" />
+    <ClCompile Include="src\GraphicsEngine\GraphicsEngine.cpp" />
+    <ClCompile Include="src\GraphicsEngine\ResourceLoaders\ShaderLoaders\ShaderLoader.cpp" />
+    <ClCompile Include="src\GraphicsEngine\ResourceLoaders\TextureBuilders\Texture2D_Builder.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Math\MathLib.cpp" />
+    <ClCompile Include="src\Meshes\BoxMesh.cpp" />
+    <ClCompile Include="src\Meshes\BoxMeshBuilder.cpp" />
+    <ClCompile Include="src\Meshes\SphereMesh.cpp" />
+    <ClCompile Include="src\Meshes\SphereMeshBuilder.cpp" />
+    <ClCompile Include="src\Mesh\Mesh.cpp" />
+    <ClCompile Include="src\Window\Context.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Functions\Functions.h" />
+    <ClInclude Include="src\Function\FunctionWrapper.h" />
+    <ClInclude Include="src\Function\IFunction.h" />
+    <ClInclude Include="src\Function\IFunctionBuilder.h" />
+    <ClInclude Include="src\glWrap\Buffer\Buffer.h" />
+    <ClInclude Include="src\glWrap\Framebuffer\Framebuffer.h" />
+    <ClInclude Include="src\glWrap\ID\Id.h" />
+    <ClInclude Include="src\glWrap\OpenGL.h" />
+    <ClInclude Include="src\glWrap\Shader\Shader.h" />
+    <ClInclude Include="src\glWrap\Shader\ShaderProgram.h" />
+    <ClInclude Include="src\glWrap\Texture\Texture.h" />
+    <ClInclude Include="src\glWrap\VertexArray\VertexArray.h" />
+    <ClInclude Include="src\GraphicsEngine\Attachment.h" />
+    <ClInclude Include="src\GraphicsEngine\Attribs.h" />
+    <ClInclude Include="src\GraphicsEngine\CommonAttributes.h" />
+    <ClInclude Include="src\GraphicsEngine\GraphicsEngine.h" />
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\FramebufferBuilders\ColorBufferBuilder.h" />
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\FramebufferBuilders\NColorFramebufferBuilder.h" />
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\FramebufferBuilders\SimpleFramebufferBuilder.h" />
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\ShaderLoaders\ShaderLoader.h" />
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\ShaderProgramBuilders\ShaderProgramBuilder.h" />
+    <ClInclude Include="src\GraphicsEngine\ResourceLoaders\TextureBuilders\Texture2D_Builder.h" />
+    <ClInclude Include="src\Interface\ICopy.h" />
+    <ClInclude Include="src\Math\MathLib.h" />
+    <ClInclude Include="src\Meshes\BoxMesh.h" />
+    <ClInclude Include="src\Meshes\BoxMeshBuilder.h" />
+    <ClInclude Include="src\Meshes\SphereMesh.h" />
+    <ClInclude Include="src\Meshes\SphereMeshBuilder.h" />
+    <ClInclude Include="src\Mesh\IMesh.h" />
+    <ClInclude Include="src\Mesh\IMeshBuilder.h" />
+    <ClInclude Include="src\Mesh\Mesh.h" />
+    <ClInclude Include="src\Solvers\NumSolvers.h" />
+    <ClInclude Include="src\Solver\ISolver.h" />
+    <ClInclude Include="src\Solver\ISolverBuilder.h" />
+    <ClInclude Include="src\Solver\SolverWrapper.h" />
+    <ClInclude Include="src\Window\Context.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -90,6 +146,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Num\NumLib\;$(SolutionDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -103,6 +162,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Num\NumLib\;$(SolutionDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,6 +180,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Num\NumLib\;$(SolutionDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +200,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Num\NumLib\;$(SolutionDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
