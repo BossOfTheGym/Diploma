@@ -7,14 +7,14 @@ namespace gl
 {
 //constructors & destructor
 	Buffer::Buffer()
-		: Id()
-		, m_size(0)
+		: m_size(0)
 		, m_usage(BufferUsage::None)
 	{}
 
-	Buffer::Buffer(Buffer&& buffer) : Id()
+	Buffer::Buffer(Buffer&& buffer) : Id(std::move(buffer))
 	{
-		*this = std::move(buffer);
+		std::swap(m_size, buffer.m_size);
+		std::swap(m_usage, buffer.m_usage);
 	}
 
 	Buffer::~Buffer()

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Components\Camera.cpp" />
     <ClCompile Include="src\Components\Orbit.cpp" />
+    <ClCompile Include="src\Components\PhysicsData.cpp" />
     <ClCompile Include="src\Components\Planet.cpp" />
     <ClCompile Include="src\Components\Rendezvous.cpp" />
     <ClCompile Include="src\Components\Satellite.cpp" />
@@ -42,18 +43,22 @@
     <ClCompile Include="src\Math\MathLib.cpp" />
     <ClCompile Include="src\Meshes\BoxMesh.cpp" />
     <ClCompile Include="src\Meshes\BoxMeshBuilder.cpp" />
+    <ClCompile Include="src\Meshes\QuadMesh.cpp" />
+    <ClCompile Include="src\Meshes\QuadMeshBuilder.cpp" />
     <ClCompile Include="src\Meshes\SphereMesh.cpp" />
     <ClCompile Include="src\Meshes\SphereMeshBuilder.cpp" />
     <ClCompile Include="src\Mesh\Mesh.cpp" />
+    <ClCompile Include="src\Simulator\GLWindow.cpp" />
+    <ClCompile Include="src\Simulator\IInputController.cpp" />
     <ClCompile Include="src\Simulator\Simulator.cpp" />
     <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp" />
     <ClCompile Include="src\SpaceUtils\Lambert.cpp" />
-    <ClCompile Include="src\SpaceUtils\Orbit.cpp" />
+    <ClCompile Include="src\SpaceUtils\OrbitUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Components\BaseComponent.h" />
     <ClInclude Include="src\Components\Camera.h" />
     <ClInclude Include="src\Components\Orbit.h" />
+    <ClInclude Include="src\Components\PhysicsData.h" />
     <ClInclude Include="src\Components\Planet.h" />
     <ClInclude Include="src\Components\Rendezvous.h" />
     <ClInclude Include="src\Components\Satellite.h" />
@@ -86,11 +91,15 @@
     <ClInclude Include="src\Math\MathLib.h" />
     <ClInclude Include="src\Meshes\BoxMesh.h" />
     <ClInclude Include="src\Meshes\BoxMeshBuilder.h" />
+    <ClInclude Include="src\Meshes\QuadMesh.h" />
+    <ClInclude Include="src\Meshes\QuadMeshBuilder.h" />
     <ClInclude Include="src\Meshes\SphereMesh.h" />
     <ClInclude Include="src\Meshes\SphereMeshBuilder.h" />
     <ClInclude Include="src\Mesh\IMesh.h" />
     <ClInclude Include="src\Mesh\IMeshBuilder.h" />
     <ClInclude Include="src\Mesh\Mesh.h" />
+    <ClInclude Include="src\Simulator\GLWindow.h" />
+    <ClInclude Include="src\Simulator\IInputController.h" />
     <ClInclude Include="src\Simulator\Simulator.h" />
     <ClInclude Include="src\Solvers\NumSolvers.h" />
     <ClInclude Include="src\Solver\ISolver.h" />
@@ -98,7 +107,20 @@
     <ClInclude Include="src\Solver\SolverWrapper.h" />
     <ClInclude Include="src\SpaceUtils\ClohessyWiltshire.h" />
     <ClInclude Include="src\SpaceUtils\Lambert.h" />
-    <ClInclude Include="src\SpaceUtils\Orbit.h" />
+    <ClInclude Include="src\SpaceUtils\OrbitUtil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\test.frag" />
+    <None Include="assets\shaders\test.vert" />
+    <None Include="assets\shaders\field.frag" />
+    <None Include="assets\shaders\gauss.frag" />
+    <None Include="assets\shaders\hdr_gamma.frag" />
+    <None Include="assets\shaders\mix.frag" />
+    <None Include="assets\shaders\quad.frag" />
+    <None Include="assets\shaders\quad.vert" />
+    <None Include="assets\shaders\voxel.frag" />
+    <None Include="assets\shaders\voxel.geom" />
+    <None Include="assets\shaders\voxel.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

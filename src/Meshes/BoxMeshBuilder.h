@@ -15,6 +15,7 @@ namespace meshes
 		{
 			graphics::Location position;
 		};
+		
 
 	public:
 		BoxMeshBuilder(const AttributeInfo& info);
@@ -30,7 +31,8 @@ namespace meshes
 
 	public:
 		[[nodiscard]]
-		virtual mesh::IMesh* buildMesh() const override;
+		virtual mesh::IMesh* buildMesh() override;
+
 
 	private:
 		AttributeInfo m_attributeInfo;

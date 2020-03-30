@@ -7,6 +7,7 @@
 namespace meshes
 {
 	using math::F32;
+	using math::F64;
 	using math::Vec3f32;
 
 	namespace
@@ -45,19 +46,19 @@ namespace meshes
 			//icosahedron params
 			const int PENTAGON_SIDES = 5;
 
-			const double HALF_ANGLE = math::PI / PENTAGON_SIDES;
-			const double ANGLE      = 2 * HALF_ANGLE;
-			const double SIN_HALF   = std::sin(HALF_ANGLE);
-
-			const double ICOSAHEDRON_SIDE = std::sqrt(4 * std::pow(SIN_HALF, 2) - 1.0) / SIN_HALF;
-			const double PYRAMID_HEIGHT   = std::pow(ICOSAHEDRON_SIDE, 2) / 2;
-			const double RADIUS           = ICOSAHEDRON_SIDE / (2 * SIN_HALF);
-			const double HEIGHT_ANGLE = std::atan((1.0f - PYRAMID_HEIGHT) / RADIUS);
-
-			const double A   = ICOSAHEDRON_SIDE;
-			const double H   = PYRAMID_HEIGHT;
-			const double R   = RADIUS;
-			const double PHI = HEIGHT_ANGLE;
+			const F64 HALF_ANGLE = math::PI / PENTAGON_SIDES;
+			const F64 ANGLE      = 2 * HALF_ANGLE;
+			const F64 SIN_HALF   = std::sin(HALF_ANGLE);
+				  
+			const F64 ICOSAHEDRON_SIDE = std::sqrt(4 * std::pow(SIN_HALF, 2) - 1.0) / SIN_HALF;
+			const F64 PYRAMID_HEIGHT   = std::pow(ICOSAHEDRON_SIDE, 2) / 2;
+			const F64 RADIUS           = ICOSAHEDRON_SIDE / (2 * SIN_HALF);
+			const F64 HEIGHT_ANGLE = std::atan((1.0f - PYRAMID_HEIGHT) / RADIUS);
+				  
+			const F64 A   = ICOSAHEDRON_SIDE;
+			const F64 H   = PYRAMID_HEIGHT;
+			const F64 R   = RADIUS;
+			const F64 PHI = HEIGHT_ANGLE;
 
 			const int N = PENTAGON_SIDES;
 
@@ -68,7 +69,7 @@ namespace meshes
 			Vec3f32 topRing[N];
 			Vec3f32 bottomRing[N];
 
-			double angle{};
+			F64 angle{};
 			for (int i = 0; i < N; i++)
 			{
 				angle = ANGLE * i;
@@ -92,14 +93,10 @@ namespace meshes
 				pushSplitedTriangles(triangles, bottom, bottomRing[curr], bottomRing[next], split);
 
 				//bottomRing[i] + topRing[i] + topRing[i + 1]
-				pushSplitedTriangles(triangles, bottomRing[curr], topRing[curr], topRing[next], split);;
+				pushSplitedTriangles(triangles, bottomRing[curr], topRing[curr], topRing[next], split);
 
 				//topRing[i] + bottomRing[i] + bottomRing[i - 1]
 				pushSplitedTriangles(triangles, topRing[curr], bottomRing[curr], bottomRing[prev], split);
-			}
-			for (auto& pos : triangles)
-			{
-				pos *= Vec3f32{1.0f - 1e-6};
 			}
 			return triangles;
 		}
@@ -111,7 +108,7 @@ namespace meshes
 	{}
 
 	[[nodiscard]]
-	mesh::IMesh* SphereMeshBuilder::buildMesh() const
+	mesh::IMesh* SphereMeshBuilder::buildMesh()
 	{
 		auto vertices = sphere(m_subdivisions);
 
@@ -144,7 +141,7 @@ namespace meshes
 		mesh::Mesh::DrawInfo drawInfo;
 		drawInfo.drawMode = gl::DrawMode::Triangles;
 		drawInfo.first    = 0;
-		drawInfo.elementsCount = vertices.size() / 3;
+		drawInfo.elementsCount = vertices.size();
 
 		return new SphereMesh(std::move(verticesArray), drawInfo, false, std::move(meshData));
 	}

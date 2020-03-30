@@ -36,7 +36,7 @@ namespace meshes
 
 	public:
 		[[nodiscard]]
-		virtual mesh::IMesh* buildMesh() const override;
+		virtual mesh::IMesh* buildMesh() override;
 
 
 	private:

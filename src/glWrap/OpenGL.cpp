@@ -1,20 +1,23 @@
 #include "OpenGL.h"
 
-namespace gl::state
+namespace gl
 {
-	bool initializeLoader()
+	bool initialize()
 	{
 		auto glewErr = glewInit();
 
 		return glewErr == GLEW_OK;
 	}
+}
 
+namespace gl::state
+{
 	//state management
 	void blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 	{
 		glBlendColor(red, green, blue, alpha);
 	}
-	
+
 	void blendEquation(BlendMode mode)
 	{
 		glBlendEquation(static_cast<GLenum>(mode));
@@ -52,7 +55,7 @@ namespace gl::state
 			, static_cast<GLenum>(dstRGB)
 			, static_cast<GLenum>(srcAlpha)
 			, static_cast<GLenum>(dstAlpha)
-		);
+			);
 	}
 
 	void blendFuncSeparatei(BufferIndex number, BlendFactor srcRGB, BlendFactor dstRGB, BlendFactor srcAlpha, BlendFactor dstAlpha)
@@ -63,7 +66,7 @@ namespace gl::state
 			, static_cast<GLenum>(dstRGB)
 			, static_cast<GLenum>(srcAlpha)
 			, static_cast<GLenum>(dstAlpha)
-		);
+			);
 	}
 
 

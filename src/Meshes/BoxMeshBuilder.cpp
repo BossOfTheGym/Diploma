@@ -16,7 +16,7 @@ namespace meshes
 	{}
 	
 	[[nodiscard]]
-	mesh::IMesh* BoxMeshBuilder::buildMesh() const
+	mesh::IMesh* BoxMeshBuilder::buildMesh()
 	{
 		Vec3f32 vertices[8] =
 		{

@@ -80,6 +80,18 @@
     <Filter Include="src\SpaceUtils\headers">
       <UniqueIdentifier>{615b525d-dd8a-4a48-8464-42ac048f5173}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Simulator\sources">
+      <UniqueIdentifier>{0132cdfb-b6d6-4f1a-96d2-0f04ef744ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\headers">
+      <UniqueIdentifier>{3fae27eb-086b-43b2-a673-6e6b4da68318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{843ee19f-290f-469c-8efc-4c36970841e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\shaders">
+      <UniqueIdentifier>{b6d3b32f-cf58-44e1-afab-53a6f99d3c20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -136,9 +148,6 @@
     <ClCompile Include="src\Meshes\SphereMeshBuilder.cpp">
       <Filter>src\Meshes\sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Simulator\Simulator.cpp">
-      <Filter>src\Simulator</Filter>
-    </ClCompile>
     <ClCompile Include="src\Context\Context.cpp">
       <Filter>src\Context</Filter>
     </ClCompile>
@@ -169,8 +178,26 @@
     <ClCompile Include="src\SpaceUtils\Lambert.cpp">
       <Filter>src\SpaceUtils\sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\SpaceUtils\Orbit.cpp">
+    <ClCompile Include="src\Components\PhysicsData.cpp">
+      <Filter>src\Components\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\GLWindow.cpp">
+      <Filter>src\Simulator\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\IInputController.cpp">
+      <Filter>src\Simulator\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Simulator.cpp">
+      <Filter>src\Simulator\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\OrbitUtil.cpp">
       <Filter>src\SpaceUtils\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Meshes\QuadMesh.cpp">
+      <Filter>src\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Meshes\QuadMeshBuilder.cpp">
+      <Filter>src\Meshes\sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -279,14 +306,8 @@
     <ClInclude Include="src\Meshes\SphereMeshBuilder.h">
       <Filter>src\Meshes\headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Simulator\Simulator.h">
-      <Filter>src\Simulator</Filter>
-    </ClInclude>
     <ClInclude Include="src\Context\Context.h">
       <Filter>src\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\BaseComponent.h">
-      <Filter>src\Components\headers</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\Camera.h">
       <Filter>src\Components\headers</Filter>
@@ -315,8 +336,61 @@
     <ClInclude Include="src\SpaceUtils\Lambert.h">
       <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\SpaceUtils\Orbit.h">
+    <ClInclude Include="src\Components\PhysicsData.h">
+      <Filter>src\Components\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\GLWindow.h">
+      <Filter>src\Simulator\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\IInputController.h">
+      <Filter>src\Simulator\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Simulator.h">
+      <Filter>src\Simulator\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\OrbitUtil.h">
       <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Meshes\QuadMesh.h">
+      <Filter>src\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Meshes\QuadMeshBuilder.h">
+      <Filter>src\Meshes\headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\field.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\gauss.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\hdr_gamma.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\mix.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\quad.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\quad.vert">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\voxel.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\voxel.geom">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\voxel.vert">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\test.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\test.vert">
+      <Filter>assets\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

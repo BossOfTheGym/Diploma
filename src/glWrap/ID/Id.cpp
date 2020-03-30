@@ -11,9 +11,9 @@ namespace gl
 	Id::Id(GLuint id) : m_id(id)
 	{}
 
-	Id::Id(Id&& id): m_id(id.id())
+	Id::Id(Id&& id) : m_id()
 	{
-		id.resetId();
+		std::swap(m_id, id.m_id);
 	}
 
 	//operators

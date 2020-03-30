@@ -12,10 +12,8 @@ namespace gl
 		: Id()
 	{}
 
-	VertexArray::VertexArray(VertexArray&& vertexBuffer) : Id()
-	{
-		*this = std::move(vertexBuffer);
-	}
+	VertexArray::VertexArray(VertexArray&& vertexBuffer) : Id(std::move(vertexBuffer))
+	{}
 
 
 	VertexArray::~VertexArray()
@@ -27,7 +25,6 @@ namespace gl
 	//operators
 	VertexArray& VertexArray::operator = (VertexArray&& vertexBuffer)
 	{
-		// TODO : that can be bad? but it works
 		static_cast<Id&>(*this) = static_cast<Id&&>(vertexBuffer);
 
 		return *this;

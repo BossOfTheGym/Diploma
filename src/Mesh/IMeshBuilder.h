@@ -10,6 +10,6 @@ namespace mesh
 	{
 	public:
 		[[nodiscard]]
-		virtual IMesh* buildMesh() const = 0;
+		virtual IMesh* buildMesh() = 0;
 	};
 }

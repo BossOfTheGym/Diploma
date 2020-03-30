@@ -10,13 +10,10 @@ namespace gl
 
 	//constructors & destructor
 	ShaderProgram::ShaderProgram()
-		: Id()
 	{}
 
-	ShaderProgram::ShaderProgram(ShaderProgram&& shaderProgram) : Id()
-	{
-		*this = std::move(shaderProgram);
-	}
+	ShaderProgram::ShaderProgram(ShaderProgram&& shaderProgram) : Id(std::move(shaderProgram))
+	{}
 
 
 	ShaderProgram::~ShaderProgram()
@@ -56,7 +53,7 @@ namespace gl
 		glLinkProgram(id());
 	}
 
-	void ShaderProgram::use() const
+	void ShaderProgram::bind() const
 	{
 		glUseProgram(id());
 	}

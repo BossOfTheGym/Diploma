@@ -48,7 +48,7 @@ namespace gl
 
 		void link() const;
 
-		void use() const;
+		void bind() const;
 
 		void unbind() const;
 

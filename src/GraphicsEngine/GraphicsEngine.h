@@ -5,6 +5,9 @@
 
 #include <glWrap/OpenGL.h>
 
+#include "ResourceLoaders/ShaderProgramBuilders/ShaderProgramBuilder.h"
+#include "ResourceLoaders/ShaderLoaders/ShaderLoader.h"
+
 #include "Attachment.h"
 
 
@@ -12,11 +15,12 @@ namespace graphics
 {
 	using gl::Float;
 
+	// TODO : make it responsible for creating graphics resources
 	class GraphicsEngine
 	{
 	public:
-		using Attribs  = std::map<Name, Location>;
-
+		using Attribs = std::map<Name, Location>;
+		
 	public:
 		GraphicsEngine(
 			  const String& glslVersion      = "#version 400 core\n"
@@ -42,11 +46,16 @@ namespace graphics
 		const String& getAttribAttachment() const;
 
 		const String& getTypeAttachment() const;
+
+
 	private:
 		Attribs m_baseAttribs;
 
 		String m_version;
 		String m_attribAttachment;
 		String m_typeAttachment;
+
+		//ShaderProgramBuilder m_programBuilder;
+		//SimpleShaderLoader   m_shaderLoader;
 	};
 }

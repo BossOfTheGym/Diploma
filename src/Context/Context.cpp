@@ -11,12 +11,12 @@ namespace context
 
 		gs_contextInitialized = (glfwErr == GLFW_TRUE);
 
-		return initialized;
+		return gs_contextInitialized;
 	}
 
-	bool intiailized()
+	bool intialized()
 	{
-		return initialized;
+		return gs_contextInitialized;
 	}
 
 	void terminate()
@@ -83,9 +83,9 @@ namespace context
 	}
 
 
-	void BaseWindow::addWindowToRegister(BaseWindow* window)
+	void BaseWindow::addWindowToRegister(BaseWindow& window)
 	{
-		s_windowRegister.insert({window->m_window, window});
+		s_windowRegister.insert({window.m_window, &window});
 	}
 
 	Optional BaseWindow::getWindowFromRegister(GLFWwindow* window)
@@ -121,18 +121,31 @@ namespace context
 
 
 	// non-static
-	BaseWindow::BaseWindow(const CreationInfo& info)
+	// TODO : little bit messy, STARTED EXPERIMENTING
+	BaseWindow::BaseWindow(const CreationInfo& info, bool initializeGL)
 		: m_info(info)
-		, m_window()
 	{
 		for (auto&[hint, value] : info.hints)
 		{
 			glfwWindowHint(hint, value);
 		}
 
-		m_window = glfwCreateWindow(info.width, info.height, info.name.c_str(), nullptr, nullptr);		
-
-		addWindowToRegister(this);
+		//GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+		//const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
+		//m_window = glfwCreateWindow(videoMode->width, videoMode->height, info.name.c_str(), primaryMonitor, nullptr);		
+		m_window = glfwCreateWindow(info.width, info.height, info.name.c_str(), nullptr, nullptr);
+		if (m_window)
+		{
+			addWindowToRegister(*this);
+			setAllCommonCallbacks(*this);
+			if (initializeGL)
+			{
+				initGL();
+			}
+			makeContextCurrent();
+			glfwSwapInterval(1);
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 	}
 
 	BaseWindow::BaseWindow(BaseWindow&& another)
@@ -157,6 +170,22 @@ namespace context
 		std::swap(m_info, another.m_info);
 
 		return *this;
+	}
+
+
+	void BaseWindow::initGL()
+	{
+		if (valid() && !m_glInitialized)
+		{
+			makeContextCurrent();
+
+			m_glInitialized = gl::initialize();
+		}
+	}
+
+	bool BaseWindow::glInitialized() const
+	{
+		return m_glInitialized;
 	}
 
 
@@ -185,6 +214,26 @@ namespace context
 		glfwSetWindowTitle(m_window, title.c_str());
 	}
 
+	Vec2f64 BaseWindow::getCursorPos()
+	{
+		Vec2f64 pos;
+		glfwGetCursorPos(m_window, &pos.x, &pos.y);
+		return pos;
+	}
+
+	void BaseWindow::setCursorPos(const Vec2f64& pos)
+	{
+		glfwSetCursorPos(m_window, pos.x, pos.y);
+	}
+
+	Vec3i BaseWindow::getWindowSize()
+	{
+		Vec3i size;
+		glfwGetWindowSize(m_window, &size.x, &size.y);
+		return size;
+	}
+
+
 	bool BaseWindow::shouldClose()
 	{
 		return glfwWindowShouldClose(m_window);
@@ -203,22 +252,14 @@ namespace context
 
 	// virtuals
 	void BaseWindow::mouseEvent(double xPos, double yPos)
-	{
-		// do nothing
-	}
+	{}
 
 	void BaseWindow::mouseButtonEvent(int button, int action, int mods)
-	{
-		// do nothing
-	}
+	{}
 
 	void BaseWindow::scrollEvent(double xOffset, double yOffset)
-	{
-		// do nothing
-	}
+	{}
 
 	void BaseWindow::keyEvent(int key, int scancode, int action, int mods)
-	{
-		// do nothing
-	}
+	{}
 }

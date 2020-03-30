@@ -503,11 +503,10 @@ namespace gl
 	};
 
 
+	bool initialize();
 
 	namespace state
 	{
-		bool initializeLoader();
-
 		//state management
 		void blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 

@@ -15,13 +15,11 @@ namespace gl
 
 
 	//constructors & destructor
-	Framebuffer::Framebuffer() : Id()
+	Framebuffer::Framebuffer()
 	{}
 
-	Framebuffer::Framebuffer(Framebuffer&& buffer) : Id()
-	{
-		*this = std::move(buffer);
-	}
+	Framebuffer::Framebuffer(Framebuffer&& buffer) : Id(std::move(buffer))
+	{}
 
 	Framebuffer::~Framebuffer()
 	{

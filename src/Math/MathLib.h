@@ -56,6 +56,7 @@ namespace math
 	const Float PI_8 = PI / 8;
 
 
+
 	using Vec4 = glm::tvec4<Float>;
 	using Mat4 = glm::tmat4x4<Float>;
 
@@ -64,6 +65,9 @@ namespace math
 
 	using Vec2 = glm::tvec2<Float>;
 	using Mat2 = glm::tmat2x2<Float>;
+
+	using Quat = glm::tquat<Float>;
+
 
 
 	using Vec4f32 = glm::tvec4<float>;
@@ -75,6 +79,9 @@ namespace math
 	using Vec2f32 = glm::tvec2<float>;
 	using Mat2f32 = glm::tmat2x2<float>;
 
+	using Quatf32 = glm::tquat<float>;
+
+
 
 	using Vec4f64 = glm::tvec4<double>;
 	using Mat4f64 = glm::tmat4x4<double>;
@@ -85,9 +92,10 @@ namespace math
 	using Vec2f64 = glm::tvec2<double>;
 	using Mat2f64 = glm::tmat2x2<double>;
 
+	using Quatf64 = glm::tquat<double>;
 
 
-	using Vec3i = glm::tvec3<Int32>;
+	using Vec3i = glm::tvec3<int>;
 
 	using Vec3i32 = glm::tvec3<Int32>;
 	using Vec3u32 = glm::tvec3<Int32>;

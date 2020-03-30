@@ -5,13 +5,11 @@
 namespace gl
 {
 //constructors & destructor
-	Texture::Texture() : Id()
+	Texture::Texture()
 	{}
 
-	Texture::Texture(Texture&& texture) : Id()
-	{
-		*this = std::move(texture);
-	}
+	Texture::Texture(Texture&& texture) : Id(std::move(texture))
+	{}
 
 
 	Texture::~Texture()

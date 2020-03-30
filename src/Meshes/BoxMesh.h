@@ -6,6 +6,7 @@
 
 namespace meshes
 {
+	// fix move constructor
 	class BoxMesh : public mesh::Mesh
 	{
 	public:
