@@ -1,34 +1,21 @@
 #pragma once
 
-#include <entt/entt.hpp>
-
-#include "GLWindow.h"
-#include "../GraphicsEngine/GraphicsEngine.h"
+#include <ECS/ecs_engine.h>
 
 namespace sim
 {
-	class Simulator
+	class ContextSystem;
+	class TimeSystem;
+
+	class Simulator : public ecs::ECSEngine
 	{
 	public:
 		Simulator();
 
-		Simulator(const Simulator&) = delete;
-		Simulator(Simulator&&);
-
-		~Simulator();
-
-		Simulator& operator = (const Simulator&) = delete;
-		Simulator& operator = (Simulator&&);
+		virtual ~Simulator() = default;
 
 
 	public:
-		void mainLoop();
-		
-
-	private:
-		entt::registry           m_registry;
-		graphics::GraphicsEngine m_grahicsEngine;
-
-		GLWindow                 m_window;
+		virtual void mainLoop() override;
 	};
 }

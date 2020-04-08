@@ -12,7 +12,7 @@ const vec3 specColor 	= vec3(1.0, 1.0, 1.0);
 
 void main()
 {
-	vec3 n = normalize(normal);
+	vec3 n = normalize(cross(dFdx(pos), dFdy(pos)));
 
 	vec3 lightDir = normalize(lightPos - pos);
 

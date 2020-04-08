@@ -14,17 +14,8 @@
     <Filter Include="src\Solver">
       <UniqueIdentifier>{916e4526-a1df-413e-9a0f-f4cc4ba3a894}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Solvers">
-      <UniqueIdentifier>{52058692-241c-44ac-a7be-30ccae88ec37}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\glWrap">
       <UniqueIdentifier>{1ef2ce13-d361-4d79-85da-cd4990fb93fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Functions">
-      <UniqueIdentifier>{3174ec58-2f2e-4c38-a976-70a8e7088c52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Components">
-      <UniqueIdentifier>{6fb51d67-c50e-43c1-b454-f602272ad321}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Math">
       <UniqueIdentifier>{c49dd7a3-a8d9-43d6-9c1a-829afff7775b}</UniqueIdentifier>
@@ -50,15 +41,6 @@
     <Filter Include="src\GraphicsEngine\ResourceLoaders\sources">
       <UniqueIdentifier>{70f85f31-f057-4272-a553-a648b52d6660}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Meshes">
-      <UniqueIdentifier>{11f22d9e-0fcc-4c29-8a5f-ae5e34e067c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Meshes\sources">
-      <UniqueIdentifier>{2693dc58-4cd6-482b-b64a-dc9f90c2a277}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Meshes\headers">
-      <UniqueIdentifier>{c89868b9-6683-4565-94b3-ad89d32f7349}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Simulator">
       <UniqueIdentifier>{e0bc3341-b6c2-4bc7-83f1-ade4f9599d39}</UniqueIdentifier>
     </Filter>
@@ -68,29 +50,56 @@
     <Filter Include="src\SpaceUtils">
       <UniqueIdentifier>{405e3cd1-2eae-4445-b310-35ef81503fdf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Components\sources">
-      <UniqueIdentifier>{8e6035db-7656-4981-9f21-0d6341e539ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Components\headers">
-      <UniqueIdentifier>{bfa6af9a-7abf-452b-9bb4-3bf7a404add4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\SpaceUtils\sources">
       <UniqueIdentifier>{61e018f7-4c7a-4130-9bb1-122126959340}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\SpaceUtils\headers">
       <UniqueIdentifier>{615b525d-dd8a-4a48-8464-42ac048f5173}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Simulator\sources">
-      <UniqueIdentifier>{0132cdfb-b6d6-4f1a-96d2-0f04ef744ccc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Simulator\headers">
-      <UniqueIdentifier>{3fae27eb-086b-43b2-a673-6e6b4da68318}</UniqueIdentifier>
-    </Filter>
     <Filter Include="assets">
       <UniqueIdentifier>{843ee19f-290f-469c-8efc-4c36970841e6}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets\shaders">
       <UniqueIdentifier>{b6d3b32f-cf58-44e1-afab-53a6f99d3c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems">
+      <UniqueIdentifier>{37df7d8a-1147-4c49-80cf-edc6b59dbc50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ECS">
+      <UniqueIdentifier>{110d234d-f4e5-45e7-95f3-26a806e46f7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ECS\Entity">
+      <UniqueIdentifier>{02ac95d6-9a29-4b24-b476-a249f925811f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ECS\System">
+      <UniqueIdentifier>{a5b7f2b1-1918-4ab0-a60d-c6ab243f172e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ECS\Utility">
+      <UniqueIdentifier>{25acc84f-efa5-4654-9721-097a24666af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Components">
+      <UniqueIdentifier>{6fb51d67-c50e-43c1-b454-f602272ad321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\EntitiesBuilders">
+      <UniqueIdentifier>{c27e8971-e369-42bb-bebf-c3e9b4c6189c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems\Functions">
+      <UniqueIdentifier>{3174ec58-2f2e-4c38-a976-70a8e7088c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems\Meshes">
+      <UniqueIdentifier>{11f22d9e-0fcc-4c29-8a5f-ae5e34e067c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems\Meshes\sources">
+      <UniqueIdentifier>{2693dc58-4cd6-482b-b64a-dc9f90c2a277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems\Meshes\headers">
+      <UniqueIdentifier>{c89868b9-6683-4565-94b3-ad89d32f7349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems\Solvers">
+      <UniqueIdentifier>{52058692-241c-44ac-a7be-30ccae88ec37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems\InputController">
+      <UniqueIdentifier>{b0568715-0d18-4f36-b5d3-fce49a6d98dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -136,41 +145,8 @@
     <ClCompile Include="src\Mesh\Mesh.cpp">
       <Filter>src\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="src\Meshes\BoxMesh.cpp">
-      <Filter>src\Meshes\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Meshes\BoxMeshBuilder.cpp">
-      <Filter>src\Meshes\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Meshes\SphereMesh.cpp">
-      <Filter>src\Meshes\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Meshes\SphereMeshBuilder.cpp">
-      <Filter>src\Meshes\sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Context\Context.cpp">
       <Filter>src\Context</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\Camera.cpp">
-      <Filter>src\Components\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\Orbit.cpp">
-      <Filter>src\Components\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\Planet.cpp">
-      <Filter>src\Components\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\Rendezvous.cpp">
-      <Filter>src\Components\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\Satellite.cpp">
-      <Filter>src\Components\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\SimData.cpp">
-      <Filter>src\Components\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\Transform.cpp">
-      <Filter>src\Components\sources</Filter>
     </ClCompile>
     <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp">
       <Filter>src\SpaceUtils\sources</Filter>
@@ -178,32 +154,98 @@
     <ClCompile Include="src\SpaceUtils\Lambert.cpp">
       <Filter>src\SpaceUtils\sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Components\PhysicsData.cpp">
-      <Filter>src\Components\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulator\GLWindow.cpp">
-      <Filter>src\Simulator\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulator\IInputController.cpp">
-      <Filter>src\Simulator\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulator\Simulator.cpp">
-      <Filter>src\Simulator\sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\SpaceUtils\OrbitUtil.cpp">
       <Filter>src\SpaceUtils\sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Meshes\QuadMesh.cpp">
-      <Filter>src\Meshes\sources</Filter>
+    <ClCompile Include="src\ECS\ecs_engine.cpp">
+      <Filter>src\ECS</Filter>
     </ClCompile>
-    <ClCompile Include="src\Meshes\QuadMeshBuilder.cpp">
-      <Filter>src\Meshes\sources</Filter>
+    <ClCompile Include="src\ECS\System\ISystem.cpp">
+      <Filter>src\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\System\SystemManager.cpp">
+      <Filter>src\ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\MeshSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\PhysicsSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\PlanetSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\TimeSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Simulator.cpp">
+      <Filter>src\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Components\Camera.cpp">
+      <Filter>src\Simulator\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Components\Orbit.cpp">
+      <Filter>src\Simulator\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\EntityBuilders\ChaserFactory.cpp">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\EntityBuilders\PlanetFactory.cpp">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\EntityBuilders\SatelliteFactory.cpp">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Components\SimData.cpp">
+      <Filter>src\Simulator\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Meshes\BoxMesh.cpp">
+      <Filter>src\Simulator\Systems\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Meshes\BoxMeshBuilder.cpp">
+      <Filter>src\Simulator\Systems\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Meshes\QuadMesh.cpp">
+      <Filter>src\Simulator\Systems\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Meshes\QuadMeshBuilder.cpp">
+      <Filter>src\Simulator\Systems\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Meshes\SphereMesh.cpp">
+      <Filter>src\Simulator\Systems\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Meshes\SphereMeshBuilder.cpp">
+      <Filter>src\Simulator\Systems\Meshes\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\InputController\IInputController.cpp">
+      <Filter>src\Simulator\Systems\InputController</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\InputController\InputController.cpp">
+      <Filter>src\Simulator\Systems\InputController</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\ContextSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GraphicsSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\PlayerSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\RendezvousControlSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\TestRendererSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\Entity\EntityBuilderManager.cpp">
+      <Filter>src\ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\Entity\IEntityBuilder.cpp">
+      <Filter>src\ECS\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Solvers\NumSolvers.h">
-      <Filter>src\Solvers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Solver\ISolver.h">
       <Filter>src\Solver</Filter>
     </ClInclude>
@@ -252,9 +294,6 @@
     <ClInclude Include="src\glWrap\VertexArray\VertexArray.h">
       <Filter>src\glWrap\headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Functions\Functions.h">
-      <Filter>src\Functions</Filter>
-    </ClInclude>
     <ClInclude Include="src\GraphicsEngine\CommonAttributes.h">
       <Filter>src\GraphicsEngine</Filter>
     </ClInclude>
@@ -294,41 +333,8 @@
     <ClInclude Include="src\Mesh\IMeshBuilder.h">
       <Filter>src\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="src\Meshes\BoxMesh.h">
-      <Filter>src\Meshes\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Meshes\BoxMeshBuilder.h">
-      <Filter>src\Meshes\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Meshes\SphereMesh.h">
-      <Filter>src\Meshes\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Meshes\SphereMeshBuilder.h">
-      <Filter>src\Meshes\headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Context\Context.h">
       <Filter>src\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Camera.h">
-      <Filter>src\Components\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Orbit.h">
-      <Filter>src\Components\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Planet.h">
-      <Filter>src\Components\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Rendezvous.h">
-      <Filter>src\Components\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Satellite.h">
-      <Filter>src\Components\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\SimData.h">
-      <Filter>src\Components\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Transform.h">
-      <Filter>src\Components\headers</Filter>
     </ClInclude>
     <ClInclude Include="src\SpaceUtils\ClohessyWiltshire.h">
       <Filter>src\SpaceUtils\headers</Filter>
@@ -336,26 +342,143 @@
     <ClInclude Include="src\SpaceUtils\Lambert.h">
       <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\PhysicsData.h">
-      <Filter>src\Components\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulator\GLWindow.h">
-      <Filter>src\Simulator\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulator\IInputController.h">
-      <Filter>src\Simulator\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulator\Simulator.h">
-      <Filter>src\Simulator\headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\SpaceUtils\OrbitUtil.h">
       <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Meshes\QuadMesh.h">
-      <Filter>src\Meshes\headers</Filter>
+    <ClInclude Include="src\ECS\ecs_common.h">
+      <Filter>src\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\Meshes\QuadMeshBuilder.h">
-      <Filter>src\Meshes\headers</Filter>
+    <ClInclude Include="src\ECS\ecs_engine.h">
+      <Filter>src\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Entity\Entity.h">
+      <Filter>src\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\System\ISystem.h">
+      <Filter>src\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\System\System.h">
+      <Filter>src\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\System\SystemManager.h">
+      <Filter>src\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Utitlity\Counter.h">
+      <Filter>src\ECS\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\MeshSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\PhysicsSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\PlanetSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\TimeSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Simulator.h">
+      <Filter>src\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Camera.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Orbit.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\PhysicsData.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Planet.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Rendezvous.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Satellite.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\SimData.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Transform.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\EntityBuilders\ChaserFactory.h">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\EntityBuilders\PlanetFactory.h">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\EntityBuilders\SatelliteFactory.h">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Meshes\BoxMesh.h">
+      <Filter>src\Simulator\Systems\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Meshes\BoxMeshBuilder.h">
+      <Filter>src\Simulator\Systems\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Meshes\QuadMesh.h">
+      <Filter>src\Simulator\Systems\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Meshes\QuadMeshBuilder.h">
+      <Filter>src\Simulator\Systems\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Meshes\SphereMesh.h">
+      <Filter>src\Simulator\Systems\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Meshes\SphereMeshBuilder.h">
+      <Filter>src\Simulator\Systems\Meshes\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Solvers\NumSolvers.h">
+      <Filter>src\Simulator\Systems\Solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Functions\Functions.h">
+      <Filter>src\Simulator\Systems\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\MeshComponent.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\PlayerTag.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\TestRendererTag.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\InputController\IInputController.h">
+      <Filter>src\Simulator\Systems\InputController</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\InputController\InputController.h">
+      <Filter>src\Simulator\Systems\InputController</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\ContextSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GraphicsSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\PlayerSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\RendezvousControlSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\TestRendererSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Entity\EntityBuilder.h">
+      <Filter>src\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Entity\EntityBuilderManager.h">
+      <Filter>src\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Entity\IEntityBuilder.h">
+      <Filter>src\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\EntityBuilders\entity_builders_common.h">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

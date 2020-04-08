@@ -5,11 +5,14 @@
 #include <cmath>
 #include <limits>
 #include <cstdint>
+#include <utility>
+#include <algorithm>
+#include <tuple>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <glm/gtc/quaternion.hpp>
 
 namespace math
 {
@@ -101,5 +104,36 @@ namespace math
 	using Vec3u32 = glm::tvec3<Int32>;
 
 	using Vec3i64 = glm::tvec3<Int64>;
-	using Vec3u64 = glm::tvec3<Int64>;
+	using Vec3u64 = glm::tvec3<Int64>;	
+
+	using Vec2i = glm::tvec2<int>;
+
+	using Vec2i32 = glm::tvec2<Int32>;
+	using Vec2u32 = glm::tvec2<Int32>;
+
+	using Vec2i64 = glm::tvec2<Int64>;
+	using Vec2u64 = glm::tvec2<Int64>;	
+
+
+	// construct one type from another
+	namespace detail
+	{
+		template<class To, class From, size_t ... Indices>
+		auto constructTo(From&& from, std::index_sequence<Indices...>)
+		{
+			return To(from[Indices]...);
+		}
+	}
+
+	template<class To, class From>
+	auto constructTo(From&& from)
+	{
+		using pure_to   = std::remove_cv_t<std::remove_reference_t<From>>;
+		using pure_from = std::remove_cv_t<std::remove_reference_t<To>>;
+
+		return detail::constructTo<To>(
+			std::forward<From>(from)
+			, std::make_index_sequence<std::min(pure_to::length(), pure_from::length())>()
+		);
+	}
 }

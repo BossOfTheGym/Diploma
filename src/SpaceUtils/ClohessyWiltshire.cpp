@@ -1,6 +1,6 @@
 #include "ClohessyWiltshire.h"
 
-namespace space_utils::cw
+namespace space_utils
 {
 	using math::operator "" _FL;
 
@@ -59,7 +59,7 @@ namespace space_utils::cw
 		);
 	}
 
-	CWsolution dr_dv(const Vec3& dr0, const Vec3& dv0, Float t, Float n)
+	StateVec dr_dv(const Vec3& dr0, const Vec3& dv0, Float t, Float n)
 	{
 		return {
 			  (phi_rr(t, n) * dr0 + phi_rv(t, n) * dv0)

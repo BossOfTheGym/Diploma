@@ -28,6 +28,11 @@ namespace context
 		}
 	}
 
+	void setSwapInterval(int interval)
+	{
+		glfwSwapInterval(interval);
+	}
+
 
 	void pollEvents()
 	{
@@ -142,9 +147,6 @@ namespace context
 			{
 				initGL();
 			}
-			makeContextCurrent();
-			glfwSwapInterval(1);
-			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 	}
 
@@ -214,6 +216,16 @@ namespace context
 		glfwSetWindowTitle(m_window, title.c_str());
 	}
 
+	void BaseWindow::disableCursor()
+	{
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+
+	void BaseWindow::enableCursor()
+	{
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+
 	Vec2f64 BaseWindow::getCursorPos()
 	{
 		Vec2f64 pos;
@@ -226,9 +238,9 @@ namespace context
 		glfwSetCursorPos(m_window, pos.x, pos.y);
 	}
 
-	Vec3i BaseWindow::getWindowSize()
+	Vec2i BaseWindow::getWindowSize()
 	{
-		Vec3i size;
+		Vec2i size;
 		glfwGetWindowSize(m_window, &size.x, &size.y);
 		return size;
 	}

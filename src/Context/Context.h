@@ -10,7 +10,7 @@
 namespace context
 {
 	using math::Vec2f64;
-	using math::Vec3i;
+	using math::Vec2i;
 
 	bool initialize();
 
@@ -18,6 +18,7 @@ namespace context
 
 	void terminate();
 
+	void setSwapInterval(int interval);
 
 	void pollEvents();
 
@@ -43,6 +44,29 @@ namespace context
 	};
 
 	// TODO : add enums associated with all GLFW constants 
+	/*enum Key : int
+	{
+		  W
+		, A
+		, S
+		, D
+		, Unknown
+	};
+
+	enum Mods : int
+	{
+
+	};
+
+	enum MouseButton : int
+	{
+		  Button0
+		, Button1
+		, Button2
+		, Unknown
+	};*/
+
+	class IMediator;
 
 	class BaseWindow
 	{
@@ -122,13 +146,16 @@ namespace context
 
 		void setWindowTitle(const String& title);
 
+		void disableCursor();
 
-		// TODO : add input functions
+		void enableCursor();
+
+
 		Vec2f64 getCursorPos();
 
 		void setCursorPos(const Vec2f64& pos);
 
-		Vec3i getWindowSize();
+		Vec2i getWindowSize();
 
 
 		bool shouldClose();
