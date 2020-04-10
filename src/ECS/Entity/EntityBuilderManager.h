@@ -3,6 +3,7 @@
 #include "IEntityBuilder.h"
 
 #include <memory>
+#include <utility>
 #include <unordered_map>
 
 namespace ecs
@@ -32,7 +33,7 @@ namespace ecs::entity
 		void add(Args&& ... args)
 		{
 			auto ptr = std::make_unique<Builder>(std::forward<Args>(args)...);
-			m_registry[Builder::TYPE_ID] = ptr;
+			m_registry[Builder::TYPE_ID] = std::move(ptr);
 		}
 
 		template<class Builder>
@@ -42,12 +43,12 @@ namespace ecs::entity
 		}
 
 		template<class Builder>
-		IEntityBuilder* get()
+		Builder* get()
 		{
-			IEntityBuilder* ptr{nullptr};
+			Builder* ptr{nullptr};
 			if (auto it = m_registry.find(Builder::TYPE_ID); it != m_registry.end())
 			{
-				ptr = it->get();
+				ptr = static_cast<Builder*>((*it).second.get());
 			}
 			return ptr;
 		}

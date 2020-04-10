@@ -4,10 +4,10 @@
 
 namespace comp
 {
-	using math::Vec3f32;
+	using Tick = math::UInt64;
 
-	struct Satellite
+	struct Timer
 	{
-		Vec3f32 color{};
+		Tick duration{};
 	};
 }

@@ -4,6 +4,8 @@
 #include <ECS/System/System.h>
 #include <ECS/Entity/Entity.h>
 
+#include <Math/MathLib.h>
+
 namespace sim
 {
 	using context::Hint;
@@ -14,6 +16,9 @@ namespace sim
 
 	using ecs::entity::Entity;
 	using ecs::entity::null;
+
+	using math::Float;
+	using math::Mat4f32;
 
 
 	class Simulator;
@@ -28,13 +33,18 @@ namespace sim
 
 
 	public:
-		ContextSystem(ecs::sys::SystemManager* manager, const CreationInfo& info = {}, bool initGL = true);
+		ContextSystem(
+			ecs::sys::SystemManager* manager
+			, const CreationInfo& info = {}
+			, bool initGL = true
+			, Float fovy = glm::radians(45.0), Float near = 1.0, Float far = 1000.0
+		);
 
 		virtual ~ContextSystem();
 
 
-	public: // System<T>
-		virtual void update(ecs::Float t, ecs::Float dt) override;
+	public:
+		void pollEvents();
 
 
 	public: //BaseWindow
@@ -47,8 +57,13 @@ namespace sim
 		virtual void keyEvent(int key, int scancode, int action, int mods) override;
 
 
+	public:
+		const Mat4f32& getProjection() const;
+
+
 	private:
-		Simulator* m_simulator{nullptr};
-		Entity m_controlled{null};
+		Simulator* m_simulator{nullptr};		
+
+		Mat4f32 m_projection{};
 	};
 }

@@ -13,6 +13,7 @@
 #include "../Components/Rendezvous.h"
 
 #include "../Simulator.h"
+#include "../Test.h"
 
 // TODO
 namespace sim

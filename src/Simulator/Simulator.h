@@ -17,5 +17,11 @@ namespace sim
 
 	public:
 		virtual void mainLoop() override;
+
+
+	private:
+		void loadSystems();
+
+		void loadEntityBuilders();
 	};
 }

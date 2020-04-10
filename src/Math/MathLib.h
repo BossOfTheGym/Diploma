@@ -13,6 +13,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace math
 {
@@ -115,6 +116,8 @@ namespace math
 	using Vec2u64 = glm::tvec2<Int64>;	
 
 
+	// TODO : realize if it is possible to construct ex. Quatf64 from Quatf32
+	// as the main purpose was handle theese type of conversionts
 	// construct one type from another
 	namespace detail
 	{

@@ -5,9 +5,7 @@
 namespace comp
 {
 	Camera3rdPerson::Camera3rdPerson(
-		  const Mat4f32& proj
-
-		, const Vec3f32& center
+		  const Vec3f32& center
 
 		, F32 pitchLimit
 
@@ -18,9 +16,7 @@ namespace comp
 		, F32 minDistance
 		, F32 maxDistance
 	)
-		: m_proj(proj)
-
-		, m_center(center)
+		: m_center(center)
 
 		, m_dist(initialDistance)
 		, m_minDist(minDistance)
@@ -44,12 +40,6 @@ namespace comp
 		updateCamera();
 	}
 
-
-	void Camera3rdPerson::setProjection(const Mat4f32& proj)
-	{
-		m_proj = proj;
-		m_needUpdate = true;
-	}
 
 	void Camera3rdPerson::setCenter(const Vec3f32& center)
 	{
@@ -85,11 +75,6 @@ namespace comp
 	}
 
 
-	const Mat4f32& Camera3rdPerson::projMat()
-	{
-		return m_proj;
-	}
-
 	const Mat4f32& Camera3rdPerson::viewMat()
 	{
 		if (m_needUpdate)
@@ -97,15 +82,6 @@ namespace comp
 			updateCamera();
 		}
 		return m_camera;
-	}
-
-	const Vec3f32& Camera3rdPerson::position()
-	{
-		if (m_needUpdate)
-		{
-			updateCamera();
-		}
-		return m_position;
 	}
 
 

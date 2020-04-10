@@ -101,6 +101,9 @@
     <Filter Include="src\Simulator\Systems\InputController">
       <UniqueIdentifier>{b0568715-0d18-4f36-b5d3-fce49a6d98dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Simulator\Systems\Rendezvous">
+      <UniqueIdentifier>{f338aaa2-78ee-4564-b2b8-e4c6c5341053}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -243,6 +246,12 @@
     </ClCompile>
     <ClCompile Include="src\ECS\Entity\IEntityBuilder.cpp">
       <Filter>src\ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Rendezvous\Actions.cpp">
+      <Filter>src\Simulator\Systems\Rendezvous</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Components\Transform.cpp">
+      <Filter>src\Simulator\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -479,6 +488,18 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\EntityBuilders\entity_builders_common.h">
       <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Timer.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Rendezvous\Actions.h">
+      <Filter>src\Simulator\Systems\Rendezvous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Function\FunctionHolder.h">
+      <Filter>src\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Test.h">
+      <Filter>src\Simulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

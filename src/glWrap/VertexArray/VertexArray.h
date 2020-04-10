@@ -19,7 +19,7 @@ namespace gl
 			GLsizei  elementsCount = static_cast<GLsizei>(0); // both drawArrays & drawElements
 
 			IndicesType indicesType = IndicesType::None; // drawElements
-			GLvoid* indices        = nullptr;           // drawElements
+			GLvoid* indices        = nullptr;            // drawElements
 		};
 		
 		struct PointerInfo

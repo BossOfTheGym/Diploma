@@ -4,6 +4,12 @@
 #include <optional>
 
 #include <glWrap/OpenGL.h>
+#include <glWrap/Buffer/Buffer.h>
+#include <glWrap/Framebuffer/Framebuffer.h>
+#include <glWrap/Shader/Shader.h>
+#include <glWrap/Shader/ShaderProgram.h>
+#include <glWrap/Texture/Texture.h>
+#include <glWrap/VertexArray/VertexArray.h>
 
 #include "ResourceLoaders/ShaderProgramBuilders/ShaderProgramBuilder.h"
 #include "ResourceLoaders/ShaderLoaders/ShaderLoader.h"

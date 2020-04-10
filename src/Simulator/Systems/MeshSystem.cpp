@@ -36,7 +36,7 @@ namespace sim
 		: ecs::sys::System<MeshSystem>(manager)
 	{
 		// TODO : load basic meshes
-		auto  graphicsSystem = manager->getSystem<GraphicsSystem>();
+		auto  graphicsSystem = manager->get<GraphicsSystem>();
 		auto& graphicsEngine = graphicsSystem->getGraphicsEngine();
 
 		auto pos = *graphicsEngine.getCommonAttribLocation(POSITION);

@@ -32,7 +32,7 @@ namespace sim
 			auto& transform = registry.get<Transform>(e);
 			auto& physics   = registry.get<PhysicsData>(e);
 
-			auto quat = math::constructTo<Quatf32>(glm::angleAxis(2 * physics.angle * dt, physics.axis));
+			auto quat = math::constructTo<Quatf32>(glm::angleAxis(physics.angle * dt, physics.axis));
 
 			transform.rotation  = quat * transform.rotation * glm::conjugate(quat);
 			transform.translate = math::constructTo<Vec3f32>(physics.r);

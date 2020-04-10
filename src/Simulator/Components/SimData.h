@@ -4,7 +4,6 @@
 
 #include <Numerics/Arg/ArgN.h>
 
-// TODO : little improvement for comfort work with state
 namespace comp
 {
 	using math::Float;
@@ -17,7 +16,12 @@ namespace comp
 	{
 		StateVec state{};
 
-		Vec3 radius() const;
-		Vec3 velocity() const;
+		void setRadius(const Vec3& r);
+		void setVelocity(const Vec3& v);
+
+		Vec3 getRadius() const;
+		Vec3 getVelocity() const;
 	};
+
+	StateVec fromRadVel(const Vec3& r, const Vec3& v);
 }

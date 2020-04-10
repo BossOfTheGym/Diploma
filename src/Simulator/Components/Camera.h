@@ -21,9 +21,7 @@ namespace comp
 	{
 	public:
 		Camera3rdPerson(
-			  const Mat4f32& proj = Mat4f32(1.0f)
-
-			, const Vec3f32& center = Vec3f32(0.0f)
+			  const Vec3f32& center = Vec3f32(0.0f)
 
 			, F32 pitchLimit = math::PI_4
 
@@ -45,8 +43,6 @@ namespace comp
 
 
 	public:
-		void setProjection(const Mat4f32& proj);
-
 		void setCenter(const Vec3f32& center);
 
 
@@ -63,15 +59,12 @@ namespace comp
 
 		const Mat4f32& viewMat();
 
-		const Vec3f32& position();
-
 
 	private:
 		void updateCamera();
 
 
 	private:
-		Mat4f32 m_proj{1.0f};
 		Mat4f32 m_camera{1.0f};
 
 		Vec3f32 m_center{0.0f};

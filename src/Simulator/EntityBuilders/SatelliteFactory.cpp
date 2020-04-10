@@ -12,6 +12,10 @@
 #include "../Components/TestRendererTag.h"
 
 #include "../Simulator.h"
+#include "../Systems/ContextSystem.h"
+
+#include "../Test.h"
+
 
 // TODO
 namespace sim
@@ -24,16 +28,23 @@ namespace sim
 
 	Entity SatelliteFactory::buildEntity()
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry      = m_simulator->getRegistry();
+		auto& systemManager = m_simulator->getSystemManager();
+
+		auto* contextSystem = systemManager.get<ContextSystem>();
+		if (!contextSystem)
+		{
+			return null;
+		}
 
 		Entity satellite = registry.create();
-		registry.assign<comp::Camera3rdPerson>(satellite);
-		registry.assign<comp::Transform>      (satellite);
-		registry.assign<comp::PhysicsData>    (satellite);
-		registry.assign<comp::SimData>        (satellite);
-		registry.assign<comp::Satellite>      (satellite);
-		registry.assign<comp::Orbit>          (satellite);
-		registry.assign<comp::MeshComponent>  (satellite);
+		registry.assign<comp::Camera3rdPerson>(satellite, test::SAT_TRANSLATE, math::PI_4, 0.0, 0.0, 1.0, 0.5, 10.0);
+		registry.assign<comp::Transform>      (satellite, test::SAT_TRANSLATE, test::SAT_ROTATION, test::SAT_SCALE);
+		registry.assign<comp::PhysicsData>    (satellite, test::SAT_RAD, test::SAT_VEL, test::SAT_ROT_AXIS, test::SAT_ROT_ANGLE, test::SAT_MASS);
+		registry.assign<comp::SimData>        (satellite, comp::fromRadVel(test::SAT_RAD, test::SAT_VEL));
+		registry.assign<comp::Satellite>      (satellite, test::SAT_COLOR);
+		//registry.assign<comp::Orbit>          (satellite); // TODO
+		//registry.assign<comp::MeshComponent>  (satellite); // TODO
 		registry.assign<comp::TestRendererTag>(satellite);
 		return satellite;
 	}

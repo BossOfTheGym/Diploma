@@ -8,6 +8,12 @@
 
 namespace sim
 {
+	class Simulator;
+
+	// TODO : add IRenderer class
+	// virtual setREnderState
+	// virtual render
+	// virtual restoreRenderState
 	class TestRendererSystem : public ecs::sys::System<TestRendererSystem>
 	{
 	public:
@@ -24,9 +30,11 @@ namespace sim
 
 
 	private:
+		Simulator* m_simulator{nullptr};
+
 		gl::Shader m_vert{};
 		gl::Shader m_frag{};
 		gl::ShaderProgram m_program{};
-		GLint m_pvmLoacation{};
+		GLint m_pvmLocation{};
 	};
 }

@@ -48,15 +48,15 @@ namespace ecs::sys
 		}
 
 		template<class System, class ... Args>
-		void addSystem(Args&& ... args)
+		void add(Args&& ... args)
 		{
-			std::unique_ptr<System> ptr(new System(std::forward<Args>(args)...));
+			auto ptr = std::make_unique<System>(std::forward<Args>(args)...);
 
-			m_systemRegistry[System::TYPE_ID] = ptr;
+			m_systemRegistry[System::TYPE_ID] = std::move(ptr);
 		}
 
 		template<class System>
-		System* getSystem() const
+		System* get() const
 		{
 			auto sysId = System::TYPE_ID;
 

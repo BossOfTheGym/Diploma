@@ -9,7 +9,12 @@
 
 namespace sim
 {
-	ContextSystem::ContextSystem(ecs::sys::SystemManager* manager, const CreationInfo& info, bool initializeGL)
+	ContextSystem::ContextSystem(
+		  ecs::sys::SystemManager* manager
+		, const CreationInfo& info
+		, bool initializeGL
+		, Float fovy, Float near, Float far
+	)
 		: base_t1(manager)
 		, base_t2(info, initializeGL)
 	{
@@ -17,6 +22,9 @@ namespace sim
 		context::initialize();
 
 		m_simulator = static_cast<Simulator*>(manager->getECSEngine());
+
+		auto size = getWindowSize();
+		m_projection = glm::perspective(fovy, 1.0 * size.x / size.y, near, far);
 	}
 
 	ContextSystem::~ContextSystem()
@@ -24,7 +32,7 @@ namespace sim
 		context::terminate();
 	}
 
-	void ContextSystem::update(ecs::Float t, ecs::Float dt)
+	void ContextSystem::pollEvents()
 	{
 		context::pollEvents();
 	}
@@ -49,5 +57,10 @@ namespace sim
 
 	void ContextSystem::keyEvent(int key, int scancode, int action, int mods)
 	{
+	}
+
+	const Mat4f32& ContextSystem::getProjection() const
+	{
+		return m_projection;
 	}
 }

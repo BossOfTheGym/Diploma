@@ -42,6 +42,7 @@
     <ClCompile Include="src\Simulator\Components\Camera.cpp" />
     <ClCompile Include="src\Simulator\Components\Orbit.cpp" />
     <ClCompile Include="src\Simulator\Components\SimData.cpp" />
+    <ClCompile Include="src\Simulator\Components\Transform.cpp" />
     <ClCompile Include="src\Simulator\EntityBuilders\ChaserFactory.cpp" />
     <ClCompile Include="src\Simulator\EntityBuilders\PlanetFactory.cpp" />
     <ClCompile Include="src\Simulator\EntityBuilders\SatelliteFactory.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="src\Simulator\Systems\PlanetSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\PlayerSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\RendezvousControlSystem.cpp" />
+    <ClCompile Include="src\Simulator\Systems\Rendezvous\Actions.cpp" />
     <ClCompile Include="src\Simulator\Systems\TestRendererSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\TimeSystem.cpp" />
     <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp" />
@@ -79,6 +81,7 @@
     <ClInclude Include="src\ECS\System\System.h" />
     <ClInclude Include="src\ECS\System\SystemManager.h" />
     <ClInclude Include="src\ECS\Utitlity\Counter.h" />
+    <ClInclude Include="src\Function\FunctionHolder.h" />
     <ClInclude Include="src\Function\FunctionWrapper.h" />
     <ClInclude Include="src\Function\IFunction.h" />
     <ClInclude Include="src\Function\IFunctionBuilder.h" />
@@ -115,6 +118,7 @@
     <ClInclude Include="src\Simulator\Components\Satellite.h" />
     <ClInclude Include="src\Simulator\Components\SimData.h" />
     <ClInclude Include="src\Simulator\Components\TestRendererTag.h" />
+    <ClInclude Include="src\Simulator\Components\Timer.h" />
     <ClInclude Include="src\Simulator\Components\Transform.h" />
     <ClInclude Include="src\Simulator\EntityBuilders\ChaserFactory.h" />
     <ClInclude Include="src\Simulator\EntityBuilders\entity_builders_common.h" />
@@ -137,9 +141,11 @@
     <ClInclude Include="src\Simulator\Systems\PlanetSystem.h" />
     <ClInclude Include="src\Simulator\Systems\PlayerSystem.h" />
     <ClInclude Include="src\Simulator\Systems\RendezvousControlSystem.h" />
+    <ClInclude Include="src\Simulator\Systems\Rendezvous\Actions.h" />
     <ClInclude Include="src\Simulator\Systems\Solvers\NumSolvers.h" />
     <ClInclude Include="src\Simulator\Systems\TestRendererSystem.h" />
     <ClInclude Include="src\Simulator\Systems\TimeSystem.h" />
+    <ClInclude Include="src\Simulator\Test.h" />
     <ClInclude Include="src\Solver\ISolver.h" />
     <ClInclude Include="src\Solver\ISolverBuilder.h" />
     <ClInclude Include="src\Solver\SolverWrapper.h" />

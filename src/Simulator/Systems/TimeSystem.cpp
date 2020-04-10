@@ -12,6 +12,9 @@ namespace sim
 		
 		setWarp(warp);
 		resetTime();
+
+		// time system is never updated in normal way
+		disable();
 	}
 
 
@@ -44,29 +47,66 @@ namespace sim
 	}
 
 
-	TimeSystem::Tick TimeSystem::getWarp() const
+	auto TimeSystem::getWarp() const -> Tick
 	{
 		return m_warp;
 	}
 
-	TimeSystem::Tick TimeSystem::getMinWarp() const
+	auto TimeSystem::getMinWarp() const -> Tick
 	{
 		return m_minWarp;
 	}
 
-	TimeSystem::Tick TimeSystem::getMaxWarp() const
+	auto TimeSystem::getMaxWarp() const -> Tick
 	{
 		return m_maxWarp;
 	}
 
 
-	TimeSystem::Tick TimeSystem::getTime() const
+	auto TimeSystem::getTime() const -> Tick
 	{
 		return m_t0Warped;
 	}
 
-	TimeSystem::Tick TimeSystem::getDeltaTime() const
+	auto TimeSystem::getDeltaTime() const -> Tick
 	{
 		return m_dtWarped;
+	}
+
+
+	void TimeSystem::addTimeEvent(Tick time)
+	{
+		m_ticks.push_back(time);
+		std::push_heap(m_ticks.begin(), m_ticks.end(), 
+			[] (auto& t1, auto& t2)
+			{
+				return t1 < t2;
+			}
+		);
+	}
+
+	auto TimeSystem::peekTimeEvent() -> std::optional<Tick>
+	{
+		if (hasTimeEvents())
+		{
+			return m_ticks.front();
+		}
+		return std::nullopt;
+	}
+
+	void TimeSystem::popTimeEvent()
+	{
+		std::pop_heap(m_ticks.begin(), m_ticks.end(),
+			[] (auto& t1, auto& t2)
+			{
+				return t1 < t2;
+			}
+		);
+		m_ticks.pop_back();
+	}
+
+	bool TimeSystem::hasTimeEvents() const
+	{
+		return !m_ticks.empty();
 	}
 }

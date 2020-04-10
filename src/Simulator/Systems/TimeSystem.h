@@ -2,10 +2,14 @@
 
 #include <Math/MathLib.h>
 
-#include <chrono>
-
 #include <ECS/System/System.h>
 
+#include <chrono>
+#include <vector>
+#include <optional>
+#include <algorithm>
+
+#include "../Components/Timer.h"
 
 namespace sim
 {
@@ -21,7 +25,10 @@ namespace sim
 		using Time     = Clock::time_point;
 		using Duration = Clock::duration;
 
-		using Tick = UInt64;
+		using Tick = comp::Tick;
+
+		using Heap = std::vector<Tick>;
+
 
 		static constexpr Tick PERIOD = Duration::period::den;
 
@@ -50,6 +57,15 @@ namespace sim
 		Tick getDeltaTime() const;
 
 
+		void addTimeEvent(Tick time);
+
+		std::optional<Tick> peekTimeEvent();
+
+		void popTimeEvent();
+
+		bool hasTimeEvents() const;
+
+
 	private:
 		Clock m_clock{};
 
@@ -64,5 +80,7 @@ namespace sim
 
 		Tick m_t0Warped{}; // warped current time
 		Tick m_dtWarped{}; // warped delta time
+
+		Heap m_ticks{};
 	};
 }

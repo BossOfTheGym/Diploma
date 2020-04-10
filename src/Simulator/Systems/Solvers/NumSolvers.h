@@ -4,13 +4,13 @@
 
 #include <Numerics/Ivp/RungeKutta.h>
 
-#include <Function/FunctionWrapper.h>
+#include <Function/FunctionHolder.h>
 #include <Solver/SolverWrapper.h>
 
 
 namespace solvers
 {
-	using func::FunctionWrapper;
+	using func::FunctionHolder;
 	using solver::SolverWrapper;
 
 	using Num::Arg::VecN;
@@ -26,8 +26,8 @@ namespace solvers
 		using Time  = Scalar;
 		using Value = Vec;
 
-		using Function = FunctionWrapper<Vec(const Time&, const Value&)>;
-		using Jacobian = FunctionWrapper<Mat(const Time&, const Value&)>;
+		using Function = FunctionHolder<Vec(const Time&, const Value&)>;
+		using Jacobian = FunctionHolder<Mat(const Time&, const Value&)>;
 
 		using Solver = SolverWrapper<Function, Jacobian, Time, Value>;
 	};
@@ -40,10 +40,10 @@ namespace solvers
 		using Mat  = MatNxM<Scalar, SystemOrder, SystemOrder>;
 
 		using Time  = Scalar;
-		using Value = Vec;
+		using Value = typename solvers_traits<Scalar, SystemOrder>::Vec;
 
-		using Function = FunctionWrapper<Vec(const Scalar&, const Vec&)>;
-		using Jacobian = FunctionWrapper<Mat(const Scalar&, const Vec&)>;
+		using Function = typename solvers_traits<Scalar, SystemOrder>::Function;
+		using Jacobian = typename solvers_traits<Scalar, SystemOrder>::Jacobian;
 
 		return SolverWrapper<Function, Jacobian, Time, Value>(
 			Num::Ivp::make_rki_solver<SystemOrder, Time, Value>(
@@ -91,11 +91,11 @@ namespace solvers
 	auto wrapExplicitNumSolver(Tableau&& tableau)
 	{
 		using Time = Scalar;
-		using Vec  = VecN<Scalar, SystemOrder>;
-		using Mat  = MatNxM<Scalar, SystemOrder, SystemOrder>;
+		using Vec  = typename solvers_traits<Scalar, SystemOrder>::Vec;
+		using Mat  = typename solvers_traits<Scalar, SystemOrder>::Mat;
 
-		using Function = FunctionWrapper<Vec(const Scalar&, const Vec&)>;
-		using Jacobian = FunctionWrapper<Mat(const Scalar&, const Vec&)>;
+		using Function = typename solvers_traits<Scalar, SystemOrder>::Function;
+		using Jacobian = typename solvers_traits<Scalar, SystemOrder>::Jacobian;
 
 		return SolverWrapper<Function, Jacobian, Time, Vec>(
 			Num::Ivp::make_rkeg_solver<SystemOrder, Scalar, Vec>(
