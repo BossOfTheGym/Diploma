@@ -19,6 +19,7 @@ namespace gl
 	ShaderProgram::~ShaderProgram()
 	{
 		deleteProgram();
+		auto e = glGetError(); // TODO
 	}
 
 

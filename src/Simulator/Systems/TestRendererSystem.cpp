@@ -28,8 +28,8 @@ namespace sim
 		graphics::SimpleShaderLoader loader;
 		graphics::ShaderProgramBuilder builder;
 
-		m_vert = loader.shaderFromFile(gl::ShaderType::Vertex, "assets/test.vert");
-		m_frag = loader.shaderFromFile(gl::ShaderType::Fragment, "assets/test.frag");
+		m_vert = loader.shaderFromFile(gl::ShaderType::Vertex, "assets/shaders/test.vert");
+		m_frag = loader.shaderFromFile(gl::ShaderType::Fragment, "assets/shaders/test.frag");
 		m_program = builder.buildProgram("test program", m_vert, m_frag);
 		m_pvmLocation = m_program.getUniformLocation("uPVM");
 	}
@@ -53,7 +53,7 @@ namespace sim
 			return;
 		}
 
-		auto sphereResource = meshSystem->acquireResource(MeshSystem::SPHERE).lock();
+		auto sphereResource = meshSystem->acquireResource(MeshSystem::CUBE).lock();
 		if (!sphereResource)
 		{
 			// TODO : notify about error
@@ -66,6 +66,8 @@ namespace sim
 
 		// to set render state
 		gl::state::enable(gl::Capability::DepthTest);
+		gl::state::disable(gl::Capability::CullFace);
+
 		gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
 		frame.clearColor(0.0, 0.0, 0.0, 0.0);
 		frame.clearDepth(1.0);
@@ -86,6 +88,10 @@ namespace sim
 			if (!usesIndices)
 			{
 				vertexArray.drawArrays(drawInfo);
+			}
+			else
+			{
+				vertexArray.drawElements(drawInfo);
 			}
 		}
 

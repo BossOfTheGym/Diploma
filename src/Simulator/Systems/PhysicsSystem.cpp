@@ -6,6 +6,8 @@
 
 #include <Math/MathLib.h>
 
+#include <iostream>
+
 namespace sim
 {
 	using comp::PhysicsData;
@@ -32,10 +34,10 @@ namespace sim
 			auto& transform = registry.get<Transform>(e);
 			auto& physics   = registry.get<PhysicsData>(e);
 
-			auto quat = math::constructTo<Quatf32>(glm::angleAxis(physics.angle * dt, physics.axis));
-
-			transform.rotation  = quat * transform.rotation * glm::conjugate(quat);
-			transform.translate = math::constructTo<Vec3f32>(physics.r);
+			auto dq = glm::angleAxis(physics.angle * dt, physics.axis);
+			
+			transform.rotation  = Quatf32(dq) * transform.rotation;
+			transform.translate = Vec3f32(physics.r);
 		}
 	}
 }

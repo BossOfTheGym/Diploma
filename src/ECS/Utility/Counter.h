@@ -11,6 +11,11 @@ namespace ecs::util
             return s_counter;
         }
 
+        static Int next()
+        {
+            return s_counter++;
+        }
+
     protected:
         static Int s_counter;
     };
@@ -25,13 +30,10 @@ namespace ecs::util
     public:
         static Int get() 
         {
+            // hotfix, makes Counter a bit redundant
+            static const Int s_ID = Counter<Int, Group>::next();
+
             return s_ID;
         }
-
-    private:
-        static const Int s_ID;
     };
-
-    template <typename Int, typename T, typename Group>
-    const Int TypeCounter<Int, T, Group>::s_ID = Counter<Int, Group>::s_counter++;
 }

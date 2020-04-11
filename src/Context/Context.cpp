@@ -14,7 +14,7 @@ namespace context
 		return gs_contextInitialized;
 	}
 
-	bool intialized()
+	bool initialized()
 	{
 		return gs_contextInitialized;
 	}
@@ -28,11 +28,11 @@ namespace context
 		}
 	}
 
+
 	void setSwapInterval(int interval)
 	{
 		glfwSwapInterval(interval);
 	}
-
 
 	void pollEvents()
 	{
@@ -42,7 +42,7 @@ namespace context
 
 	// statics
 	using Register = BaseWindow::Register;
-	Register BaseWindow::s_windowRegister;
+	Register BaseWindow::sm_windowRegister;
 
 	using Optional = BaseWindow::Optional;
 
@@ -90,13 +90,13 @@ namespace context
 
 	void BaseWindow::addWindowToRegister(BaseWindow& window)
 	{
-		s_windowRegister.insert({window.m_window, &window});
+		sm_windowRegister.insert({window.m_window, &window});
 	}
 
 	Optional BaseWindow::getWindowFromRegister(GLFWwindow* window)
 	{
-		auto it = s_windowRegister.find(window);
-		if (it != s_windowRegister.end())
+		auto it = sm_windowRegister.find(window);
+		if (it != sm_windowRegister.end())
 		{
 			return it->second;
 		}
@@ -105,12 +105,12 @@ namespace context
 
 	bool BaseWindow::hasRegisterWindow(GLFWwindow* window)
 	{
-		return s_windowRegister.find(window) != s_windowRegister.end();
+		return sm_windowRegister.find(window) != sm_windowRegister.end();
 	}
 
 	void BaseWindow::removeWindowFromRegister(GLFWwindow* window)
 	{
-		s_windowRegister.erase(window);
+		sm_windowRegister.erase(window);
 	}
 
 
@@ -130,6 +130,11 @@ namespace context
 	BaseWindow::BaseWindow(const CreationInfo& info, bool initializeGL)
 		: m_info(info)
 	{
+		if (sm_windowRegister.empty() && !initialized())
+		{
+			context::initialize();
+		}
+
 		for (auto&[hint, value] : info.hints)
 		{
 			glfwWindowHint(hint, value);
@@ -163,6 +168,11 @@ namespace context
 		if (m_window)
 		{
 			glfwDestroyWindow(m_window);
+		}
+
+		if (sm_windowRegister.empty() && initialized())
+		{
+			context::terminate();
 		}
 	}
 

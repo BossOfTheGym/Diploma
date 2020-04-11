@@ -23,16 +23,18 @@ namespace sim
 		auto t1 = m_clock.now().time_since_epoch().count();
 
 		m_t0 += m_dt;
-		m_dt  = t1 - m_t0;
+		m_dt  = t1 - m_t;
 
 		m_t0Warped += m_dtWarped;
 		m_dtWarped  = m_dt * m_warp;
+
+		m_t = t1;
 	}
 
 
 	void TimeSystem::resetTime()
 	{
-		m_t = m_clock.now();
+		m_t = m_clock.now().time_since_epoch().count();
 
 		m_t0 = 0;
 		m_dt = 0;
@@ -73,6 +75,16 @@ namespace sim
 		return m_dtWarped;
 	}
 
+
+	auto TimeSystem::getRealTime() const -> Tick
+	{
+		return m_t0;
+	}
+
+	auto TimeSystem::getRealTimeDelta() const ->Tick
+	{
+		return m_dt;
+	}
 
 	void TimeSystem::addTimeEvent(Tick time)
 	{

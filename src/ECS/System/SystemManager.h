@@ -3,6 +3,8 @@
 #include "ISystem.h"
 #include "../Utility/NoCopyMove.h"
 
+#include <GL/glew.h>
+
 #include <unordered_map>
 #include <vector>
 #include <utility>
@@ -70,6 +72,7 @@ namespace ecs::sys
 
 
 		ecs::ECSEngine* getECSEngine() const;
+
 
 	private:
 		Registry      m_systemRegistry{};

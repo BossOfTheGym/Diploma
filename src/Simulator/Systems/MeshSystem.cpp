@@ -35,7 +35,6 @@ namespace sim
 	MeshSystem::MeshSystem(ecs::sys::SystemManager* manager)
 		: ecs::sys::System<MeshSystem>(manager)
 	{
-		// TODO : load basic meshes
 		auto  graphicsSystem = manager->get<GraphicsSystem>();
 		auto& graphicsEngine = graphicsSystem->getGraphicsEngine();
 

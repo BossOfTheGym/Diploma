@@ -40,7 +40,7 @@ namespace sim
 
 		TestRendererSystem* testRendererSystem = systemManager.get<TestRendererSystem>();
 
-		TimeSystem* timeSystem = systemManager.get<TimeSystem>();
+		TimeSystem* timeSystem = systemManager.get<TimeSystem>();		
 
 		// builders
 		auto& entityBuilderManager = getEntityBuilderManager();
@@ -51,14 +51,26 @@ namespace sim
 
 
 		// main loop
+		contextSystem->showWindow();
+
+		Entity planet    = planetFactory->buildEntity();
+		Entity satellite = satelliteFactory->buildEntity();
 		while(!contextSystem->shouldClose())
 		{
 			contextSystem->pollEvents();
 			timeSystem->tick();
 
+			auto  t = timeSystem->getTime() / static_cast<Float>(TimeSystem::PERIOD);
+			auto dt = timeSystem->getDeltaTime() / static_cast<Float>(TimeSystem::PERIOD);
 
+			planetSystem->update(t, dt);
+			physicsSystem->update(t, dt);
+			testRendererSystem->update(t, dt);
+
+			contextSystem->swapBuffers();
 		}
 	}
+
 
 	void Simulator::loadEntityBuilders()
 	{
@@ -98,16 +110,23 @@ namespace sim
 		Float near = 1.0;
 		Float far  = 1000.0;
 		systemManager.add<ContextSystem>(&systemManager, info, true, fovy, near, far);
+		std::cout << ContextSystem::TYPE_ID << std::endl;
+		std::cout << ecs::util::TypeCounter<ecs::Id, GraphicsSystem, ecs::sys::ISystem>::get() << std::endl;
 
 		// graphics
 		systemManager.add<GraphicsSystem>(&systemManager);
+		std::cout << GraphicsSystem::TYPE_ID << std::endl;
+		std::cout << ecs::util::TypeCounter<ecs::Id, ContextSystem, ecs::sys::ISystem>::get() << std::endl;
 
 		// mesh system
 		systemManager.add<MeshSystem>(&systemManager);
+		std::cout << MeshSystem::TYPE_ID << std::endl;
+		std::cout << ecs::util::TypeCounter<ecs::Id, MeshSystem, ecs::sys::ISystem>::get() << std::endl;
 
 		// PlanetSystem
 		systemManager.add<PlanetSystem>(&systemManager);
-
+		std::cout << PlanetSystem::TYPE_ID << std::endl;
+		std::cout << ecs::util::TypeCounter<ecs::Id, PlanetSystem, ecs::sys::ISystem>::get() << std::endl;
 		// Player System
 		//systemManager.add<PlayerSystem>(&systemManager);
 
@@ -116,6 +135,7 @@ namespace sim
 
 		// TestRendererSystem
 		systemManager.add<TestRendererSystem>(&systemManager);
+		std::cout << TestRendererSystem::TYPE_ID << std::endl;
 
 		// Time system
 		using Tick = TimeSystem::Tick;

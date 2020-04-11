@@ -57,6 +57,11 @@ namespace sim
 		Tick getDeltaTime() const;
 
 
+		Tick getRealTime() const;
+
+		Tick getRealTimeDelta() const;
+
+
 		void addTimeEvent(Tick time);
 
 		std::optional<Tick> peekTimeEvent();
@@ -73,8 +78,8 @@ namespace sim
 		Tick m_minWarp{1}; // min warp 
 		Tick m_maxWarp{1}; // max warp
 
-		Time m_t{}; // ground zero
-
+		Tick m_t{};
+		
 		Tick m_t0{}; // current real time
 		Tick m_dt{}; // real time delta
 

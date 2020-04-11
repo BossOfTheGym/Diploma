@@ -57,13 +57,13 @@ namespace graphics
 
 	template<class F>
 	const String attrib_attachment<F>::value = 
-		"in vec3" POSITION    ";\n"
-		"in vec3" BARYCENTRIC ";\n"
-		"in vec3" TEXCOORD    ";\n"
-		"in vec3" COLOR       ";\n"
-		"in vec3" NORMAL      ";\n"
-		"in vec3" TANGENT     ";\n"
-		"in vec3" BITANGENT   ";\n";
+		"in vec3 " POSITION    ";\n"
+		"in vec3 " BARYCENTRIC ";\n"
+		"in vec3 " TEXCOORD    ";\n"
+		"in vec3 " COLOR       ";\n"
+		"in vec3 " NORMAL      ";\n"
+		"in vec3 " TANGENT     ";\n"
+		"in vec3 " BITANGENT   ";\n";
 
 
 

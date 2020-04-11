@@ -22,6 +22,7 @@ namespace gl
 	Shader::~Shader()
 	{
 		deleteShader();
+		auto e = glGetError(); // TODO
 	}
 
 	//operators

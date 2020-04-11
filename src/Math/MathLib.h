@@ -114,29 +114,4 @@ namespace math
 
 	using Vec2i64 = glm::tvec2<Int64>;
 	using Vec2u64 = glm::tvec2<Int64>;	
-
-
-	// TODO : realize if it is possible to construct ex. Quatf64 from Quatf32
-	// as the main purpose was handle theese type of conversionts
-	// construct one type from another
-	namespace detail
-	{
-		template<class To, class From, size_t ... Indices>
-		auto constructTo(From&& from, std::index_sequence<Indices...>)
-		{
-			return To(from[Indices]...);
-		}
-	}
-
-	template<class To, class From>
-	auto constructTo(From&& from)
-	{
-		using pure_to   = std::remove_cv_t<std::remove_reference_t<From>>;
-		using pure_from = std::remove_cv_t<std::remove_reference_t<To>>;
-
-		return detail::constructTo<To>(
-			std::forward<From>(from)
-			, std::make_index_sequence<std::min(pure_to::length(), pure_from::length())>()
-		);
-	}
 }

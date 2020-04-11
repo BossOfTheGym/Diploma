@@ -28,6 +28,8 @@ namespace sim
 
 		m_graviHolder         = Function(m_gravitation);
 		m_graviJacobianHolder = Jacobian(m_gravitationJacobian);
+
+		m_solver = solvers::gaussLegendre6<Float, 6>(1e-15, 50);
 	}
 
 	void PlanetSystem::update(ecs::Float t, ecs::Float dt)

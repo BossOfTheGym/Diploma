@@ -12,11 +12,11 @@ namespace context
 	using math::Vec2f64;
 	using math::Vec2i;
 
-	bool initialize();
+	/*bool initialize();
 
 	bool initialized();
 
-	void terminate();
+	void terminate();*/
 
 	void setSwapInterval(int interval);
 
@@ -76,7 +76,7 @@ namespace context
 		using Optional = std::optional<BaseWindow*>;
 
 	private:
-		static Register s_windowRegister;
+		static Register sm_windowRegister;
 
 
 		static void commonCursorPosCallback(GLFWwindow* window, double xPos, double yPos);

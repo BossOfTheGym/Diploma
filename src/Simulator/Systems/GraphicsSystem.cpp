@@ -7,7 +7,9 @@ namespace sim
 
 	GraphicsSystem::GraphicsSystem(ecs::sys::SystemManager* manager)
 		: base_t(manager)
-	{}
+	{
+		auto e = glGetError();
+	}
 
 	GraphicsEngine& GraphicsSystem::getGraphicsEngine()
 	{

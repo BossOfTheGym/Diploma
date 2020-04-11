@@ -19,8 +19,6 @@ namespace sim
 		, base_t2(info, initializeGL)
 	{
 		// TODO : add assert
-		context::initialize();
-
 		m_simulator = static_cast<Simulator*>(manager->getECSEngine());
 
 		auto size = getWindowSize();
@@ -28,9 +26,7 @@ namespace sim
 	}
 
 	ContextSystem::~ContextSystem()
-	{
-		context::terminate();
-	}
+	{}
 
 	void ContextSystem::pollEvents()
 	{
