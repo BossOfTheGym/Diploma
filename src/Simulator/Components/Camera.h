@@ -55,9 +55,17 @@ namespace comp
 		void rotatePitch(F32 angleDelta);
 
 
-		const Mat4f32& projMat();
+		const Vec3f32& getPosition();
+
+		const Vec3f32& getCenter();
 
 		const Mat4f32& viewMat();
+
+
+	public:	
+		void setMinDist(F32 minDist);
+
+		void setMaxDist(F32 maxDist);
 
 
 	private:

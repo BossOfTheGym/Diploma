@@ -8,7 +8,7 @@ namespace test
 
 	const Mat4f32 TEST_VIEW = glm::lookAt(Vec3f32{30}, Vec3f32{}, Vec3f32{0.0, 1.0, 0.0});
 
-	const Float PLANET_R    = 10.0;
+	const Float PLANET_R    = 1.0;
 	const Float PLANET_MU   = 1000.0;
 	const Float PLANET_MASS = 1.0;
 
@@ -16,7 +16,7 @@ namespace test
 
 	const Vec3 PLANET_RAD = Vec3{0.0};
 	const Vec3 PLANET_VEL = Vec3{0.0};
-	const Vec3 PLANET_ROT_AXIS = Vec3(0.0, 1.0, 0.0);
+	const Vec3 PLANET_ROT_AXIS = glm::normalize(Vec3(0.0, 1.0, 0.0));
 	const Float PLANET_ROT_ANGLE = 0.5;
 
 	const Vec3f32 PLANET_SCALE     = Vec3{PLANET_R};
@@ -28,7 +28,7 @@ namespace test
 
 	const Vec3f32 SAT_COLOR = Vec3f32(1.0, 0.5, 0.25);
 
-	const Vec3 SAT_RAD = Vec3{2 * PLANET_R, 0.0, 0.0};
+	const Vec3 SAT_RAD = Vec3{12.0, 0.0, 0.0};
 	const Vec3 SAT_VEL = Vec3{0.0, 0.0, 7.0};
 	const Vec3 SAT_ROT_AXIS = glm::normalize(Vec3{1.0, 1.0, 1.0});
 	const Float SAT_ROT_ANGLE = 0.5;

@@ -31,7 +31,6 @@ namespace sim
 		auto& registry = m_simulator->getRegistry();
 
 		Entity planet = registry.create();
-		registry.assign<comp::Camera3rdPerson>(planet, test::PLANET_RAD, math::PI_4, 0.0, 0.0, test::PLANET_R, test::PLANET_R * 1.5, test::PLANET_R * 10.0);
 		registry.assign<comp::Transform>      (planet, test::PLANET_RAD, test::PLANET_ROTATTION, test::PLANET_SCALE);
 		registry.assign<comp::PhysicsData>    (planet, test::PLANET_RAD, test::PLANET_VEL, test::PLANET_ROT_AXIS, test::PLANET_ROT_ANGLE, test::PLANET_MASS);
 		registry.assign<comp::SimData>        (planet, comp::fromRadVel(test::PLANET_RAD, test::PLANET_VEL));

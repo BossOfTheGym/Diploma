@@ -253,6 +253,9 @@
     <ClCompile Include="src\Simulator\Components\Transform.cpp">
       <Filter>src\Simulator\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Simulator\EntityBuilders\PlayerFactory.cpp">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Solver\ISolver.h">
@@ -450,9 +453,6 @@
     <ClInclude Include="src\Simulator\Components\MeshComponent.h">
       <Filter>src\Simulator\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Simulator\Components\PlayerTag.h">
-      <Filter>src\Simulator\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\Simulator\Components\TestRendererTag.h">
       <Filter>src\Simulator\Components</Filter>
     </ClInclude>
@@ -500,6 +500,12 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\Test.h">
       <Filter>src\Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Components\Player.h">
+      <Filter>src\Simulator\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\EntityBuilders\PlayerFactory.h">
+      <Filter>src\Simulator\EntitiesBuilders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

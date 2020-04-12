@@ -6,6 +6,7 @@
 
 #include "../Components/TestRendererTag.h"
 #include "../Components/Transform.h"
+#include "../Components/Camera.h"
 
 #include "MeshSystem.h"
 #include "ContextSystem.h"
@@ -32,6 +33,8 @@ namespace sim
 		m_frag = loader.shaderFromFile(gl::ShaderType::Fragment, "assets/shaders/test.frag");
 		m_program = builder.buildProgram("test program", m_vert, m_frag);
 		m_pvmLocation = m_program.getUniformLocation("uPVM");
+		m_mLocation  = m_program.getUniformLocation("uM");
+		m_eyeLocation = m_program.getUniformLocation("uEye");
 	}
 
 	void TestRendererSystem::update(ecs::Float t, ecs::Float dt)
@@ -53,18 +56,26 @@ namespace sim
 			return;
 		}
 
-		auto sphereResource = meshSystem->acquireResource(MeshSystem::CUBE).lock();
+		auto sphereResource = meshSystem->acquireResource(MeshSystem::SPHERE).lock();
 		if (!sphereResource)
 		{
 			// TODO : notify about error
 			return;
 		}
 
+		auto player = m_simulator->getPlayer();
+		if (!registry.valid(player) || !registry.has<comp::Camera3rdPerson>(player))
+		{
+			// TODO : notify about error
+			return;
+		}
+		auto& camera = registry.get<comp::Camera3rdPerson>(player);
+
 		auto usesIndices  = sphereResource->usingIndices();
 		auto& drawInfo    = sphereResource->getDrawInfo();
 		auto& vertexArray = sphereResource->getVertexArray();
 
-		// to set render state
+		// set render state
 		gl::state::enable(gl::Capability::DepthTest);
 		gl::state::disable(gl::Capability::CullFace);
 
@@ -78,13 +89,18 @@ namespace sim
 		vertexArray.bind();
 
 		// render
-		auto pv = contextSystem->getProjection() * test::TEST_VIEW;
-		auto view = registry.view<comp::TestRendererTag, comp::Transform>();
-		for (auto e : view)
+		auto p = contextSystem->getProjection();
+		auto v = camera.viewMat();
+		auto pv = p * v;
+
+		for (auto e : registry.view<comp::TestRendererTag, comp::Transform>())
 		{
 			auto& transform = registry.get<comp::Transform>(e);
 
-			m_program.setUniformMat4f32(m_pvmLocation, pv * transform.toMat());
+			auto m = transform.toMat();
+			m_program.setUniformMat4f32(m_pvmLocation, pv * m);
+			m_program.setUniformMat4f32(m_mLocation, m);
+			m_program.setUniformVec3f32(m_eyeLocation, camera.getPosition());
 			if (!usesIndices)
 			{
 				vertexArray.drawArrays(drawInfo);

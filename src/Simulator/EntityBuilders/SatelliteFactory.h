@@ -4,8 +4,6 @@
 
 namespace sim
 {
-	class Simulator;
-
 	class SatelliteFactory : public ecs::entity::EntityBuilder<SatelliteFactory>
 	{
 	public:

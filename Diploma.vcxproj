@@ -45,6 +45,7 @@
     <ClCompile Include="src\Simulator\Components\Transform.cpp" />
     <ClCompile Include="src\Simulator\EntityBuilders\ChaserFactory.cpp" />
     <ClCompile Include="src\Simulator\EntityBuilders\PlanetFactory.cpp" />
+    <ClCompile Include="src\Simulator\EntityBuilders\PlayerFactory.cpp" />
     <ClCompile Include="src\Simulator\EntityBuilders\SatelliteFactory.cpp" />
     <ClCompile Include="src\Simulator\Simulator.cpp" />
     <ClCompile Include="src\Simulator\Systems\ContextSystem.cpp" />
@@ -113,7 +114,7 @@
     <ClInclude Include="src\Simulator\Components\Orbit.h" />
     <ClInclude Include="src\Simulator\Components\PhysicsData.h" />
     <ClInclude Include="src\Simulator\Components\Planet.h" />
-    <ClInclude Include="src\Simulator\Components\PlayerTag.h" />
+    <ClInclude Include="src\Simulator\Components\Player.h" />
     <ClInclude Include="src\Simulator\Components\Rendezvous.h" />
     <ClInclude Include="src\Simulator\Components\Satellite.h" />
     <ClInclude Include="src\Simulator\Components\SimData.h" />
@@ -123,6 +124,7 @@
     <ClInclude Include="src\Simulator\EntityBuilders\ChaserFactory.h" />
     <ClInclude Include="src\Simulator\EntityBuilders\entity_builders_common.h" />
     <ClInclude Include="src\Simulator\EntityBuilders\PlanetFactory.h" />
+    <ClInclude Include="src\Simulator\EntityBuilders\PlayerFactory.h" />
     <ClInclude Include="src\Simulator\EntityBuilders\SatelliteFactory.h" />
     <ClInclude Include="src\Simulator\Simulator.h" />
     <ClInclude Include="src\Simulator\Systems\ContextSystem.h" />

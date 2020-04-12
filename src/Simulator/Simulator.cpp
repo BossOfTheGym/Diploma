@@ -1,4 +1,3 @@
-
 #include "Simulator.h"
 
 #include "Systems/ContextSystem.h"
@@ -14,6 +13,11 @@
 #include "EntityBuilders/ChaserFactory.h"
 #include "EntityBuilders/PlanetFactory.h"
 #include "EntityBuilders/SatelliteFactory.h"
+#include "EntityBuilders/PlayerFactory.h"
+
+#include "Components/Player.h"
+#include "Components/Transform.h"
+#include "Components/Camera.h"
 
 namespace sim
 {
@@ -42,6 +46,9 @@ namespace sim
 
 		TimeSystem* timeSystem = systemManager.get<TimeSystem>();		
 
+		PlayerSystem* playerSystem = systemManager.get<PlayerSystem>();
+
+
 		// builders
 		auto& entityBuilderManager = getEntityBuilderManager();
 
@@ -49,12 +56,24 @@ namespace sim
 
 		PlanetFactory* planetFactory = entityBuilderManager.get<PlanetFactory>();
 
+		PlayerFactory* playerFactory = entityBuilderManager.get<PlayerFactory>();
 
 		// main loop
-		contextSystem->showWindow();
+		// init
+		m_planet = planetFactory->buildEntity();
+		m_player = playerFactory->buildEntity();
 
-		Entity planet    = planetFactory->buildEntity();
-		Entity satellite = satelliteFactory->buildEntity();
+		m_sat1 = satelliteFactory->buildEntity();
+
+		auto controller = playerSystem->getInputController();
+		controller->setControlledEntity(m_player);
+
+		getRegistry().get<comp::Player>(m_player).view = m_sat1;
+
+
+		contextSystem->showWindow();
+		contextSystem->setSwapInterval(1);
+		contextSystem->pushController(controller);
 		while(!contextSystem->shouldClose())
 		{
 			contextSystem->pollEvents();
@@ -65,12 +84,31 @@ namespace sim
 
 			planetSystem->update(t, dt);
 			physicsSystem->update(t, dt);
+			playerSystem->update(t, dt);
 			testRendererSystem->update(t, dt);
 
 			contextSystem->swapBuffers();
 		}
+
+		// deinit
+		m_registry.clear();
+
+		m_planet = null;
+		m_player = null;
+		m_sat1 = null;
+		m_sat2 = null;
 	}
 
+
+	void Simulator::init()
+	{
+		// TODO
+	}
+
+	void Simulator::deinit()
+	{
+		// TODO
+	}
 
 	void Simulator::loadEntityBuilders()
 	{
@@ -84,6 +122,9 @@ namespace sim
 
 		// PlanetFactory
 		entityBuilderManager.add<PlanetFactory>(&entityBuilderManager);
+
+		// PlayerFactory
+		entityBuilderManager.add<PlayerFactory>(&entityBuilderManager);
 	}
 
 	void Simulator::loadSystems()
@@ -110,23 +151,16 @@ namespace sim
 		Float near = 1.0;
 		Float far  = 1000.0;
 		systemManager.add<ContextSystem>(&systemManager, info, true, fovy, near, far);
-		std::cout << ContextSystem::TYPE_ID << std::endl;
-		std::cout << ecs::util::TypeCounter<ecs::Id, GraphicsSystem, ecs::sys::ISystem>::get() << std::endl;
 
 		// graphics
 		systemManager.add<GraphicsSystem>(&systemManager);
-		std::cout << GraphicsSystem::TYPE_ID << std::endl;
-		std::cout << ecs::util::TypeCounter<ecs::Id, ContextSystem, ecs::sys::ISystem>::get() << std::endl;
 
 		// mesh system
 		systemManager.add<MeshSystem>(&systemManager);
-		std::cout << MeshSystem::TYPE_ID << std::endl;
-		std::cout << ecs::util::TypeCounter<ecs::Id, MeshSystem, ecs::sys::ISystem>::get() << std::endl;
 
 		// PlanetSystem
 		systemManager.add<PlanetSystem>(&systemManager);
-		std::cout << PlanetSystem::TYPE_ID << std::endl;
-		std::cout << ecs::util::TypeCounter<ecs::Id, PlanetSystem, ecs::sys::ISystem>::get() << std::endl;
+
 		// Player System
 		//systemManager.add<PlayerSystem>(&systemManager);
 
@@ -135,7 +169,6 @@ namespace sim
 
 		// TestRendererSystem
 		systemManager.add<TestRendererSystem>(&systemManager);
-		std::cout << TestRendererSystem::TYPE_ID << std::endl;
 
 		// Time system
 		using Tick = TimeSystem::Tick;
@@ -146,5 +179,29 @@ namespace sim
 
 		// Physics system
 		systemManager.add<PhysicsSystem>(&systemManager);
+
+		// Player system
+		systemManager.add<PlayerSystem>(&systemManager);
+	}
+
+
+	Entity Simulator::getPlanet() const
+	{
+		return m_planet;
+	}
+
+	Entity Simulator::getPlayer() const
+	{
+		return m_player;
+	}
+
+	Entity Simulator::getSat1() const
+	{
+		return m_sat1;
+	}
+
+	Entity Simulator::getSat2() const
+	{
+		return m_sat2;
 	}
 }

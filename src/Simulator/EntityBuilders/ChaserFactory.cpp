@@ -30,7 +30,6 @@ namespace sim
 		auto& registry = m_simulator->getRegistry();
 
 		Entity satellite = registry.create();
-		registry.assign<comp::Camera3rdPerson>(satellite);
 		registry.assign<comp::Transform>      (satellite);
 		registry.assign<comp::PhysicsData>    (satellite);
 		registry.assign<comp::SimData>        (satellite);

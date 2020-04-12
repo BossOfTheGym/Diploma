@@ -36,5 +36,7 @@ namespace sim
 		gl::Shader m_frag{};
 		gl::ShaderProgram m_program{};
 		GLint m_pvmLocation{};
+		GLint m_mLocation{};
+		GLint m_eyeLocation{};
 	};
 }

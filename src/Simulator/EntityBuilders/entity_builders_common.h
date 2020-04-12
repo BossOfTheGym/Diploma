@@ -13,4 +13,6 @@ namespace sim
 	using ecs::entity::Entity;
 	using ecs::entity::null;
 	using ECRegistry = ecs::entity::EntityComponentRegistry;
+
+	class Simulator;
 }

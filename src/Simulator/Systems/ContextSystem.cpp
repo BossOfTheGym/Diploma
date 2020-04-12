@@ -1,11 +1,12 @@
 #include "ContextSystem.h"
 
-#include <utility>
-#include <glWrap/OpenGL.h>
+#include "InputController/IInputController.h"
 
 #include "../Components/Camera.h"
-
 #include "../Simulator.h"
+
+#include <utility>
+
 
 namespace sim
 {
@@ -25,35 +26,69 @@ namespace sim
 		m_projection = glm::perspective(fovy, 1.0 * size.x / size.y, near, far);
 	}
 
-	ContextSystem::~ContextSystem()
-	{}
 
 	void ContextSystem::pollEvents()
 	{
 		context::pollEvents();
 	}
 
+	void ContextSystem::setSwapInterval(int interval)
+	{
+		context::setSwapInterval(interval);
+	}
+
 
 	void ContextSystem::mouseEvent(double xPos, double yPos)
 	{
-		//m_host->getCamera().rotateAround(2 * math::PI * (xPos - m_prevX) / window.getWindowSize().x);
-		//m_host->getCamera().rotatePitch(2 * math::PI * (yPos - m_prevY) /window.getWindowSize().x);
-		//m_prevX = xPos;
-		//m_prevY = yPos;
+		if (!m_controllers.empty())
+		{
+			m_controllers.back()->mouseEvent(*this, xPos, yPos);
+		}
 	}
 
 	void ContextSystem::mouseButtonEvent(int button, int action, int mods)
 	{
+		if (!m_controllers.empty())
+		{
+			m_controllers.back()->mouseButtonEvent(*this, button, action, mods);
+		}
 	}
 
 	void ContextSystem::scrollEvent(double xOffset, double yOffset)
 	{
-		//m_host->getCamera().changeDistance(yOffset / 100);
+		if (!m_controllers.empty())
+		{
+			m_controllers.back()->scrollEvent(*this, xOffset, yOffset);
+		}
 	}
 
 	void ContextSystem::keyEvent(int key, int scancode, int action, int mods)
 	{
+		if (!m_controllers.empty())
+		{
+			m_controllers.back()->keyEvent(*this, key, scancode, action, mods);
+		}
 	}
+
+
+	void ContextSystem::pushController(IInputController* controller)
+	{
+		m_controllers.push_back(controller);
+	}
+
+	IInputController* ContextSystem::peekController()
+	{
+		return (!m_controllers.empty() ? m_controllers.back() : nullptr);
+	}
+
+	void ContextSystem::popController()
+	{
+		if (!m_controllers.empty())
+		{
+			m_controllers.pop_back();
+		}
+	}
+
 
 	const Mat4f32& ContextSystem::getProjection() const
 	{

@@ -121,7 +121,7 @@ namespace context
 		glfwSetKeyCallback(handle, commonKeyCallback);
 		glfwSetCursorPosCallback(handle, commonCursorPosCallback);
 		glfwSetScrollCallback(handle, commonScrollCallback);
-		glfwSetKeyCallback(handle, commonKeyCallback);
+		glfwSetMouseButtonCallback(handle, commonMouseButtonCallback);
 	}
 
 

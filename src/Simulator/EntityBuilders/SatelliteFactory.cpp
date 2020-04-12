@@ -38,7 +38,6 @@ namespace sim
 		}
 
 		Entity satellite = registry.create();
-		registry.assign<comp::Camera3rdPerson>(satellite, test::SAT_TRANSLATE, math::PI_4, 0.0, 0.0, 1.0, 0.5, 10.0);
 		registry.assign<comp::Transform>      (satellite, test::SAT_TRANSLATE, test::SAT_ROTATION, test::SAT_SCALE);
 		registry.assign<comp::PhysicsData>    (satellite, test::SAT_RAD, test::SAT_VEL, test::SAT_ROT_AXIS, test::SAT_ROT_ANGLE, test::SAT_MASS);
 		registry.assign<comp::SimData>        (satellite, comp::fromRadVel(test::SAT_RAD, test::SAT_VEL));

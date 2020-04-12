@@ -1,6 +1,7 @@
 #include "Camera.h"
 
 #include <algorithm>
+#include <iostream>
 
 namespace comp
 {
@@ -22,8 +23,7 @@ namespace comp
 		, m_minDist(minDistance)
 		, m_maxDist(maxDistance)
 	{
-		pitchLimit = pitchLimit - std::floor(pitchLimit / math::PI2) * math::PI2;
-		pitchLimit -= math::PI_2;
+		pitchLimit = pitchLimit - std::floor(pitchLimit / math::PI_2) * math::PI_2;
 		pitchLimit = std::abs(pitchLimit);
 		pitchLimit = (pitchLimit > math::EPS ? pitchLimit : math::PI_4);
 		m_pitchLimit = pitchLimit;
@@ -84,16 +84,49 @@ namespace comp
 		return m_camera;
 	}
 
+	const Vec3f32& Camera3rdPerson::getPosition()
+	{
+		if (m_needUpdate)
+		{
+			updateCamera();
+		}
+		return m_position;
+	}
+
+	const Vec3f32& Camera3rdPerson::getCenter()
+	{
+		return m_center;
+	}
+
+
+
+	void Camera3rdPerson::setMinDist(F32 minDist)
+	{
+		minDist = std::abs(minDist);
+		m_minDist = std::min(minDist, m_maxDist);
+		m_maxDist = std::max(minDist, m_maxDist);
+	}
+
+	void Camera3rdPerson::setMaxDist(F32 maxDist)
+	{
+		maxDist = std::abs(maxDist);
+		m_minDist = std::min(maxDist, m_maxDist);
+		m_maxDist = std::max(maxDist, m_maxDist);
+	}
 
 	void Camera3rdPerson::updateCamera()
 	{
-		Vec3f32 r = glm::normalize(
-			Vec3f32{ // -roll
-			  std::cos(m_rotation)
-			, std::sin(m_pitch)
-			, std::sin(m_rotation)
-			}
-		);
+		F32 cosP = std::cos(m_pitch);
+		F32 sinP = std::sin(m_pitch);
+		F32 cosR = std::cos(m_rotation);
+		F32 sinR = std::sin(m_rotation);
+
+		Vec3f32 r = Vec3f32 // -roll
+		{
+			  cosP * cosR
+			, sinP
+			, cosP * sinR
+		};
 		Vec3f32 p = glm::normalize(glm::cross(Vec3f32{0.0f, 1.0f, 0.0f}, r)); // -pitch
 		Vec3f32 y = glm::normalize(glm::cross(r, p)); // yaw
 

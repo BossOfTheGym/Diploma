@@ -16,7 +16,7 @@ namespace sim
 	class InputController : public IInputController
 	{
 	public:
-		InputController(Simulator* host);
+		InputController(Simulator* host, Entity controlled = null);
 
 		virtual ~InputController() = default;
 
@@ -32,14 +32,18 @@ namespace sim
 
 
 	public:
-		
+		void setControlledEntity(Entity e);
+
+		Entity getControlledEntity() const;
+
 
 	private:
 		Simulator* m_simulator{nullptr};
 
 		Entity m_controlled{null};
 
-		Float m_prevX{};
-		Float m_prevY{};
+		Float m_prevX{0.0};
+		Float m_prevY{0.0};
+		bool m_pressed{false};
 	};
 }

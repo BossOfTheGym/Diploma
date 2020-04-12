@@ -6,6 +6,8 @@
 
 #include <Math/MathLib.h>
 
+#include <vector>
+
 namespace sim
 {
 	using context::Hint;
@@ -23,6 +25,8 @@ namespace sim
 
 	class Simulator;
 
+	class IInputController;
+
 	// TODO : move out input functionality to InputSystem
 	class ContextSystem : public ecs::sys::System<ContextSystem>, public BaseWindow
 	{		
@@ -31,6 +35,7 @@ namespace sim
 		using base_t1 = ecs::sys::System<ContextSystem>;
 		using base_t2 = BaseWindow;
 
+		using ControllerStack = std::vector<IInputController*>;
 
 	public:
 		ContextSystem(
@@ -40,11 +45,13 @@ namespace sim
 			, Float fovy = glm::radians(45.0), Float near = 1.0, Float far = 1000.0
 		);
 
-		virtual ~ContextSystem();
+		virtual ~ContextSystem() = default;
 
 
 	public:
 		void pollEvents();
+
+		void setSwapInterval(int interval);
 
 
 	public: //BaseWindow
@@ -58,6 +65,16 @@ namespace sim
 
 
 	public:
+		// TODO : maybe std::weak_ptr<> ?
+		// TODO : add asserts
+		// controller != nullptr		
+		void pushController(IInputController* controller);
+
+		IInputController* peekController();
+
+		void popController();
+
+
 		const Mat4f32& getProjection() const;
 
 
@@ -65,5 +82,7 @@ namespace sim
 		Simulator* m_simulator{nullptr};		
 
 		Mat4f32 m_projection{};
+
+		ControllerStack m_controllers{};
 	};
 }

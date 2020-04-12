@@ -36,13 +36,13 @@ namespace sim
 	{
 		auto& registry = m_simulator->getRegistry();
 
-		auto planetView = registry.view<Planet, SimData>();
-		if (planetView.begin() == planetView.end())
+		auto planet = m_simulator->getPlanet();
+		if (!registry.valid(planet) || !registry.has<Planet, SimData>(planet))
 		{
+			// TODO : notify about error
 			return;
 		}
-		
-		auto planet = *planetView.begin();
+
 		auto center = registry.get<SimData>(planet).getRadius();
 		auto mu     = registry.get<Planet>(planet).mu;
 		m_gravitation->setMu(mu);

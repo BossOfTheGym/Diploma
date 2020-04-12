@@ -54,9 +54,11 @@ namespace math
 	const Float PI = static_cast<Float>(std::acos(-1.0_FL));
 	const Float PI2 = 2 * PI;
 	const Float PI_2 = PI / 2;
+	const Float PI_3 = PI / 3;
 	const Float PI_4 = PI / 4;
 	const Float PI_5 = PI / 5;
 	const Float PI_6 = PI / 6;
+	const Float PI_7 = PI / 7;
 	const Float PI_8 = PI / 8;
 
 
