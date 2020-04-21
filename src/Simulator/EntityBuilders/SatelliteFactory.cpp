@@ -10,6 +10,7 @@
 #include "../Components/Orbit.h"
 #include "../Components/MeshComponent.h"
 #include "../Components/TestRendererTag.h"
+#include "../Components/Orbit.h"
 
 #include "../Simulator.h"
 #include "../Systems/ContextSystem.h"
@@ -42,7 +43,7 @@ namespace sim
 		registry.assign<comp::PhysicsData>    (satellite, test::SAT_RAD, test::SAT_VEL, test::SAT_ROT_AXIS, test::SAT_ROT_ANGLE, test::SAT_MASS);
 		registry.assign<comp::SimData>        (satellite, comp::fromRadVel(test::SAT_RAD, test::SAT_VEL));
 		registry.assign<comp::Satellite>      (satellite, test::SAT_COLOR);
-		//registry.assign<comp::Orbit>          (satellite); // TODO
+		registry.assign<comp::Orbit>          (satellite); // TODO
 		//registry.assign<comp::MeshComponent>  (satellite); // TODO
 		registry.assign<comp::TestRendererTag>(satellite);
 		return satellite;

@@ -127,6 +127,7 @@ namespace context
 
 	// non-static
 	// TODO : little bit messy, STARTED EXPERIMENTING
+	// TODO : add ability to create window in full-windowed mode
 	BaseWindow::BaseWindow(const CreationInfo& info, bool initializeGL)
 		: m_info(info)
 	{
@@ -155,13 +156,6 @@ namespace context
 		}
 	}
 
-	BaseWindow::BaseWindow(BaseWindow&& another)
-		: m_info()
-		, m_window()
-	{
-		*this = std::move(another);
-	}
-
 	BaseWindow::~BaseWindow()
 	{
 		removeWindowFromRegister(m_window);
@@ -174,14 +168,6 @@ namespace context
 		{
 			context::terminate();
 		}
-	}
-
-	BaseWindow& BaseWindow::operator = (BaseWindow&& another)
-	{
-		std::swap(m_window, another.m_window);
-		std::swap(m_info, another.m_info);
-
-		return *this;
 	}
 
 

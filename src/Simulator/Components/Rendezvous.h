@@ -28,30 +28,44 @@ namespace comp
 		struct BaseAction : ecs::util::StaticType
 		{
 			static const Id TYPE_ID;
+
+			BaseAction() : ecs::util::StaticType(TYPE_ID)
+			{}
 		};
 
 		template<class T>
 		const Id BaseAction<T>::TYPE_ID = ecs::util::TypeCounter<Id, T, BaseAction>::get(); 
 	}
 
+
 	struct Action
 	{
 		Entity nextAction{null};
+
 		Id actionStaticType{BAD_ID};
 	};
 
 	struct Impuls : detail::BaseAction<Impuls>
 	{
+		Impuls(const Vec3& dvInit) : dv(dvInit)
+		{}
+
 		Vec3 dv{};
 	};
 
 	struct Wait : detail::BaseAction<Wait>
 	{
+		Wait(const Tick& tInit) : duration(tInit)
+		{}
+
 		Tick duration{};
 	};
 
 	struct Rendezvous
 	{
 		Float propellantUsed{};
+
+		Entity actionHead{null};
+		Entity actionTail{null};
 	};
 }

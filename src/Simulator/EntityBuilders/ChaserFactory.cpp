@@ -11,6 +11,7 @@
 #include "../Components/MeshComponent.h"
 #include "../Components/TestRendererTag.h"
 #include "../Components/Rendezvous.h"
+#include "../Components/Orbit.h"
 
 #include "../Simulator.h"
 #include "../Test.h"
@@ -37,6 +38,7 @@ namespace sim
 		registry.assign<comp::Orbit>          (satellite);
 		registry.assign<comp::MeshComponent>  (satellite);
 		registry.assign<comp::Rendezvous>     (satellite);
+		registry.assign<comp::Orbit>          (satellite);
 		registry.assign<comp::TestRendererTag>(satellite);
 		return satellite;
 	}

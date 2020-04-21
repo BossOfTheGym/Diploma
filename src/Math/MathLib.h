@@ -35,6 +35,7 @@ namespace math
 		}
 	}
 
+	using Int    = int;
 	using Int32  = std::int32_t;
 	using Int64  = std::int64_t;
 	using UInt32 = std::uint32_t;
@@ -75,7 +76,6 @@ namespace math
 	using Quat = glm::tquat<Float>;
 
 
-
 	using Vec4f32 = glm::tvec4<float>;
 	using Mat4f32 = glm::tmat4x4<float>;
 
@@ -86,7 +86,6 @@ namespace math
 	using Mat2f32 = glm::tmat2x2<float>;
 
 	using Quatf32 = glm::tquat<float>;
-
 
 
 	using Vec4f64 = glm::tvec4<double>;
@@ -101,7 +100,7 @@ namespace math
 	using Quatf64 = glm::tquat<double>;
 
 
-	using Vec3i = glm::tvec3<int>;
+	using Vec3i = glm::tvec3<Int>;
 
 	using Vec3i32 = glm::tvec3<Int32>;
 	using Vec3u32 = glm::tvec3<Int32>;
@@ -109,7 +108,8 @@ namespace math
 	using Vec3i64 = glm::tvec3<Int64>;
 	using Vec3u64 = glm::tvec3<Int64>;	
 
-	using Vec2i = glm::tvec2<int>;
+
+	using Vec2i = glm::tvec2<Int>;
 
 	using Vec2i32 = glm::tvec2<Int32>;
 	using Vec2u32 = glm::tvec2<Int32>;

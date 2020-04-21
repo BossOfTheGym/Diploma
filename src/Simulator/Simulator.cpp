@@ -9,6 +9,7 @@
 #include "Systems/RendezvousControlSystem.h"
 #include "Systems/TestRendererSystem.h"
 #include "Systems/TimeSystem.h"
+#include "Systems/ImGuiSystem.h"
 
 #include "EntityBuilders/ChaserFactory.h"
 #include "EntityBuilders/PlanetFactory.h"
@@ -48,6 +49,9 @@ namespace sim
 
 		PlayerSystem* playerSystem = systemManager.get<PlayerSystem>();
 
+		RendezvousControlSystem* rendezvousControlSystem = systemManager.get<RendezvousControlSystem>();
+
+		ImGuiSystem* imguiSystem = systemManager.get<ImGuiSystem>();
 
 		// builders
 		auto& entityBuilderManager = getEntityBuilderManager();
@@ -79,6 +83,7 @@ namespace sim
 			contextSystem->pollEvents();
 			timeSystem->tick();
 
+			// TODO : duration, duration and duration
 			auto  t = timeSystem->getTime() / static_cast<Float>(TimeSystem::PERIOD);
 			auto dt = timeSystem->getDeltaTime() / static_cast<Float>(TimeSystem::PERIOD);
 
@@ -87,12 +92,16 @@ namespace sim
 			playerSystem->update(t, dt);
 			testRendererSystem->update(t, dt);
 
+			// TEST
+			imguiSystem->update(0.0, 0.0);
+
 			contextSystem->swapBuffers();
 		}
 
 		// deinit
 		m_registry.clear();
 
+		// TODO
 		m_planet = null;
 		m_player = null;
 		m_sat1 = null;
@@ -161,11 +170,8 @@ namespace sim
 		// PlanetSystem
 		systemManager.add<PlanetSystem>(&systemManager);
 
-		// Player System
-		//systemManager.add<PlayerSystem>(&systemManager);
-
 		// Rendezvous control system
-		//systemManager.add<RendezvousControlSystem>(&systemManager);
+		systemManager.add<RendezvousControlSystem>(&systemManager);
 
 		// TestRendererSystem
 		systemManager.add<TestRendererSystem>(&systemManager);
@@ -182,6 +188,9 @@ namespace sim
 
 		// Player system
 		systemManager.add<PlayerSystem>(&systemManager);
+
+		// ImGuiSystem
+		systemManager.add<ImGuiSystem>(&systemManager);
 	}
 
 

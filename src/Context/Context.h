@@ -122,12 +122,12 @@ namespace context
 		BaseWindow(const CreationInfo& info, bool initializeGL = true);
 
 		BaseWindow(const BaseWindow&) = delete;
-		BaseWindow(BaseWindow&&);
+		BaseWindow(BaseWindow&&)      = delete;
 
 		virtual ~BaseWindow();
 
 		BaseWindow& operator = (const BaseWindow&) = delete;
-		BaseWindow& operator = (BaseWindow&&);
+		BaseWindow& operator = (BaseWindow&&)      = delete;
 
 
 	public:

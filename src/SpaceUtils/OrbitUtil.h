@@ -1,11 +1,78 @@
 #pragma once
 
+#include "StateVec.h"
+
 namespace space_utils::orbit
 {
-	// TODO : orbit utility
-	struct OrbitalParameters
-	{
+	using math::operator "" _FL;
+	using math::Float;
+	using math::Vec3;
 
+	// TODO : orbit utility
+	struct OrbitState
+	{
+		Float h{};  // specific angular momentum
+		Float i{};  // inclination
+		Float ra{}; // right ascension of the ascending node
+		Float e{};  // eccentricity
+		Float ap{}; // argument of periapsis
+		Float ta{}; // true anomaly
+
+		Float a{};  // apoapsis
+		Float p{};  // periapsis
+		Float ea{}; // eccentric anomaly
+		Float n{};  // mean motion
+		Float t{};  // time since periapsis
+		Float T{};  // orbit period
+	};
+
+	class Orbit
+	{
+	public:
+		Orbit(const StateVec& state, Float mu);
+
+		Orbit() = default;
+
+		Orbit(const Orbit&) = default;
+		Orbit(Orbit&&)      = default;
+
+		~Orbit() = default;
+
+		Orbit& operator = (const Orbit&) = default;
+		Orbit& operator = (Orbit&&)      = default;
+
+
+	public:
+		void setFromParameters(Float c, Float i, Float ra, Float e, Float ap, Float ta, Float mu);
+
+		void setFromState(const StateVec& state, Float mu);
+
+
+		StateVec stateFromDeltaAngle(Float delta) const;
+
+		StateVec stateFromAngle(Float angle) const;
+
+		// TODO
+		//StateVec stateFromTime(Float time) const;
+
+
+	public:
+		const OrbitState& getOrbit() const;
+
+		const StateVec& getState() const;
+
+		Float getMu() const;
+
+
+	private:
+		void updateSpecificParameters();
+
+
+	private:
+		OrbitState m_orbit{}; // orbital parameters
+		StateVec   m_state{}; // state parameters
+
+		Float m_mu{}; // extern(planet mu)
 	};
 }
 

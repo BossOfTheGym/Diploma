@@ -104,6 +104,12 @@
     <Filter Include="src\Simulator\Systems\Rendezvous">
       <UniqueIdentifier>{f338aaa2-78ee-4564-b2b8-e4c6c5341053}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ImGui">
+      <UniqueIdentifier>{11415f69-94f1-4b71-ba58-d16c06efd1f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Simulator\Systems\GuiInfo">
+      <UniqueIdentifier>{c9ba8cc0-98c9-45fb-a638-09b523257de7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -155,9 +161,6 @@
       <Filter>src\SpaceUtils\sources</Filter>
     </ClCompile>
     <ClCompile Include="src\SpaceUtils\Lambert.cpp">
-      <Filter>src\SpaceUtils\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SpaceUtils\OrbitUtil.cpp">
       <Filter>src\SpaceUtils\sources</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\ecs_engine.cpp">
@@ -256,6 +259,45 @@
     <ClCompile Include="src\Simulator\EntityBuilders\PlayerFactory.cpp">
       <Filter>src\Simulator\EntitiesBuilders</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>src\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>src\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>src\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>src\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\examples\imgui_impl_opengl3.cpp">
+      <Filter>src\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\ImGuiSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\GuiInfo.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\Stumpff.cpp">
+      <Filter>src\SpaceUtils\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Rendezvous\Circular.cpp">
+      <Filter>src\Simulator\Systems\Rendezvous</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Rendezvous\Method.cpp">
+      <Filter>src\Simulator\Systems\Rendezvous</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Components\Rendezvous.cpp">
+      <Filter>src\Simulator\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\OrbitUtil.cpp">
+      <Filter>src\SpaceUtils\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\examples\imgui_impl_glfw.cpp">
+      <Filter>src\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Solver\ISolver.h">
@@ -352,9 +394,6 @@
       <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
     <ClInclude Include="src\SpaceUtils\Lambert.h">
-      <Filter>src\SpaceUtils\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SpaceUtils\OrbitUtil.h">
       <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\ecs_common.h">
@@ -506,6 +545,51 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\EntityBuilders\PlayerFactory.h">
       <Filter>src\Simulator\EntitiesBuilders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\StateVec.h">
+      <Filter>src\SpaceUtils\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\examples\imgui_impl_opengl3.h">
+      <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\ImGuiSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\GuiInfo.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\Stumpff.h">
+      <Filter>src\SpaceUtils\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Rendezvous\Circular.h">
+      <Filter>src\Simulator\Systems\Rendezvous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Rendezvous\Method.h">
+      <Filter>src\Simulator\Systems\Rendezvous</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\OrbitUtil.h">
+      <Filter>src\SpaceUtils\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\examples\imgui_impl_glfw.h">
+      <Filter>src\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

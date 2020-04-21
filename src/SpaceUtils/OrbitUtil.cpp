@@ -1,5 +1,219 @@
-//#include "Orbit.h"
-//
+#include "OrbitUtil.h"
+
+namespace space_utils::orbit
+{
+	Orbit::Orbit(const StateVec& state, Float mu)
+	{
+		setFromState(state, mu);
+	}
+
+
+	void Orbit::setFromParameters(Float h, Float i, Float ra, Float e, Float ap, Float ta, Float mu)
+	{
+		m_orbit = OrbitState{h, i, ra, e, ap, ta};
+		m_mu    = mu;
+
+		Float cost = cos(ap);
+		Float sint = sin(ap);
+		
+		Float coso = cos(ap);
+		Float sino = sin(ap);
+		Float cosO = cos(ra);
+		Float sinO = sin(ra);
+		Float cosi = cos(i);
+		Float sini = sin(i);
+		
+		Vec3 rx = h *  h / mu / (1.0_FL + e * cost) * Vec3(cost, sint, 0.0_FL);
+		Vec3 vx = mu / h * Vec3(-sint, e + cost, 0.0_FL);
+		
+		Mat3 Qxx = transpose(
+			Mat3(
+				  cosO * coso - sinO * sino * cosi, -cosO * sino - sinO * cosi * coso, +sinO * sini
+				, sinO * coso + cosO * cosi * sino, -sinO * sino + cosO * cosi * coso, -cosO * sini
+				,        sini * sino              ,         sini * coso              ,      cosi
+			)
+		);
+		
+		m_state = StateVec{Qxx * rx, Qxx * vx};
+
+		updateSpecificParameters();
+	}
+
+	void Orbit::setFromState(const StateVec& state, Float mu)
+	{
+		m_state = state;
+		m_mu = mu;
+
+		//1.
+		Vec3 rv = state.r;
+		Float r = glm::length(rv);
+		
+		//2.
+		Vec3 vv = state.v;
+		Float v = glm::length(vv);
+		auto energy = glm::dot(vv, vv) - 2 * mu / r;
+		
+		//3.
+		Float vr = glm::dot(rv / r, vv);
+		
+		//4, 5
+		auto hv = glm::cross(rv, vv);
+		m_orbit.h = glm::length(hv);	
+		
+		//6.
+		m_orbit.i = std::acos(hv.z / m_orbit.h);
+		
+		//7, 8
+		auto nv = glm::cross(Vec3(0.0, 0.0, 1.0), hv); // TODO : Sukhanov
+		m_orbit.n = glm::length(nv);
+		
+		//9.
+		m_orbit.ra = std::acos(nv.x / m_orbit.n);
+		if(nv.y <= std::numeric_limits<Float>::epsilon())
+		{
+			m_orbit.ra = math::PI2 - m_orbit.ra;
+		}	
+		
+		//10, 11
+		auto ev = glm::cross(vv, hv) / mu - rv / r;
+		m_orbit.e = glm::length(ev);
+		
+		Vec3 uev = (m_orbit.e > std::numeric_limits<Float>::epsilon() ? ev / m_orbit.e : Vec3(0.0));
+		
+		//12.
+		m_orbit.ap = std::acos(glm::dot((nv / m_orbit.n), uev));
+		if (ev.z <= std::numeric_limits<Float>::epsilon())
+		{
+			m_orbit.ap = math::PI2 - m_orbit.ap;
+		}
+		
+		//13.
+		m_orbit.ta = std::acos(glm::dot(rv / r, uev));
+		if(vr <= std::numeric_limits<double>::epsilon())
+		{
+			m_orbit.ta = math::PI2 - m_orbit.ta;
+		}	
+
+		updateSpecificParameters();
+	}
+
+
+	StateVec Orbit::stateFromDeltaAngle(Float deltaAngle) const
+	{
+		if (std::abs(deltaAngle) <= std::numeric_limits<Float>::epsilon())
+		{
+			return m_state;
+		}
+
+		auto h  = m_orbit.h;
+		auto mu = m_orbit.h;
+
+		auto r0 = glm::length(m_state.r);
+		auto v0 = glm::length(m_state.v);
+
+		auto vr0 = glm::dot(m_state.v,  m_state.r / r0);
+
+		auto p = h * h / mu;
+
+		auto cosdT = std::cos(deltaAngle);
+		auto sindT = std::sin(deltaAngle);
+
+		auto r = p / (1 + (p / r0 - 1) * cosdT - h * vr0 * sindT / mu);
+
+		auto f  = 1 - r / p * (1 - cosdT);
+		auto g  = r * r0 / h * sindT;
+		auto fd = mu / h * (1 - cosdT) / sindT * ((1 - cosdT) / p - 1 / r0 - 1 / r);
+		auto gd = 1 - r0 / p * (1 - cosdT);
+
+		return StateVec{f * m_state.r + g * m_state.v, fd * m_state.r + gd * m_state.v};
+	}
+
+	StateVec Orbit::stateFromAngle(Float angle) const
+	{		
+		Float deltaAngle = std::fmod(angle, math::PI2) - m_orbit.ta;
+
+		return stateFromDeltaAngle(deltaAngle);
+	}
+
+	// TODO  
+	//StateVec Orbit::stateFromTime(Float time) const{}
+
+	const OrbitState& Orbit::getOrbit() const
+	{
+		return m_orbit;
+	}
+
+	const StateVec& Orbit::getState() const
+	{
+		return m_state;
+	}
+
+	Float Orbit::getMu() const
+	{
+		return m_mu;
+	}
+
+
+	// private
+	void Orbit::updateSpecificParameters()
+	{
+		auto& h  = m_orbit.h;
+		auto& e  = m_orbit.e;
+		auto& ta = m_orbit.ta;
+
+		auto& a  = m_orbit.a;
+		auto& p  = m_orbit.p;
+		auto& ea = m_orbit.ea;
+		auto& n  = m_orbit.n;
+		auto& t  = m_orbit.t;
+		auto& T  = m_orbit.T;
+
+		if (e < 1.0_FL) //elliptic
+		{	
+			a = (h * h / m_mu) / (1 - e * e);
+			p = (h * h / m_mu) / (1 + e);
+
+			ea = 2 * std::atan(std::sqrt((1 - e) / (1 + e)) * std::tan(ta / 2));
+			if (ta > math::PI)
+			{
+				ea += math::PI2;
+			}
+		
+			n = std::sqrt(m_mu) / std::pow(a, 1.5_FL);
+		
+			t = 1.0_FL / n * (ea - e * std::sin(ea));
+			T = 1.0_FL / n * math::PI2;
+		}
+		else if (e > 1.0_FL) // hyperbolic
+		{
+			a = (h * h / m_mu) / (e * e - 1);
+			p = 0.0;
+
+			ea = 2 * std::atanh(std::sqrt((e - 1) / (e + 1)) * std::tanh(ta / 2));
+		
+			n = std::sqrt(m_mu) / std::pow(a, 1.5_FL);
+		
+			t = 1.0_FL / n * (e * std::sinh(ea) - ea);
+			T = std::numeric_limits<Float>::infinity();
+		}
+		else // parabolic
+		{
+			// still TODO
+			/*a = std::numeric_limits<Float>::infinity();
+			p = (h * h / m_mu) / 2;
+
+			n = 0.0_FL;
+
+			T = std::numeric_limits<Float>::infinity();*/
+			auto inf = std::numeric_limits<Float>::infinity();
+			m_orbit = OrbitState{
+				  inf, inf, inf, inf, inf, inf
+				, inf, inf, inf, inf, inf, inf
+			};
+		}
+	}
+}
+
 //namespace components
 //{
 //	OrbitComponent::OrbitComponent(
