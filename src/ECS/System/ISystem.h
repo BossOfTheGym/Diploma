@@ -6,7 +6,7 @@
 
 namespace ecs::sys
 {
-	using ecs::Float;
+	using ecs::Time;
 	using ecs::Id;
 
 
@@ -21,23 +21,13 @@ namespace ecs::sys
 
 
 	public:
-		virtual void update(Float t, Float dt) = 0;
+		virtual void update(Time t, Time dt) = 0;
 
 
 	public:
-		void disable();
-
-		void enable();
-
-		bool enabled() const;
-
-
 		SystemManager* getSystemManager() const;
 
-
 	private:
-		bool m_enabled{true};
-
 		SystemManager* m_manager{nullptr};
 	};
 }

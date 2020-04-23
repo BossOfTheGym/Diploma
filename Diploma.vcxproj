@@ -101,7 +101,9 @@
     <ClInclude Include="src\ECS\System\ISystem.h" />
     <ClInclude Include="src\ECS\System\System.h" />
     <ClInclude Include="src\ECS\System\SystemManager.h" />
-    <ClInclude Include="src\ECS\Utitlity\Counter.h" />
+    <ClInclude Include="src\ECS\Utility\Counter.h" />
+    <ClInclude Include="src\ECS\Utility\NoCopyMove.h" />
+    <ClInclude Include="src\ECS\Utility\StaticType.h" />
     <ClInclude Include="src\Function\FunctionHolder.h" />
     <ClInclude Include="src\Function\FunctionWrapper.h" />
     <ClInclude Include="src\Function\IFunction.h" />

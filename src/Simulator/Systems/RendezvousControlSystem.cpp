@@ -20,16 +20,11 @@ namespace sim
 	}
 
 
-	void RendezvousControlSystem::update(ecs::Float t, ecs::Float dt)
-	{
-		// TODO : move from method below
-	}
-
-	void RendezvousControlSystem::update(Tick ticks)
+	void RendezvousControlSystem::update(ecs::Time t, ecs::Time dt)
 	{
 		// TODO : move to original update method
 		auto& registry = m_simulator->getRegistry();
-		for(auto actionList : registry.view<comp::Rendezvous>())
+		for (auto actionList : registry.view<comp::Rendezvous>())
 		{
 			if (!empty(actionList))
 			{
@@ -39,17 +34,16 @@ namespace sim
 					auto& action = registry.get<comp::Action>(nextAction);
 					if (auto it = m_actions.find(action.actionStaticType); it != m_actions.end())
 					{
-						(*it).second->update(actionList, ticks);
+						(*it).second->update(actionList, t, dt);
 					}
 				}
 			}
 		}
 	}
 
-
-	void RendezvousControlSystem::startRendezvous(Entity target, Entity chaser, Tick ticks, Float ticksF)
+	void RendezvousControlSystem::startRendezvous(Entity target, Entity chaser, ecs::Time t, ecs::Time dt)
 	{
-		m_method.startRendezvous(target, chaser, ticks, ticksF);
+		m_method.startRendezvous(target, chaser, t, dt);
 	}
 
 

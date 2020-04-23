@@ -45,10 +45,6 @@ namespace sim
 
 
 	public:
-		virtual void update(ecs::Float t, ecs::Float dt) override;
-
-
-	public:
 		bool loadMesh(RawMesh* meshToAdd, const Name& name);
 
 

@@ -37,7 +37,7 @@ namespace sim
 		m_eyeLocation = m_program.getUniformLocation("uEye");
 	}
 
-	void TestRendererSystem::update(ecs::Float t, ecs::Float dt)
+	void TestRendererSystem::update(ecs::Time t, ecs::Time dt)
 	{
 		auto& registry      = m_simulator->getRegistry();
 		auto& systemManager = m_simulator->getSystemManager();

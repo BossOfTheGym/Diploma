@@ -36,7 +36,7 @@ namespace sim
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiSystem::update(ecs::Float t, ecs::Float dt)
+	void ImGuiSystem::update(ecs::Time t, ecs::Time dt)
 	{
 		// TODO
 		// TEST

@@ -32,18 +32,14 @@ namespace sim
 
 	public:
 		// TODO
-		virtual void update(ecs::Float t, ecs::Float dt) override;
-
-		// TODO : total workaround, replace ecs::Float to duration<>(see appropriate ticket)
-		// TODO : to do
-		void update(Tick ticks);
+		virtual void update(ecs::Time t, ecs::Time dt) override;
 
 
 	public:
-		// TODO : workaround
-		void startRendezvous(Entity e1, Entity e2, Tick ticks, Float ticksF);
+		void startRendezvous(Entity e1, Entity e2, ecs::Time t, ecs::Time dt);
 
 
+		// TODO : add convinient methods to push Actions
 		// TODO : that's weird
 		// works with Rendezvous component
 		void clear(Entity list);

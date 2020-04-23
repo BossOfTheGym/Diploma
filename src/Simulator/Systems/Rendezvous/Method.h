@@ -9,8 +9,7 @@
 namespace sim
 {
 	using ecs::entity::Entity;
-	using comp::Tick;
-	using math::Float;
+	using ecs::Time;
 
 	class RendezvousControlSystem;
 
@@ -23,8 +22,7 @@ namespace sim
 
 
 	public:
-		// TODO : timeF is workaround, duration, duration and duration
-		virtual bool startRendezvous(Entity target, Entity chaser, Tick time, Float timeF) = 0;
+		virtual bool startRendezvous(Entity target, Entity chaser, Time t, Time dt) = 0;
 
 
 	public:

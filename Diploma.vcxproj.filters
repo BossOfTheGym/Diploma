@@ -414,9 +414,6 @@
     <ClInclude Include="src\ECS\System\SystemManager.h">
       <Filter>src\ECS\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\Utitlity\Counter.h">
-      <Filter>src\ECS\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="src\Simulator\Systems\MeshSystem.h">
       <Filter>src\Simulator\Systems</Filter>
     </ClInclude>
@@ -590,6 +587,15 @@
     </ClInclude>
     <ClInclude Include="imgui\examples\imgui_impl_glfw.h">
       <Filter>src\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Utility\Counter.h">
+      <Filter>src\ECS\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Utility\NoCopyMove.h">
+      <Filter>src\ECS\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Utility\StaticType.h">
+      <Filter>src\ECS\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

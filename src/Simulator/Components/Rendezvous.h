@@ -16,6 +16,7 @@ namespace comp
 
 	using ecs::BAD_ID;
 	using ecs::entity::null;
+	using ecs::Time;
 
 	using math::Float;
 	using math::Vec3;
@@ -55,10 +56,10 @@ namespace comp
 
 	struct Wait : detail::BaseAction<Wait>
 	{
-		Wait(const Tick& tInit) : duration(tInit)
+		Wait(const Time& tInit) : duration(tInit)
 		{}
 
-		Tick duration{};
+		Time duration{};
 	};
 
 	struct Rendezvous

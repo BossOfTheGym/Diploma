@@ -12,15 +12,12 @@ namespace sim
 		
 		setWarp(warp);
 		resetTime();
-
-		// time system is never updated in normal way
-		disable();
 	}
 
 
 	void TimeSystem::tick()
 	{
-		auto t1 = m_clock.now().time_since_epoch().count();
+		auto t1 = m_clock.now().time_since_epoch();
 
 		m_t0 += m_dt;
 		m_dt  = t1 - m_t;
@@ -34,13 +31,13 @@ namespace sim
 
 	void TimeSystem::resetTime()
 	{
-		m_t = m_clock.now().time_since_epoch().count();
+		m_t = m_clock.now().time_since_epoch();
 
-		m_t0 = 0;
-		m_dt = 0;
+		m_t0 = Time(0);
+		m_dt = Time(0);
 
-		m_t0Warped = 0;
-		m_dtWarped = 0;		
+		m_t0Warped = Time(0);
+		m_dtWarped = Time(0);		
 	}
 
 	void TimeSystem::setWarp(Tick warp)
@@ -65,31 +62,31 @@ namespace sim
 	}
 
 
-	auto TimeSystem::getTime() const -> Tick
+	auto TimeSystem::getTime() const -> Time
 	{
 		return m_t0Warped;
 	}
 
-	auto TimeSystem::getDeltaTime() const -> Tick
+	auto TimeSystem::getDeltaTime() const -> Time
 	{
 		return m_dtWarped;
 	}
 
 
-	auto TimeSystem::getRealTime() const -> Tick
+	auto TimeSystem::getRealTime() const -> Time
 	{
 		return m_t0;
 	}
 
-	auto TimeSystem::getRealTimeDelta() const ->Tick
+	auto TimeSystem::getRealTimeDelta() const ->Time
 	{
 		return m_dt;
 	}
 
-	void TimeSystem::addTimeEvent(Tick time)
+	void TimeSystem::addTimeEvent(Time time)
 	{
-		m_ticks.push_back(time);
-		std::push_heap(m_ticks.begin(), m_ticks.end(), 
+		m_timeEvents.push_back(time);
+		std::push_heap(m_timeEvents.begin(), m_timeEvents.end(),
 			[] (auto& t1, auto& t2)
 			{
 				return t1 < t2;
@@ -97,28 +94,24 @@ namespace sim
 		);
 	}
 
-	auto TimeSystem::peekTimeEvent() -> std::optional<Tick>
+	auto TimeSystem::peekTimeEvent() -> Time
 	{
-		if (hasTimeEvents())
-		{
-			return m_ticks.front();
-		}
-		return std::nullopt;
+		return m_timeEvents.front();
 	}
 
 	void TimeSystem::popTimeEvent()
 	{
-		std::pop_heap(m_ticks.begin(), m_ticks.end(),
+		std::pop_heap(m_timeEvents.begin(), m_timeEvents.end(),
 			[] (auto& t1, auto& t2)
 			{
 				return t1 < t2;
 			}
 		);
-		m_ticks.pop_back();
+		m_timeEvents.pop_back();
 	}
 
 	bool TimeSystem::hasTimeEvents() const
 	{
-		return !m_ticks.empty();
+		return !m_timeEvents.empty();
 	}
 }

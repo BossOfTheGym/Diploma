@@ -49,9 +49,6 @@ namespace sim
 		loadMesh(sphereBuilder.buildMesh(), MeshSystem::SPHERE);
 	}
 
-	void MeshSystem::update(ecs::Float t, ecs::Float dt)
-	{}
-
 
 	bool MeshSystem::loadMesh(RawMesh* meshToAdd, const Name& name)
 	{

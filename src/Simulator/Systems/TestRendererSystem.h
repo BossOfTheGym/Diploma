@@ -26,7 +26,7 @@ namespace sim
 
 
 	public:
-		virtual void update(ecs::Float t, ecs::Float dt) override;
+		virtual void update(ecs::Time t, ecs::Time dt) override;
 
 
 	private:

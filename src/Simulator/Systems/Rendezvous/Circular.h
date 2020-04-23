@@ -13,6 +13,6 @@ namespace sim
 
 
 	public:
-		virtual bool startRendezvous(Entity target, Entity chaser, Tick time, Float timeF) override;
+		virtual bool startRendezvous(Entity target, Entity chaser, Time t, Time dt) override;
 	};
 }

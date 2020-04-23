@@ -9,28 +9,19 @@
 #include <optional>
 #include <algorithm>
 
-#include "../Components/Timer.h"
-
 namespace sim
 {
-	using math::UInt64;
-
 	class TimeSystem : public ecs::sys::System<TimeSystem>
 	{
 	public:
 		using this_t = TimeSystem;
 		using base_t = ecs::sys::System<TimeSystem>;
 
-		using Clock    = std::chrono::steady_clock;
-		using Time     = Clock::time_point;
-		using Duration = Clock::duration;
+		using Clock = ecs::Clock;
+		using Time  = ecs::Time;
+		using Tick  = ecs::Tick;
 
-		using Tick = comp::Tick;
-
-		using Heap = std::vector<Tick>;
-
-
-		static constexpr Tick PERIOD = Duration::period::den;
+		using Heap = std::vector<Time>;
 
 
 	public:
@@ -52,19 +43,19 @@ namespace sim
 		Tick getMaxWarp() const;
 
 
-		Tick getTime() const;
+		Time getTime() const;
 
-		Tick getDeltaTime() const;
-
-
-		Tick getRealTime() const;
-
-		Tick getRealTimeDelta() const;
+		Time getDeltaTime() const;
 
 
-		void addTimeEvent(Tick time);
+		Time getRealTime() const;
 
-		std::optional<Tick> peekTimeEvent();
+		Time getRealTimeDelta() const;
+
+
+		void addTimeEvent(Time time);
+
+		Time peekTimeEvent(); // alwaus check for present events
 
 		void popTimeEvent();
 
@@ -78,14 +69,14 @@ namespace sim
 		Tick m_minWarp{1}; // min warp 
 		Tick m_maxWarp{1}; // max warp
 
-		Tick m_t{};
+		Time m_t{};
 		
-		Tick m_t0{}; // current real time
-		Tick m_dt{}; // real time delta
+		Time m_t0{}; // current real time
+		Time m_dt{}; // real time delta
 
-		Tick m_t0Warped{}; // warped current time
-		Tick m_dtWarped{}; // warped delta time
+		Time m_t0Warped{}; // warped current time
+		Time m_dtWarped{}; // warped delta time
 
-		Heap m_ticks{};
+		Heap m_timeEvents{}; // used for producing correct time deltas
 	};
 }

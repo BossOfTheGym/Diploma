@@ -22,7 +22,7 @@ namespace sim
 		: BaseAction<comp::Impuls>(sys)
 	{}
 
-	void ImpulsAction::update(Entity actionList, Tick ticks)
+	void ImpulsAction::update(Entity actionList, Time t, Time dt)
 	{
 		auto* sys    = getSystem();
 		auto* engine = sys->getSystemManager()->getECSEngine();
@@ -48,7 +48,7 @@ namespace sim
 		: BaseAction<comp::Wait>(sys)
 	{}
 
-	void WaitAction::update(Entity actionList, Tick ticks)
+	void WaitAction::update(Entity actionList, Time t, Time dt)
 	{
 		auto* sys    = getSystem();
 		auto* engine = sys->getSystemManager()->getECSEngine();
@@ -60,11 +60,11 @@ namespace sim
 			if (next != null && registry.has<comp::Wait>(next))
 			{
 				auto& wait = registry.get<comp::Wait>(next);
-				if (wait.duration >= ticks)
+				if (wait.duration >= dt)
 				{
-					wait.duration -= ticks;
+					wait.duration -= dt;
 				}
-				if (wait.duration == 0)
+				if (wait.duration == Time(0))
 				{
 					sys->popFront(actionList);
 				}

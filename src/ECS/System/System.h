@@ -23,7 +23,7 @@ namespace ecs::sys
 
 
 	public:
-		virtual void update(Float t, Float dt) override
+		virtual void update(Time t, Time dt) override
 		{}
 	};
 

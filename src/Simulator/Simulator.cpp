@@ -84,8 +84,8 @@ namespace sim
 			timeSystem->tick();
 
 			// TODO : duration, duration and duration
-			auto  t = timeSystem->getTime() / static_cast<Float>(TimeSystem::PERIOD);
-			auto dt = timeSystem->getDeltaTime() / static_cast<Float>(TimeSystem::PERIOD);
+			auto  t = timeSystem->getTime();
+			auto dt = timeSystem->getDeltaTime();
 
 			planetSystem->update(t, dt);
 			physicsSystem->update(t, dt);
@@ -93,7 +93,7 @@ namespace sim
 			testRendererSystem->update(t, dt);
 
 			// TEST
-			imguiSystem->update(0.0, 0.0);
+			imguiSystem->update(t, dt);
 
 			contextSystem->swapBuffers();
 		}

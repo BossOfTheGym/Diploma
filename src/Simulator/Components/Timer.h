@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Math/MathLib.h>
+#include <ECS/ecs_common.h>
 
 namespace comp
 {
-	using Tick = math::UInt64;
+	using Time = ecs::Time;
 
 	struct Timer
 	{
-		Tick duration{};
+		Time duration{};
 	};
 }

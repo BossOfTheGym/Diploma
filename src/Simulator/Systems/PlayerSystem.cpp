@@ -20,7 +20,7 @@ namespace sim
 	}
 
 
-	void PlayerSystem::update(ecs::Float t, ecs::Float dt)
+	void PlayerSystem::update(ecs::Time t, ecs::Time dt)
 	{
 		auto& registry = m_simulator->getRegistry();
 		for (auto e : registry.view<comp::Player, comp::Camera3rdPerson>())

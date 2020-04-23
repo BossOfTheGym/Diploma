@@ -30,7 +30,7 @@ namespace sim
 	ToCircular::ToCircular(RendezvousControlSystem* sys) : Method(sys)
 	{}
 
-	bool ToCircular::startRendezvous(Entity target, Entity chaser, Tick time, Float timeF)
+	bool ToCircular::startRendezvous(Entity target, Entity chaser, Time t, Time dt)
 	{
 		// TODO : check for appropriate eccentricity
 
@@ -50,7 +50,7 @@ namespace sim
 
 			//mean motion & time
 			Float n = targetOrbit.getOrbit().n;
-			Float t = timeF;
+			Float T = ecs::toSeconds<Float>(t).count(); // transfer time
 
 			//satellites parameters
 			Vec3 rChaser = chaserSim.getRadius();
@@ -80,8 +80,9 @@ namespace sim
 			Vec3 dr0 = q * dr;
 			Vec3 dv0 = q * dv;
 
-			Vec3 dvNew0 = -glm::inverse(space_utils::phi_rv(t, n)) * space_utils::phi_rr(t, n) * dr0;
-			Vec3 dvNew1 = space_utils::phi_vr(t, n) * dr0 + space_utils::phi_vv(t, n) * dvNew0;
+
+			Vec3 dvNew0 = -glm::inverse(space_utils::phi_rv(T, n)) * space_utils::phi_rr(T, n) * dr0;
+			Vec3 dvNew1 = space_utils::phi_vr(T, n) * dr0 + space_utils::phi_vv(T, n) * dvNew0;
 
 			//actions
 			Vec3 dvFirstBefore = (dvNew0 - dv0);
@@ -90,10 +91,11 @@ namespace sim
 			Vec3 dvSecondBefore = (-dvNew1); 
 			Vec3 dvSecond = qi * dvSecondBefore;
 
+			// DEBUG
 			std::cout << "First : x:" << dvFirst.x  << " y: " << dvFirst.y  << " z: " << dvFirst.z  << std::endl;
 			std::cout << "Second: x:" << dvSecond.x << " y: " << dvSecond.y << " z: " << dvSecond.z << std::endl;
 
-			// TODO : add time events
+			// TODO : add to rendezvous control system convinient methods to push actions
 			// first impuls
 			auto firstImpuls = registry.create();
 			registry.assign<comp::Action>(firstImpuls, null, comp::Impuls::TYPE_ID);
@@ -103,7 +105,7 @@ namespace sim
 			// wait
 			auto wait = registry.create();
 			registry.assign<comp::Action>(wait, null, comp::Wait::TYPE_ID);
-			registry.assign<comp::Wait>(wait, time);
+			registry.assign<comp::Wait>(wait, dt);
 			sys->pushBack(chaser, wait);
 
 			// second impuls
@@ -113,9 +115,9 @@ namespace sim
 			sys->pushBack(chaser, secondImpuls);
 
 			// TODO
-			timeSys->addTimeEvent(timeSys->getTime());
-			timeSys->addTimeEvent(timeSys->getTime() + time);
-			timeSys->addTimeEvent(timeSys->getTime() + time);
+			timeSys->addTimeEvent(t);
+			timeSys->addTimeEvent(t + dt);
+			timeSys->addTimeEvent(t + dt);
 
 			return true;
 		}

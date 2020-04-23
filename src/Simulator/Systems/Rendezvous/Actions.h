@@ -4,7 +4,6 @@
 #include <ECS/Utility/StaticType.h>
 
 #include "../../Components/Rendezvous.h"
-#include "../../Components/Timer.h"
 
 namespace sim
 {
@@ -14,7 +13,7 @@ namespace sim
 	using ecs::BAD_ID;
 	using ecs::entity::null;
 	
-	using comp::Tick;
+	using ecs::Time;
 
 	class RendezvousControlSystem;
 
@@ -24,7 +23,7 @@ namespace sim
 		IAction(RendezvousControlSystem* sys, Id staticTypeId);
 
 	public:
-		virtual void update(Entity e, Tick ticks) = 0;
+		virtual void update(Entity e, Time t, Time dt) = 0;
 
 	public:
 		RendezvousControlSystem* getSystem() const;
@@ -46,7 +45,7 @@ namespace sim
 		{}
 
 	public:
-		virtual void update(Entity e, Tick ticks) override
+		virtual void update(Entity e, Time t, Time dt) override
 		{}
 	};
 
@@ -60,7 +59,7 @@ namespace sim
 		ImpulsAction(RendezvousControlSystem* sys);
 
 	public:
-		virtual void update(Entity actionList, Tick ticks) override;
+		virtual void update(Entity actionList, Time t, Time dt) override;
 	};
 
 	class WaitAction : public BaseAction<comp::Wait>
@@ -69,6 +68,6 @@ namespace sim
 		WaitAction(RendezvousControlSystem* sys);
 
 	public:
-		virtual void update(Entity actionList, Tick ticks) override;
+		virtual void update(Entity actionList, Time t, Time dt) override;
 	};
 }
