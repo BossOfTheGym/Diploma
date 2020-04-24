@@ -1,6 +1,8 @@
 #pragma once
 
+#include <ECS/ecs_engine.h>
 #include <ECS/Entity/Entity.h>
+
 #include <Utility/PureType.h>
 
 #include <utility>
@@ -247,7 +249,44 @@ namespace sim
 
 
 	// ecs component info
-	template<class Component>
+	template<class Component, class T>
 	class BaseComponentInfo
-	{};
+	{
+	public:
+		BaseComponentInfo(ecs::ECSEngine* engine)
+			: m_engine(engine)
+		{
+			// TODO : assert
+		}
+
+		BaseComponentInfo(const BaseComponentInfo&) = default;
+		BaseComponentInfo(BaseComponentInfo&&)      = default;
+
+		~BaseComponentInfo() = default;
+
+		BaseComponentInfo& operator = (const BaseComponentInfo&) = default;
+		BaseComponentInfo& operator = (BaseComponentInfo&&)      = default;
+
+
+	public:
+		bool hasComponent(Entity e) const
+		{
+			return e != null && m_engine->getRegistry().has<Component>(e);
+		}
+
+		void render(Entity e)
+		{
+			static_cast<T*>(this)->render(e);
+		}
+
+
+	public:
+		ecs::ECSEngine* getECSEngine()
+		{
+			return m_engine;
+		}
+
+	private:
+		ecs::ECSEngine* m_engine{nullptr};
+	};
 }
