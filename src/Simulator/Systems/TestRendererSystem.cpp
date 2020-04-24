@@ -1,5 +1,8 @@
 #include "TestRendererSystem.h"
 
+#include <ECS/ecs_engine.h>
+#include <ECS/System/SystemManager.h>
+
 #include <Math/MathLib.h>
 #include <GraphicsEngine/ResourceLoaders/ShaderLoaders/ShaderLoader.h>
 #include <GraphicsEngine/ResourceLoaders/ShaderProgramBuilders/ShaderProgramBuilder.h>
@@ -11,8 +14,8 @@
 #include "MeshSystem.h"
 #include "ContextSystem.h"
 #include "GraphicsSystem.h"
+#include "SimulatorState.h"
 
-#include "../Simulator.h"
 #include "../Test.h"
 
 
@@ -23,9 +26,6 @@ namespace sim
 	TestRendererSystem::TestRendererSystem(ecs::sys::SystemManager* manager)
 		: base_t(manager)
 	{
-		// TODO : add assert
-		m_simulator = static_cast<Simulator*>(manager->getECSEngine());
-
 		graphics::SimpleShaderLoader loader;
 		graphics::ShaderProgramBuilder builder;
 
@@ -39,17 +39,18 @@ namespace sim
 
 	void TestRendererSystem::update(ecs::Time t, ecs::Time dt)
 	{
-		auto& registry      = m_simulator->getRegistry();
-		auto& systemManager = m_simulator->getSystemManager();
+		auto* systemManager  = getSystemManager();
+		auto* simulatorState = systemManager->get<SimulatorState>();
+		auto& registry       = systemManager->getECSEngine()->getRegistry();
 
-		auto contextSystem = systemManager.get<ContextSystem>();
+		auto contextSystem = systemManager->get<ContextSystem>();
 		if (!contextSystem)
 		{
 			// TODO : notify about error
 			return;
 		}
 
-		auto meshSystem = systemManager.get<MeshSystem>();
+		auto meshSystem = systemManager->get<MeshSystem>();
 		if (!meshSystem)
 		{
 			// TODO : notify about error
@@ -63,7 +64,7 @@ namespace sim
 			return;
 		}
 
-		auto player = m_simulator->getPlayer();
+		auto player = simulatorState->getPlayer();
 		if (!registry.valid(player) || !registry.has<comp::Camera3rdPerson>(player))
 		{
 			// TODO : notify about error

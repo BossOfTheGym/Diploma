@@ -33,6 +33,7 @@ namespace sim
 	bool ToCircular::startRendezvous(Entity target, Entity chaser, Time t, Time dt)
 	{
 		// TODO : check for appropriate eccentricity
+		// TODO : far-stage & interorbital transition
 
 		auto* sys        = getSystem();
 		auto* sysManager = sys->getSystemManager();
@@ -114,9 +115,8 @@ namespace sim
 			registry.assign<comp::Impuls>(secondImpuls, dvSecond);
 			sys->pushBack(chaser, secondImpuls);
 
-			// TODO
+			// TODO : check
 			timeSys->addTimeEvent(t);
-			timeSys->addTimeEvent(t + dt);
 			timeSys->addTimeEvent(t + dt);
 
 			return true;

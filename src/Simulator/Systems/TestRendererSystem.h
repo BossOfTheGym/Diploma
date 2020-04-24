@@ -30,8 +30,6 @@ namespace sim
 
 
 	private:
-		Simulator* m_simulator{nullptr};
-
 		gl::Shader m_vert{};
 		gl::Shader m_frag{};
 		gl::ShaderProgram m_program{};

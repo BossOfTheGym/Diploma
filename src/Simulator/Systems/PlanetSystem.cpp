@@ -1,5 +1,6 @@
 #include "PlanetSystem.h"
 
+#include <ECS/ecs_engine.h>
 #include <ECS/Entity/Entity.h>
 #include <ECS/System/SystemManager.h>
 
@@ -8,7 +9,7 @@
 #include "../Components/PhysicsData.h"
 #include "../Components/Planet.h"
 
-#include "../Simulator.h"
+#include "SimulatorState.h"
 
 namespace sim
 {
@@ -21,8 +22,6 @@ namespace sim
 	PlanetSystem::PlanetSystem(ecs::sys::SystemManager* manager)
 		: base_t(manager)
 	{
-		m_simulator = static_cast<Simulator*>(manager->getECSEngine());
-
 		m_gravitation.reset(new Gravitation());
 		m_gravitationJacobian.reset(new GravitationJacobian());
 
@@ -34,9 +33,11 @@ namespace sim
 
 	void PlanetSystem::update(ecs::Time t, ecs::Time dt)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 
-		auto planet = m_simulator->getPlanet();
+		auto* simulatorState = getSystemManager()->get<SimulatorState>();
+
+		auto planet = simulatorState->getPlanet();
 		if (!registry.valid(planet) || !registry.has<Planet, SimData>(planet))
 		{
 			// TODO : notify about error

@@ -22,7 +22,7 @@ namespace sim
 
 	void RendezvousControlSystem::update(ecs::Time t, ecs::Time dt)
 	{
-		// TODO : move to original update method
+		// TODO : add while loop so it can update multiple 'immediate' actions like impuls
 		auto& registry = m_simulator->getRegistry();
 		for (auto actionList : registry.view<comp::Rendezvous>())
 		{

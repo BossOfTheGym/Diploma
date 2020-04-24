@@ -198,10 +198,8 @@ namespace sim
 		template<class Info, class Tag> // Tag : component type tag
 		ComponentInfo(Info info, Tag)
 			: m_infoPtr(
-				new detail::ComponentInfo<
-					util::remove_cv_ref_t<Info>
-					, typename Tag::type
-				>(std::forward<Info>(info)))
+				new detail::ComponentInfo<util::remove_cv_ref_t<Info>, typename Tag::type>(std::forward<Info>(info))
+			)
 		{}
 
 		ComponentInfo() = default;
@@ -245,4 +243,11 @@ namespace sim
 	private:
 		ComponentInfoPtr m_infoPtr{};
 	};
+
+
+
+	// ecs component info
+	template<class Component>
+	class BaseComponentInfo
+	{};
 }

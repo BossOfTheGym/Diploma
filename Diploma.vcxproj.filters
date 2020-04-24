@@ -298,6 +298,9 @@
     <ClCompile Include="imgui\examples\imgui_impl_glfw.cpp">
       <Filter>src\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\SimulatorState.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Solver\ISolver.h">
@@ -596,6 +599,9 @@
     </ClInclude>
     <ClInclude Include="src\ECS\Utility\StaticType.h">
       <Filter>src\ECS\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\SimulatorState.h">
+      <Filter>src\Simulator\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

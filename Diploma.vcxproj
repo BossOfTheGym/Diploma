@@ -75,6 +75,7 @@
     <ClCompile Include="src\Simulator\Systems\Rendezvous\Actions.cpp" />
     <ClCompile Include="src\Simulator\Systems\Rendezvous\Circular.cpp" />
     <ClCompile Include="src\Simulator\Systems\Rendezvous\Method.cpp" />
+    <ClCompile Include="src\Simulator\Systems\SimulatorState.cpp" />
     <ClCompile Include="src\Simulator\Systems\TestRendererSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\TimeSystem.cpp" />
     <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="src\Simulator\Systems\Rendezvous\Actions.h" />
     <ClInclude Include="src\Simulator\Systems\Rendezvous\Circular.h" />
     <ClInclude Include="src\Simulator\Systems\Rendezvous\Method.h" />
+    <ClInclude Include="src\Simulator\Systems\SimulatorState.h" />
     <ClInclude Include="src\Simulator\Systems\Solvers\NumSolvers.h" />
     <ClInclude Include="src\Simulator\Systems\TestRendererSystem.h" />
     <ClInclude Include="src\Simulator\Systems\TimeSystem.h" />

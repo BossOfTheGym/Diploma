@@ -50,8 +50,6 @@ namespace sim
 
 
 	private:
-		Simulator* m_simulator{nullptr};
-
 		Solver   m_solver{};
 		GravitationPtr         m_gravitation{};
 		GravitationJacobianPtr m_gravitationJacobian{};
