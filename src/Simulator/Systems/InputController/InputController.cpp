@@ -1,5 +1,8 @@
 #include "InputController.h"
 
+// workaround
+#include <imgui.h>
+
 #include "../../Components/Camera.h"
 #include "../../Simulator.h"
 
@@ -16,7 +19,9 @@ namespace sim
 
 	void InputController::mouseEvent(BaseWindow& window, double xPos, double yPos)
 	{
-		if (m_pressed)
+		bool captured = ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow) || ImGui::IsWindowHovered(ImGuiFocusedFlags_AnyWindow);
+
+		if (!captured && m_pressed)
 		{
 			auto& registry = m_simulator->getRegistry();
 			if (registry.valid(m_controlled) && registry.has<comp::Camera3rdPerson>(m_controlled))
@@ -28,12 +33,13 @@ namespace sim
 		}
 		m_prevX = xPos;
 		m_prevY = yPos;
-		
 	}
 
 	void InputController::mouseButtonEvent(BaseWindow & window, int button, int action, int mods)
 	{		
-		if (button == GLFW_MOUSE_BUTTON_LEFT)
+		bool captured = ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow) || ImGui::IsWindowHovered(ImGuiFocusedFlags_AnyWindow);
+
+		if (!captured && button == GLFW_MOUSE_BUTTON_LEFT)
 		{
 			m_pressed = (action == GLFW_PRESS);
 		}
@@ -41,8 +47,10 @@ namespace sim
 
 	void InputController::scrollEvent(BaseWindow & window, double xOffset, double yOffset)
 	{
+		bool captured = ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow) || ImGui::IsWindowHovered(ImGuiFocusedFlags_AnyWindow);
+
 		auto& registry = m_simulator->getRegistry();
-		if (registry.valid(m_controlled) && registry.has<comp::Camera3rdPerson>(m_controlled))
+		if (!captured && registry.valid(m_controlled) && registry.has<comp::Camera3rdPerson>(m_controlled))
 		{
 			auto& camera = registry.get<comp::Camera3rdPerson>(m_controlled);
 			camera.changeDistance(yOffset / 5);
