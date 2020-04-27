@@ -28,7 +28,7 @@ namespace test
 	const Vec3f32 TAR_COLOR = Vec3f32(1.0, 0.5, 0.25);
 
 	const Vec3 TAR_RAD = Vec3{15.0, 0.0, 0.0};
-	const Vec3 TAR_VEL = Vec3{0.0, 0.0, std::sqrt(PLANET_MU / glm::length(TAR_RAD))};
+	const Vec3 TAR_VEL = Vec3{0.0, std::sqrt(PLANET_MU / glm::length(TAR_RAD)), 0.0};
 	const Vec3 TAR_ROT_AXIS = glm::normalize(Vec3{1.0, 1.0, 1.0});
 	const Float TAR_ROT_ANGLE = 1.0;
 
@@ -42,7 +42,7 @@ namespace test
 	const Vec3f32 CHA_COLOR = Vec3f32(1.0, 0.5, 0.25);
 
 	const Vec3 CHA_RAD = Vec3{-15.0, 0.0, 0.0};
-	const Vec3 CHA_VEL = Vec3{0.0, 0.0, -std::sqrt(PLANET_MU / glm::length(CHA_RAD))};
+	const Vec3 CHA_VEL = Vec3{0.0, -std::sqrt(PLANET_MU / glm::length(CHA_RAD)), 0.0};
 	const Vec3 CHA_ROT_AXIS = glm::normalize(Vec3{1.0, 1.0, 1.0});
 	const Float CHA_ROT_ANGLE = 2.0;
 

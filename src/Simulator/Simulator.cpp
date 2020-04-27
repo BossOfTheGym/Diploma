@@ -12,12 +12,13 @@
 #include "Systems/TimeSystem.h"
 #include "Systems/ImGuiSystem.h"
 #include "Systems/SimulatorState.h"
-#include "Systems/GuiInfo/GuiInfo.h"
 
+#include "Systems/GuiInfo/GuiInfo.h"
 #include "Systems/GuiInfo/OrbitComponentGui.h"
 #include "Systems/GuiInfo/RendezvousControlGui.h"
 #include "Systems/GuiInfo/SimulatorStateGui.h"
 #include "Systems/GuiInfo/TimeSystemGui.h"
+#include "Systems/GuiInfo/PlanetComponentGui.h"
 
 #include "Components/Player.h"
 #include "Components/Transform.h"
@@ -68,6 +69,7 @@ namespace sim
 		imguiSystem->registerEntity(planet);
 		imguiSystem->registerEntity(target);
 		imguiSystem->registerEntity(chaser);
+		imguiSystem->registerEntity(player);
 
 		timeSystem->resetTime();
 		contextSystem->showWindow();
@@ -146,7 +148,7 @@ namespace sim
 		using Tick = TimeSystem::Tick;
 		Tick warp = 1;
 		Tick minWarp = 1;
-		Tick maxWarp = 5;
+		Tick maxWarp = 1000;
 		systemManager.add<TimeSystem>(warp, minWarp, maxWarp);
 
 		// CORE : simulator state
@@ -160,6 +162,7 @@ namespace sim
 		imGuiSystem->registerSystem<SimulatorStateGui>();
 		imGuiSystem->registerSystem<TimeSystemInfo>();
 		imGuiSystem->registerComponent<OrbitComponentGui>();
+		imGuiSystem->registerComponent<PlanetComponentGui>();
 
 		// PlanetSystem
 		systemManager.add<PlanetSystem>();

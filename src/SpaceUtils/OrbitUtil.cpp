@@ -13,8 +13,8 @@ namespace space_utils::orbit
 		m_orbit = OrbitState{h, i, ra, e, ap, ta};
 		m_mu    = mu;
 
-		Float cost = cos(ap);
-		Float sint = sin(ap);
+		Float cost = cos(ta);
+		Float sint = sin(ta);
 		
 		Float coso = cos(ap);
 		Float sino = sin(ap);
@@ -23,7 +23,7 @@ namespace space_utils::orbit
 		Float cosi = cos(i);
 		Float sini = sin(i);
 		
-		Vec3 rx = h *  h / mu / (1.0_FL + e * cost) * Vec3(cost, sint, 0.0_FL);
+		Vec3 rx = h *  h / mu / (1 + e * cost) * Vec3(cost, sint, 0.0_FL);
 		Vec3 vx = mu / h * Vec3(-sint, e + cost, 0.0_FL);
 		
 		Mat3 Qxx = transpose(
@@ -64,15 +64,21 @@ namespace space_utils::orbit
 		m_orbit.i = std::acos(hv.z / m_orbit.h);
 		
 		//7, 8
-		auto nv = glm::cross(Vec3(0.0, 0.0, 1.0), hv); // TODO : Sukhanov
+		auto nv = glm::cross(Vec3(0.0, 0.0, 1.0), hv);
 		m_orbit.n = glm::length(nv);
-		
+		if (m_orbit.n <= std::numeric_limits<Float>::epsilon())
+		{
+			// TODO
+			//nv = Vec3(1.0, 0.0, 0.0);
+		}
+
 		//9.
 		m_orbit.ra = std::acos(nv.x / m_orbit.n);
 		if(nv.y <= std::numeric_limits<Float>::epsilon())
 		{
 			m_orbit.ra = math::PI2 - m_orbit.ra;
-		}	
+		}
+		
 		
 		//10, 11
 		auto ev = glm::cross(vv, hv) / mu - rv / r;
@@ -89,7 +95,7 @@ namespace space_utils::orbit
 		
 		//13.
 		m_orbit.ta = std::acos(glm::dot(rv / r, uev));
-		if(vr <= std::numeric_limits<double>::epsilon())
+		if(vr <= std::numeric_limits<Float>::epsilon())
 		{
 			m_orbit.ta = math::PI2 - m_orbit.ta;
 		}	

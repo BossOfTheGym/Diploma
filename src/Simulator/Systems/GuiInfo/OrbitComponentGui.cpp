@@ -36,12 +36,11 @@ namespace sim
 			sprintf_s(hStr, "%.15f", h);
 			sprintf_s(eStr, "%.15f", e);
 
-			ImGui::InputText("angular momentum(h)", hStr, 64, ImGuiInputTextFlags_CharsDecimal);
-			ImGui::InputText("eccentricity(e)" ,    eStr, 64, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputText("h", hStr, 64, ImGuiInputTextFlags_CharsDecimal);
+			ImGui::InputText("e", eStr, 64, ImGuiInputTextFlags_CharsDecimal);
 
 			h = atof(hStr);
 			e = atof(eStr);
-
 
 			double DEGREE_0 = 0.0, DEGREE_360 = 360.0, DEGREE_180 = 180.0;
 
@@ -50,10 +49,10 @@ namespace sim
 			double i  = glm::degrees(orbitState.i);
 			double ta = glm::degrees(orbitState.ta);
 
-			ImGui::SliderScalar("right ascension"    , ImGuiDataType_Double, &ra, &DEGREE_0, &DEGREE_360, "%.15f", 0.2f);
-			ImGui::SliderScalar("argument of perigee", ImGuiDataType_Double, &ap, &DEGREE_0, &DEGREE_360, "%.15f", 0.2f);
-			ImGui::SliderScalar("inclination"        , ImGuiDataType_Double, &i , &DEGREE_0, &DEGREE_180, "%.15f", 0.2f);
-			ImGui::SliderScalar("true anomaly"       , ImGuiDataType_Double, &ta, &DEGREE_0, &DEGREE_360, "%.15f", 0.2f);
+			ImGui::SliderScalar("ra", ImGuiDataType_Double, &ra, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
+			ImGui::SliderScalar("ap", ImGuiDataType_Double, &ap, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
+			ImGui::SliderScalar("i" , ImGuiDataType_Double, &i , &DEGREE_0, &DEGREE_180, "%.15f", 1.0f);
+			ImGui::SliderScalar("ta", ImGuiDataType_Double, &ta, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
 
 			orbit.setFromParameters(
 				  h
@@ -74,17 +73,17 @@ namespace sim
 		}
 		else
 		{
-			ImGui::Text("Specific ang. momentum : %f", orbitState.h);
-			ImGui::Text("Right ascension        : %f", orbitState.ra);
-			ImGui::Text("Argument of perigee    : %f", orbitState.ap);
-			ImGui::Text("Inclination            : %f", orbitState.i);
-			ImGui::Text("Eccentricity           : %f", orbitState.e);
-			ImGui::Text("True anomaly           : %f", orbitState.ta);
+			ImGui::Text("h : %f", orbitState.h);
+			ImGui::Text("ra: %f", orbitState.ra);
+			ImGui::Text("ap: %f", orbitState.ap);
+			ImGui::Text("i : %f", orbitState.i);
+			ImGui::Text("e : %f", orbitState.e);
+			ImGui::Text("ta: %f", orbitState.ta);
 			ImGui::Text("");
-			ImGui::Text("Eccentric anomaly : %f", orbitState.ea);
-			ImGui::Text("Apoapsis          : %f", orbitState.a);
-			ImGui::Text("Orbit period      : %f", orbitState.T);
-			ImGui::Text("Time              : %f", orbitState.t);
+			ImGui::Text("ea: %f", orbitState.ea);
+			ImGui::Text("a : %f", orbitState.a);
+			ImGui::Text("T : %f", orbitState.T);
+			ImGui::Text("t : %f", orbitState.t);
 		}
 	}
 

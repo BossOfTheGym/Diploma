@@ -35,7 +35,7 @@ namespace sim
 		m_graviHolder         = Function(m_gravitation);
 		m_graviJacobianHolder = Jacobian(m_gravitationJacobian);
 		
-		m_solver = solvers::classic4<Float, 6>();
+		m_solver = solvers::gaussLegendre4<Float, 6>(1e-15, 25);
 	}
 
 	void PlanetSystem::update(ecs::Time t, ecs::Time dt)
@@ -67,21 +67,22 @@ namespace sim
 
 		for (auto e : registry.view<PhysicsData, SimData>(entt::exclude<Planet>))
 		{
+			auto tUpdate  = t;
+			auto dtUpdate = dt;
+
 			auto& simData = registry.get<SimData>(e);
-			auto r = simData.getRadius() - center;
-			simData.setRadius(r);
 
 			auto state = simData.state;
 			for (int i = 1; i < updates; i++)
 			{
-				auto tSec  = ecs::toSeconds<Float>(t).count();
+				auto tSec  = ecs::toSeconds<Float>(tUpdate).count();
 				state = m_solver.solve(m_graviHolder, m_graviJacobianHolder, tSec, state, stepSec);
 
-				t  += step;
-				dt -= step;
+				tUpdate  += step;
+				dtUpdate -= step;
 			}
-			auto tSec  = ecs::toSeconds<Float>(t).count();
-			auto dtSec = ecs::toSeconds<Float>(dt).count();
+			auto tSec  = ecs::toSeconds<Float>(tUpdate).count();
+			auto dtSec = ecs::toSeconds<Float>(dtUpdate).count();
 			simData.state = m_solver.solve(m_graviHolder, m_graviJacobianHolder, tSec, state, dtSec);
 
 			auto& physics = registry.get<PhysicsData>(e);

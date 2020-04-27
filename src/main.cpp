@@ -6,6 +6,9 @@
 
 #include <SpaceUtils/Lambert.h>
 
+#include "Simulator/Components/SimData.h"
+#include "Simulator/Components/Orbit.h"
+
 void testSpaceUtils()
 {
 	
@@ -13,7 +16,8 @@ void testSpaceUtils()
 
 int main()
 {
-	//testSpaceUtils();
+	testSpaceUtils();
+
 	sim::Simulator sim;
 	sim.mainLoop();
 

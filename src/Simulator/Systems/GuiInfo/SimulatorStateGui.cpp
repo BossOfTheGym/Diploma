@@ -23,13 +23,25 @@ namespace sim
 
 		auto* timeSystem     = sysManager->get<TimeSystem>();
 		auto* simulatorState = sysManager->get<SimulatorState>();
+
+
 		if (simulatorState->paused())
 		{
 			if (ImGui::Button("Resume"))
 			{
 				simulatorState->resume();
 			}
+		}
+		else
+		{
+			if (ImGui::Button("Pause"))
+			{
+				simulatorState->pause();
+			}
+		}
 
+		if (simulatorState->paused())
+		{
 			if (!simulatorState->rendezvousStarted())
 			{
 				char transferStr[64];
@@ -46,37 +58,31 @@ namespace sim
 					simulatorState->startRendezvous(t, dt);
 				}
 			}
-			else
-			{
-				auto target = simulatorState->getTarget();
-				auto chaser = simulatorState->getChaser();
-				
-				if (registry.valid(target) && registry.has<comp::SimData>(target) 
-					&& registry.valid(chaser) && registry.has<comp::SimData, comp::Rendezvous>(chaser))
-				{
-					auto& targetSim = registry.get<comp::SimData>(target);
-					auto& chaserSim = registry.get<comp::SimData>(chaser);
-
-					auto& rendComp = registry.get<comp::Rendezvous>(chaser);
-
-					auto dr = targetSim.getRadius() - chaserSim.getRadius();
-					auto dv = targetSim.getVelocity() - chaserSim.getVelocity();
-
-					ImGui::Text("dr:%f  x:%f y:%f z:%f", glm::length(dr), dr.x, dr.y, dr.z);
-					ImGui::Text("dv:%f  x:%f y:%f z:%f", glm::length(dv), dv.x, dv.y, dv.z);
-					ImGui::Text("Time remaining: %f", ecs::toSeconds<double>(rendComp.duration).count());
-				}
-				if (ImGui::Button("Abort"))
-				{
-					simulatorState->abortRendezvous();
-				}
-			}
 		}
-		else
+
+		if (simulatorState->rendezvousStarted())
 		{
-			if (ImGui::Button("Pause"))
+			auto target = simulatorState->getTarget();
+			auto chaser = simulatorState->getChaser();
+
+			if (registry.valid(target) && registry.has<comp::SimData>(target) 
+				&& registry.valid(chaser) && registry.has<comp::SimData, comp::Rendezvous>(chaser))
 			{
-				simulatorState->pause();
+				auto& targetSim = registry.get<comp::SimData>(target);
+				auto& chaserSim = registry.get<comp::SimData>(chaser);
+
+				auto& rendComp = registry.get<comp::Rendezvous>(chaser);
+
+				auto dr = targetSim.getRadius() - chaserSim.getRadius();
+				auto dv = targetSim.getVelocity() - chaserSim.getVelocity();
+
+				ImGui::Text("dr:%f  x:%f y:%f z:%f", glm::length(dr), dr.x, dr.y, dr.z);
+				ImGui::Text("dv:%f  x:%f y:%f z:%f", glm::length(dv), dv.x, dv.y, dv.z);
+				ImGui::Text("Time remaining: %f", ecs::toSeconds<double>(rendComp.duration).count());
+			}
+			if (ImGui::Button("Abort"))
+			{
+				simulatorState->abortRendezvous();
 			}
 		}
 	}

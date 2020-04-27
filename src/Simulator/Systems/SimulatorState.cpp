@@ -99,21 +99,9 @@ namespace sim
 		m_target = buildTarget(registry);
 		m_chaser = buildChaser(registry);
 
+		/*buildChaser(registry);
 		buildChaser(registry);
-		buildChaser(registry);
-		buildChaser(registry);
-
-		buildChaser(registry);
-		buildChaser(registry);
-		buildChaser(registry);
-
-		buildChaser(registry);
-		buildChaser(registry);
-		buildChaser(registry);
-
-		buildChaser(registry);
-		buildChaser(registry);
-		buildChaser(registry);
+		buildChaser(registry);*/
 	}
 
 

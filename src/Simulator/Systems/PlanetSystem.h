@@ -43,9 +43,7 @@ namespace sim
 
 
 	public:
-		PlanetSystem(ecs::sys::SystemManager* manager, ecs::Time dt = ecs::Time(50'000'000), ecs::Tick maxUpdates = 10);
-
-		virtual ~PlanetSystem() = default;
+		PlanetSystem(ecs::sys::SystemManager* manager, ecs::Time dt = ecs::Time(50'000'000), ecs::Tick maxUpdates = 100);
 
 
 	public:

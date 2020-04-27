@@ -295,6 +295,9 @@
     <ClCompile Include="src\Simulator\Simulator.cpp">
       <Filter>src\Simulator</Filter>
     </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Solver\ISolver.h">
@@ -596,6 +599,9 @@
     </ClInclude>
     <ClInclude Include="src\SpaceUtils\Stumpff.h">
       <Filter>src\SpaceUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
