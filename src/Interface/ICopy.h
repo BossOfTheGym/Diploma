@@ -8,7 +8,10 @@ namespace basic_interface
 	class ICopy
 	{
 	public:
-		using Pointer = std::unique_ptr<Return>;
+		virtual ~ICopy() = default;
+
+	public:
+		using Pointer = Return*;//std::unique_ptr<Return>;
 
 		[[nodiscard]]
 		virtual Pointer copy() const = 0;

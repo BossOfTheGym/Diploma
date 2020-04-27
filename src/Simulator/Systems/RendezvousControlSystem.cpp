@@ -22,28 +22,41 @@ namespace sim
 
 	void RendezvousControlSystem::update(ecs::Time t, ecs::Time dt)
 	{
-		// TODO : add while loop so it can update multiple 'immediate' actions like impuls
 		auto& registry = m_simulator->getRegistry();
-		for (auto actionList : registry.view<comp::Rendezvous>())
+		for (auto chaser : registry.view<comp::Rendezvous>())
 		{
-			if (!empty(actionList))
+			if (!empty(chaser))
 			{
-				auto nextAction = front(actionList);
+				auto& rendComp = registry.get<comp::Rendezvous>(chaser);
+				rendComp.duration -= dt;
+
+				auto nextAction = front(chaser);
 				if (registry.has<comp::Action>(nextAction))
 				{
 					auto& action = registry.get<comp::Action>(nextAction);
 					if (auto it = m_actions.find(action.actionStaticType); it != m_actions.end())
 					{
-						(*it).second->update(actionList, t, dt);
+						(*it).second->update(chaser, t, dt);
 					}
 				}
 			}
 		}
 	}
 
-	void RendezvousControlSystem::startRendezvous(Entity target, Entity chaser, ecs::Time t, ecs::Time dt)
+
+	bool RendezvousControlSystem::startRendezvous(Entity target, Entity chaser, ecs::Time t, ecs::Time dt)
 	{
-		m_method.startRendezvous(target, chaser, t, dt);
+		return m_method.startRendezvous(target, chaser, t, dt);
+	}
+
+	void RendezvousControlSystem::abortRendezvous(Entity e)
+	{
+		clear(e);
+	}
+
+	bool RendezvousControlSystem::rendezvousStarted(Entity e)
+	{
+		return !empty(e);
 	}
 
 

@@ -6,6 +6,7 @@
 #include "GuiInfo/GuiInfo.h"
 
 #include <unordered_map> 
+#include <memory>
 
 
 namespace sim
@@ -18,8 +19,8 @@ namespace sim
 
 
 	private:
-		using SystemInfoRegistry    = std::unordered_map<ecs::Id, SystemInfo>;
-		using ComponentInfoRegistry = std::unordered_map<ecs::Id, ComponentInfo>;
+		using SystemInfoRegistry    = std::unordered_map<ecs::Id, std::unique_ptr<ISystemInfo>>;
+		using ComponentInfoRegistry = std::unordered_map<ecs::Id, std::unique_ptr<IComponentInfo>>;
 
 
 	public:
@@ -33,17 +34,24 @@ namespace sim
 
 
 	public:
-		template<class Component, class ComponentInfoT>
-		void registerComponent(ComponentInfoT&& info)
+		template<class Component, class ComponentInfoT, class ... Args>
+		void registerComponent(Args ... args)
 		{
-			m_compInfoRegistry[entt::type_info<Component>::id()] = ComponentInfo(std::forward<ComponentInfo>(info), TypeTag<Component>);
+			m_compInfoRegistry[entt::type_info<Component>::id()] 
+				= std::make_unique<ComponentInfoT>(getSystemManager(), std::forward<Args>(args)...);
 		}
 
-		template<class System, class SystemInfoT>
-		void registerSystem(SystemInfoT&& info)
+		template<class System, class SystemInfoT, class ... Args>
+		void registerSystem(Args ... args)
 		{
-			m_sysInfoRegistry[System::TYPE_ID] = SystemInfo(std::forward<SystemInfoT>(info), TypeTag<System>);
+			m_sysInfoRegistry[System::TYPE_ID] 
+				= std::make_unique<SystemInfoT>(getSystemManager(), std::forward<Args>(args)...);
 		}
+
+
+		void registerEntity(Entity e) const;
+
+		void unregisterEntity(Entity e) const;
 
 
 	private:

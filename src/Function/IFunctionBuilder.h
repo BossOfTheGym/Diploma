@@ -15,6 +15,11 @@ namespace func
 		using FunctionType = Ret(Args...);
 		using ReturnType   = Ret;
 
+
+	public:
+		virtual ~IFunctionBuilder() = default;
+
+
 	public:
 		virtual FunctionWrapper<Ret(Args...)> build() const = 0;
 	};

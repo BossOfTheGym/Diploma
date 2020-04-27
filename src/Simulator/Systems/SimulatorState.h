@@ -8,6 +8,7 @@ namespace sim
 	using ecs::entity::Entity;
 	using ecs::entity::null;
 
+
 	class SimulatorState : public ecs::sys::System<SimulatorState>
 	{
 	public:
@@ -20,21 +21,42 @@ namespace sim
 
 
 	public:
+		virtual void update(ecs::Time t, ecs::Time dt) override;
+
+
+	public:
 		Entity getPlanet() const;
 
 		Entity getPlayer() const;
 
-		Entity getSat1() const;
+		Entity getTarget() const;
 
-		Entity getSat2() const;
+		Entity getChaser() const;
+
+
+		bool paused() const;
+
+		void pause();
+
+		void resume();
+
+
+		// TEST
+		void startRendezvous(ecs::Time t, ecs::Time dt);
+
+		void abortRendezvous();
+
+		bool rendezvousStarted();
+		// END TEST
 
 
 	private:
 		Entity m_planet{null};
 		Entity m_player{null};
-		Entity m_sat1{null};
-		Entity m_sat2{null};
+		Entity m_target{null};
+		Entity m_chaser{null};
 
-		bool m_paused{ false };
+		bool m_paused{false};
+		bool m_rendezvousStarted{false};
 	};
 }

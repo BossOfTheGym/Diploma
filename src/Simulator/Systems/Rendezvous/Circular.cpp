@@ -44,10 +44,11 @@ namespace sim
 		if (registry.has<comp::Orbit, comp::SimData>(target)
 			&& registry.has<comp::Orbit, comp::SimData, comp::Rendezvous>(chaser))
 		{
-			auto [targetOrbit, targetSim]                = registry.get<comp::Orbit, comp::SimData>(target);
-			auto [chaserOrbit, chaserSim, chaserActList] = registry.get<comp::Orbit, comp::SimData, comp::Rendezvous>(chaser);
+			auto [targetOrbit, targetSim]                 = registry.get<comp::Orbit, comp::SimData>(target);
+			auto [chaserOrbit, chaserSim, chaserRendComp] = registry.get<comp::Orbit, comp::SimData, comp::Rendezvous>(chaser);
 
-			sys->clear(chaser);
+			sys->abortRendezvous(chaser);
+			chaserRendComp.duration = dt;
 
 			//mean motion & time
 			Float n = targetOrbit.getOrbit().n;
@@ -96,23 +97,23 @@ namespace sim
 			std::cout << "First : x:" << dvFirst.x  << " y: " << dvFirst.y  << " z: " << dvFirst.z  << std::endl;
 			std::cout << "Second: x:" << dvSecond.x << " y: " << dvSecond.y << " z: " << dvSecond.z << std::endl;
 
-			// TODO : add to rendezvous control system convinient methods to push actions
+			// TODO : add to rendezvous control system convenient methods to push actions
 			// first impuls
 			auto firstImpuls = registry.create();
 			registry.assign<comp::Action>(firstImpuls, null, comp::Impuls::TYPE_ID);
-			registry.assign<comp::Impuls>(firstImpuls, dvFirst);
+			registry.assign<comp::Impuls>(firstImpuls, dvFirst, Time(0));
 			sys->pushBack(chaser, firstImpuls);
 
 			// wait
-			auto wait = registry.create();
-			registry.assign<comp::Action>(wait, null, comp::Wait::TYPE_ID);
-			registry.assign<comp::Wait>(wait, dt);
-			sys->pushBack(chaser, wait);
+			//auto wait = registry.create();
+			//registry.assign<comp::Action>(wait, null, comp::Wait::TYPE_ID);
+			//registry.assign<comp::Wait>(wait, dt);
+			//sys->pushBack(chaser, wait);
 
 			// second impuls
 			auto secondImpuls = registry.create();
 			registry.assign<comp::Action>(secondImpuls, null, comp::Impuls::TYPE_ID);
-			registry.assign<comp::Impuls>(secondImpuls, dvSecond);
+			registry.assign<comp::Impuls>(secondImpuls, dvSecond, dt);
 			sys->pushBack(chaser, secondImpuls);
 
 			// TODO : check

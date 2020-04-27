@@ -57,7 +57,7 @@ namespace sim
 			return;
 		}
 
-		auto sphereResource = meshSystem->acquireResource(MeshSystem::SPHERE).lock();
+		auto sphereResource = meshSystem->acquireResource(MeshSystem::CUBE).lock();
 		if (!sphereResource)
 		{
 			// TODO : notify about error

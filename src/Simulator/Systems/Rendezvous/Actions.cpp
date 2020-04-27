@@ -36,6 +36,15 @@ namespace sim
 				auto& impuls  = registry.get<comp::Impuls>(next);
 				auto& simData = registry.get<comp::SimData>(actionList);
 
+				if (impuls.duration >= dt)
+				{
+					impuls.duration -= dt;
+				}
+				if (impuls.duration == Time(0))
+				{
+					sys->popFront(actionList);
+				}
+
 				simData.setVelocity(simData.getVelocity() + impuls.dv);
 
 				sys->popFront(actionList);

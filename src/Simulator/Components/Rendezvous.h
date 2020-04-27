@@ -48,10 +48,11 @@ namespace comp
 
 	struct Impuls : detail::BaseAction<Impuls>
 	{
-		Impuls(const Vec3& dvInit) : dv(dvInit)
+		Impuls(const Vec3& dvInit, const Time& t) : dv(dvInit), duration(t)
 		{}
 
 		Vec3 dv{};
+		Time duration{};
 	};
 
 	struct Wait : detail::BaseAction<Wait>
@@ -68,5 +69,7 @@ namespace comp
 
 		Entity actionHead{null};
 		Entity actionTail{null};
+
+		Time duration{};
 	};
 }

@@ -4,26 +4,119 @@
 #include <ECS/System/SystemManager.h>
 #include <ECS/Entity/EntityBuilderManager.h>
 
-#include "../EntityBuilders/ChaserFactory.h"
-#include "../EntityBuilders/PlanetFactory.h"
-#include "../EntityBuilders/SatelliteFactory.h"
-#include "../EntityBuilders/PlayerFactory.h"
+#include "../Components/Camera.h"
+#include "../Components/Transform.h"
+#include "../Components/PhysicsData.h"
+#include "../Components/SimData.h"
+#include "../Components/Satellite.h"
+#include "../Components/Orbit.h"
+#include "../Components/MeshComponent.h"
+#include "../Components/TestRendererTag.h"
+#include "../Components/Rendezvous.h"
+#include "../Components/Planet.h"
+#include "../Components/Player.h"
+
+// TEST
+#include "../Components/TestRendererTag.h"
+
+#include "../Test.h"
+
+#include "RendezvousControlSystem.h"
+
+namespace
+{	
+	using ecs::entity::Entity;
+	using ecs::entity::null;
+
+	using math::Vec3f32;
+	using math::Float;
+	using math::F32;
+	using math::F64;
+
+	auto buildChaser(ecs::entity::EntityComponentRegistry& registry)
+	{
+		static Float m = 1.0;
+		static F32 m32 = 1.0f;
+		static F32 m64 = 1.0f;
+
+		Entity satellite = registry.create();
+		registry.assign<comp::Transform>      (satellite, m32 * test::CHA_TRANSLATE, test::CHA_ROTATION, test::CHA_SCALE);
+		registry.assign<comp::PhysicsData>    (satellite, m * test::CHA_RAD, test::CHA_VEL, test::CHA_ROT_AXIS, test::CHA_ROT_ANGLE, test::CHA_MASS);
+		registry.assign<comp::SimData>        (satellite, comp::fromRadVel(m * test::CHA_RAD, test::CHA_VEL));
+		registry.assign<comp::Satellite>      (satellite, test::CHA_COLOR);
+		registry.assign<comp::Orbit>          (satellite, comp::Orbit({m * test::CHA_RAD, test::CHA_VEL}, test::PLANET_MU));
+		registry.assign<comp::TestRendererTag>(satellite);
+		registry.assign<comp::Rendezvous>     (satellite);
+
+		m   += 0.2;
+		m32 += 0.2;
+		m64 += 0.2;
+
+		return satellite;
+	}
+
+	auto buildTarget(ecs::entity::EntityComponentRegistry& registry)
+	{
+		Entity satellite = registry.create();
+		registry.assign<comp::Transform>      (satellite, test::TAR_TRANSLATE, test::TAR_ROTATION, test::TAR_SCALE);
+		registry.assign<comp::PhysicsData>    (satellite, test::TAR_RAD, test::TAR_VEL, test::TAR_ROT_AXIS, test::TAR_ROT_ANGLE, test::TAR_MASS);
+		registry.assign<comp::SimData>        (satellite, comp::fromRadVel(test::TAR_RAD, test::TAR_VEL));
+		registry.assign<comp::Satellite>      (satellite, test::TAR_COLOR);
+		registry.assign<comp::Orbit>          (satellite, comp::Orbit({test::TAR_RAD, test::TAR_VEL}, test::PLANET_MU));
+		registry.assign<comp::TestRendererTag>(satellite);
+		return satellite;
+	}
+
+	auto buildPlayer(ecs::entity::EntityComponentRegistry& registry)
+	{
+		auto player = registry.create();
+		registry.assign<comp::Player>         (player, player);
+		registry.assign<comp::Camera3rdPerson>(player, Vec3f32{}, math::PI_3, 0.0, 0.0, 1.0, 1.0, 500.0);
+		return player;
+	}
+
+	auto buildPlanet(ecs::entity::EntityComponentRegistry& registry)
+	{
+		Entity planet = registry.create();
+		registry.assign<comp::Transform>      (planet, test::PLANET_RAD, test::PLANET_ROTATTION, test::PLANET_SCALE);
+		registry.assign<comp::PhysicsData>    (planet, test::PLANET_RAD, test::PLANET_VEL, test::PLANET_ROT_AXIS, test::PLANET_ROT_ANGLE, test::PLANET_MASS);
+		registry.assign<comp::SimData>        (planet, comp::fromRadVel(test::PLANET_RAD, test::PLANET_VEL));
+		registry.assign<comp::Planet>         (planet, test::PLANET_MU, test::PLANET_R, 1.0);
+		registry.assign<comp::TestRendererTag>(planet);
+		return planet;
+	}
+}
 
 namespace sim
 {
 	SimulatorState::SimulatorState(ecs::sys::SystemManager* manager)
 		:	base_t(manager)
 	{
-		auto& entityBuilderManager = manager->getECSEngine()->getEntityBuilderManager();
-		SatelliteFactory* satelliteFactory = entityBuilderManager.get<SatelliteFactory>();
-		PlanetFactory*    planetFactory    = entityBuilderManager.get<PlanetFactory>();
-		PlayerFactory*    playerFactory    = entityBuilderManager.get<PlayerFactory>();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
+		m_planet = buildPlanet(registry);
+		m_player = buildPlayer(registry);
 
-		m_planet = planetFactory->buildEntity();
-		m_player = playerFactory->buildEntity();
+		m_target = buildTarget(registry);
+		m_chaser = buildChaser(registry);
 
-		m_sat1 = satelliteFactory->buildEntity();
+		buildChaser(registry);
+		buildChaser(registry);
+		buildChaser(registry);
+
+		buildChaser(registry);
+		buildChaser(registry);
+		buildChaser(registry);
 	}
+
+
+	void SimulatorState::update(ecs::Time t, ecs::Time dt)
+	{
+		auto* sysManager = getSystemManager();
+		auto* rendezvousControlSystem = sysManager->get<RendezvousControlSystem>();
+
+		m_rendezvousStarted = rendezvousControlSystem->rendezvousStarted(m_chaser);
+	}
+
 
 	Entity SimulatorState::getPlanet() const
 	{
@@ -35,13 +128,56 @@ namespace sim
 		return m_player;
 	}
 
-	Entity SimulatorState::getSat1() const
+	Entity SimulatorState::getTarget() const
 	{
-		return m_sat1;
+		return m_target;
 	}
 
-	Entity SimulatorState::getSat2() const
+	Entity SimulatorState::getChaser() const
 	{
-		return m_sat2;
+		return m_chaser;
+	}
+
+
+	bool SimulatorState::paused() const
+	{
+		return m_paused;
+	}
+
+	void SimulatorState::pause()
+	{
+		m_paused = true;
+	}
+
+	void SimulatorState::resume()
+	{
+		m_paused = false;
+	}
+
+
+	void SimulatorState::startRendezvous(ecs::Time t, ecs::Time dt)
+	{
+		auto* sysManager = getSystemManager();
+		auto* rendezvousControl = sysManager->get<RendezvousControlSystem>();
+
+		m_rendezvousStarted = rendezvousControl->startRendezvous(m_target, m_chaser, t, dt);
+	}
+
+	void SimulatorState::abortRendezvous()
+	{
+		auto* sysManager = getSystemManager();
+		auto* rendezvousControl = sysManager->get<RendezvousControlSystem>();
+	
+		rendezvousControl->abortRendezvous(m_chaser);
+
+		m_rendezvousStarted = false;
+	}
+
+	bool SimulatorState::rendezvousStarted()
+	{
+		auto* sysManager = getSystemManager();
+		auto* rendezvousControl = sysManager->get<RendezvousControlSystem>();
+
+		return rendezvousControl->rendezvousStarted(m_chaser);
 	}
 }

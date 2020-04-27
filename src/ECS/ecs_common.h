@@ -17,9 +17,15 @@ namespace ecs
 	template<class Type>
 	using Seconds = std::chrono::duration<Type>;
 
-	template<class Ty, class TimeValue>
+	template<class T, class TimeValue>
 	auto toSeconds(TimeValue t)
 	{
-		return std::chrono::duration_cast<Seconds<Ty>>(t);
+		return std::chrono::duration_cast<Seconds<T>>(t);
+	}
+
+	template<class T, class TimeValue>
+	auto toTime(TimeValue t)
+	{
+		return std::chrono::duration_cast<Time>(t);
 	}
 }

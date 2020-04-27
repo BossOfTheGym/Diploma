@@ -50,12 +50,6 @@
     <Filter Include="src\SpaceUtils">
       <UniqueIdentifier>{405e3cd1-2eae-4445-b310-35ef81503fdf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\SpaceUtils\sources">
-      <UniqueIdentifier>{61e018f7-4c7a-4130-9bb1-122126959340}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\SpaceUtils\headers">
-      <UniqueIdentifier>{615b525d-dd8a-4a48-8464-42ac048f5173}</UniqueIdentifier>
-    </Filter>
     <Filter Include="assets">
       <UniqueIdentifier>{843ee19f-290f-469c-8efc-4c36970841e6}</UniqueIdentifier>
     </Filter>
@@ -79,9 +73,6 @@
     </Filter>
     <Filter Include="src\Simulator\Components">
       <UniqueIdentifier>{6fb51d67-c50e-43c1-b454-f602272ad321}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Simulator\EntitiesBuilders">
-      <UniqueIdentifier>{c27e8971-e369-42bb-bebf-c3e9b4c6189c}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Simulator\Systems\Functions">
       <UniqueIdentifier>{3174ec58-2f2e-4c38-a976-70a8e7088c52}</UniqueIdentifier>
@@ -157,12 +148,6 @@
     <ClCompile Include="src\Context\Context.cpp">
       <Filter>src\Context</Filter>
     </ClCompile>
-    <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp">
-      <Filter>src\SpaceUtils\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SpaceUtils\Lambert.cpp">
-      <Filter>src\SpaceUtils\sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\ECS\ecs_engine.cpp">
       <Filter>src\ECS</Filter>
     </ClCompile>
@@ -184,23 +169,11 @@
     <ClCompile Include="src\Simulator\Systems\TimeSystem.cpp">
       <Filter>src\Simulator\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="src\Simulator\Simulator.cpp">
-      <Filter>src\Simulator</Filter>
-    </ClCompile>
     <ClCompile Include="src\Simulator\Components\Camera.cpp">
       <Filter>src\Simulator\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulator\Components\Orbit.cpp">
       <Filter>src\Simulator\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulator\EntityBuilders\ChaserFactory.cpp">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulator\EntityBuilders\PlanetFactory.cpp">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulator\EntityBuilders\SatelliteFactory.cpp">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulator\Components\SimData.cpp">
       <Filter>src\Simulator\Components</Filter>
@@ -256,9 +229,6 @@
     <ClCompile Include="src\Simulator\Components\Transform.cpp">
       <Filter>src\Simulator\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\Simulator\EntityBuilders\PlayerFactory.cpp">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>src\ImGui</Filter>
     </ClCompile>
@@ -280,9 +250,6 @@
     <ClCompile Include="src\Simulator\Systems\GuiInfo\GuiInfo.cpp">
       <Filter>src\Simulator\Systems\GuiInfo</Filter>
     </ClCompile>
-    <ClCompile Include="src\SpaceUtils\Stumpff.cpp">
-      <Filter>src\SpaceUtils\sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Simulator\Systems\Rendezvous\Circular.cpp">
       <Filter>src\Simulator\Systems\Rendezvous</Filter>
     </ClCompile>
@@ -292,13 +259,40 @@
     <ClCompile Include="src\Simulator\Components\Rendezvous.cpp">
       <Filter>src\Simulator\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\SpaceUtils\OrbitUtil.cpp">
-      <Filter>src\SpaceUtils\sources</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\examples\imgui_impl_glfw.cpp">
       <Filter>src\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulator\Systems\SimulatorState.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\OrbitComponentGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\RendezvousControlGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\SimulatorStateGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\TimeSystemGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\OrbitSystem.cpp">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\ClohessyWiltshire.cpp">
+      <Filter>src\SpaceUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\Lambert.cpp">
+      <Filter>src\SpaceUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\OrbitUtil.cpp">
+      <Filter>src\SpaceUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpaceUtils\Stumpff.cpp">
+      <Filter>src\SpaceUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Simulator.cpp">
       <Filter>src\Simulator\Systems</Filter>
     </ClCompile>
   </ItemGroup>
@@ -393,12 +387,6 @@
     <ClInclude Include="src\Context\Context.h">
       <Filter>src\Context</Filter>
     </ClInclude>
-    <ClInclude Include="src\SpaceUtils\ClohessyWiltshire.h">
-      <Filter>src\SpaceUtils\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SpaceUtils\Lambert.h">
-      <Filter>src\SpaceUtils\headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\ECS\ecs_common.h">
       <Filter>src\ECS</Filter>
     </ClInclude>
@@ -455,15 +443,6 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\Components\Transform.h">
       <Filter>src\Simulator\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulator\EntityBuilders\ChaserFactory.h">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulator\EntityBuilders\PlanetFactory.h">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulator\EntityBuilders\SatelliteFactory.h">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
     </ClInclude>
     <ClInclude Include="src\Simulator\Systems\Meshes\BoxMesh.h">
       <Filter>src\Simulator\Systems\Meshes\headers</Filter>
@@ -525,9 +504,6 @@
     <ClInclude Include="src\ECS\Entity\IEntityBuilder.h">
       <Filter>src\ECS\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="src\Simulator\EntityBuilders\entity_builders_common.h">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
-    </ClInclude>
     <ClInclude Include="src\Simulator\Components\Timer.h">
       <Filter>src\Simulator\Components</Filter>
     </ClInclude>
@@ -542,12 +518,6 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\Components\Player.h">
       <Filter>src\Simulator\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulator\EntityBuilders\PlayerFactory.h">
-      <Filter>src\Simulator\EntitiesBuilders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SpaceUtils\StateVec.h">
-      <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>src\ImGui</Filter>
@@ -576,17 +546,11 @@
     <ClInclude Include="src\Simulator\Systems\GuiInfo\GuiInfo.h">
       <Filter>src\Simulator\Systems\GuiInfo</Filter>
     </ClInclude>
-    <ClInclude Include="src\SpaceUtils\Stumpff.h">
-      <Filter>src\SpaceUtils\headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Simulator\Systems\Rendezvous\Circular.h">
       <Filter>src\Simulator\Systems\Rendezvous</Filter>
     </ClInclude>
     <ClInclude Include="src\Simulator\Systems\Rendezvous\Method.h">
       <Filter>src\Simulator\Systems\Rendezvous</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SpaceUtils\OrbitUtil.h">
-      <Filter>src\SpaceUtils\headers</Filter>
     </ClInclude>
     <ClInclude Include="imgui\examples\imgui_impl_glfw.h">
       <Filter>src\ImGui</Filter>
@@ -602,6 +566,36 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\Systems\SimulatorState.h">
       <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\OrbitComponentGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\SimulatorStateGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\TimeSystemGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\RendezvousControlGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\OrbitSystem.h">
+      <Filter>src\Simulator\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\ClohessyWiltshire.h">
+      <Filter>src\SpaceUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\Lambert.h">
+      <Filter>src\SpaceUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\OrbitUtil.h">
+      <Filter>src\SpaceUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\StateVec.h">
+      <Filter>src\SpaceUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpaceUtils\Stumpff.h">
+      <Filter>src\SpaceUtils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

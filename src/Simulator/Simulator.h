@@ -27,7 +27,5 @@ namespace sim
 
 
 		void loadSystems();
-
-		void loadEntityBuilders();
 	};
 }

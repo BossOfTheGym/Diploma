@@ -31,15 +31,18 @@ namespace sim
 
 
 	public:
-		// TODO
 		virtual void update(ecs::Time t, ecs::Time dt) override;
 
 
 	public:
-		void startRendezvous(Entity e1, Entity e2, ecs::Time t, ecs::Time dt);
+		bool startRendezvous(Entity target, Entity chaser, ecs::Time t, ecs::Time dt);
+
+		void abortRendezvous(Entity e);
+
+		bool rendezvousStarted(Entity e);
 
 
-		// TODO : add convinient methods to push Actions
+		// TODO : add convenient methods to push Actions
 		// TODO : that's weird
 		// works with Rendezvous component
 		void clear(Entity list);

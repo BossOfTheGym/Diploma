@@ -21,8 +21,6 @@ namespace sim
 		: ecs::sys::System<PhysicsSystem>(manager)
 	{
 		m_simulator = static_cast<Simulator*>(manager->getECSEngine());
-		// TODO : assert
-		// TODO : maybe dynamic_cast better?
 	}
 
 	void PhysicsSystem::update(ecs::Time t, ecs::Time dt)

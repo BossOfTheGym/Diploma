@@ -14,7 +14,11 @@ namespace func
 		using BaseInterface = basic_interface::ICopy<IFunction<Ret(Args...)>>;
 		using Pointer       = typename BaseInterface::Pointer; 
 
+	public:
+		virtual ~IFunction() = default;
 
+
+	public:
 		virtual Ret operator()(Args ... args) = 0;
 
 		virtual Ret operator()(Args ... args) const = 0;

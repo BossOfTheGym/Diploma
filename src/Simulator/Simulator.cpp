@@ -6,17 +6,13 @@
 #include "Systems/PhysicsSystem.h"
 #include "Systems/PlanetSystem.h"
 #include "Systems/PlayerSystem.h"
+#include "Systems/OrbitSystem.h"
 #include "Systems/RendezvousControlSystem.h"
 #include "Systems/TestRendererSystem.h"
 #include "Systems/TimeSystem.h"
 #include "Systems/ImGuiSystem.h"
 #include "Systems/SimulatorState.h"
 #include "Systems/GuiInfo/GuiInfo.h"
-
-#include "EntityBuilders/ChaserFactory.h"
-#include "EntityBuilders/PlanetFactory.h"
-#include "EntityBuilders/SatelliteFactory.h"
-#include "EntityBuilders/PlayerFactory.h"
 
 #include "Components/Player.h"
 #include "Components/Transform.h"
@@ -33,7 +29,6 @@ namespace sim
 	Simulator::Simulator()
 	{
 		loadSystems(); // loaded first
-		loadEntityBuilders();
 	}
 
 	void Simulator::mainLoop()
@@ -51,22 +46,19 @@ namespace sim
 		RendezvousControlSystem* rendezvousControlSystem = systemManager.get<RendezvousControlSystem>();
 		ImGuiSystem*             imguiSystem             = systemManager.get<ImGuiSystem>();
 		SimulatorState*          simulatorState          = systemManager.get<SimulatorState>();
-
-		// builders
-		
+		OrbitSystem*             orbitSystem             = systemManager.get<OrbitSystem>();
 
 		// main loop
-		// init
-		// TODO
 		auto player = simulatorState->getPlayer();
-		auto sat1   = simulatorState->getSat1();
+		auto target = simulatorState->getPlanet();
 
 		auto controller = playerSystem->getInputController();
 		controller->setControlledEntity(player);
 
-		getRegistry().get<comp::Player>(player).view = sat1;
+		getRegistry().get<comp::Player>(player).view = target;
 
 
+		timeSystem->resetTime();
 		contextSystem->showWindow();
 		contextSystem->setSwapInterval(1);
 		contextSystem->pushController(controller);
@@ -78,14 +70,14 @@ namespace sim
 			auto  t = timeSystem->getTime();
 			auto dt = timeSystem->getDeltaTime();
 
+			rendezvousControlSystem->update(t, dt);
 			planetSystem->update(t, dt);
 			physicsSystem->update(t, dt);
+
+			orbitSystem->update(t, dt);
 			playerSystem->update(t, dt);
 			testRendererSystem->update(t, dt);
-
-			// TEST
 			imguiSystem->update(t, dt);
-			// END TEST
 
 			contextSystem->swapBuffers();
 		}
@@ -101,11 +93,6 @@ namespace sim
 	}
 
 	void Simulator::deinit()
-	{
-		// TODO : TODO : TODO
-	}
-
-	void Simulator::loadEntityBuilders()
 	{
 		// TODO : TODO : TODO
 	}
@@ -148,25 +135,12 @@ namespace sim
 		Tick maxWarp = 1;
 		systemManager.add<TimeSystem>(&systemManager, warp, minWarp, maxWarp);
 
-		// TODO : initialization order
-		auto& entityBuilderManager = getEntityBuilderManager();
-
-		// ChaserFactory
-		entityBuilderManager.add<ChaserFactory>(&entityBuilderManager);
-
-		// SatelliteFactory
-		entityBuilderManager.add<SatelliteFactory>(&entityBuilderManager);
-
-		// PlanetFactory
-		entityBuilderManager.add<PlanetFactory>(&entityBuilderManager);
-
-		// PlayerFactory
-		entityBuilderManager.add<PlayerFactory>(&entityBuilderManager);
-		// TODOTODOTODOTODOTODO
-
 		// CORE : simulator state
 		systemManager.add<SimulatorState>(&systemManager);
 
+		// CORE : ImGuiSystem
+		systemManager.add<ImGuiSystem>(&systemManager);
+		// TODO : register components
 
 		// PlanetSystem
 		systemManager.add<PlanetSystem>(&systemManager);
@@ -183,9 +157,7 @@ namespace sim
 		// Player system
 		systemManager.add<PlayerSystem>(&systemManager);
 
-		// ImGuiSystem
-		systemManager.add<ImGuiSystem>(&systemManager);
-		auto* imguiSys = systemManager.get<ImGuiSystem>();
-		//imguiSys->registerComponent<comp::
+		// OrbitSystem
+		systemManager.add<OrbitSystem>(&systemManager);
 	}
 }
