@@ -34,17 +34,17 @@ namespace sim
 
 
 	public:
-		template<class Component, class ComponentInfoT, class ... Args>
+		template<class ComponentInfoT, class ... Args>
 		void registerComponent(Args ... args)
 		{
-			m_compInfoRegistry[entt::type_info<Component>::id()] 
+			m_compInfoRegistry[entt::type_info<typename ComponentInfoT::Component>::id()] 
 				= std::make_unique<ComponentInfoT>(getSystemManager(), std::forward<Args>(args)...);
 		}
 
-		template<class System, class SystemInfoT, class ... Args>
+		template<class SystemInfoT, class ... Args>
 		void registerSystem(Args ... args)
 		{
-			m_sysInfoRegistry[System::TYPE_ID] 
+			m_sysInfoRegistry[SystemInfoT::System::TYPE_ID] 
 				= std::make_unique<SystemInfoT>(getSystemManager(), std::forward<Args>(args)...);
 		}
 

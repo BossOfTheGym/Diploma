@@ -16,6 +16,7 @@ namespace sim
 		std::uint64_t maxWarp = timeSystem->getMaxWarp();
 		std::uint64_t warp    = timeSystem->getWarp();
 		ImGui::SliderScalar("Time warp", ImGuiDataType_U64, &warp, &minWarp, &maxWarp);
+		timeSystem->setWarp(warp);
 	}
 
 	const char* TimeSystemInfo::name() const

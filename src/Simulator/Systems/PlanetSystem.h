@@ -12,6 +12,7 @@
 #include "Solvers/NumSolvers.h"
 #include "Functions/Functions.h"
 
+#include <ECS/Entity/Entity.h>
 
 namespace sim
 {
@@ -29,6 +30,8 @@ namespace sim
 	using GravitationJacobianPtr = std::shared_ptr<GravitationJacobian>;
 
 
+	using ecs::entity::Entity;
+
 
 	class Simulator;
 
@@ -40,7 +43,7 @@ namespace sim
 
 
 	public:
-		PlanetSystem(ecs::sys::SystemManager* manager);
+		PlanetSystem(ecs::sys::SystemManager* manager, ecs::Time dt = ecs::Time(50'000'000), ecs::Tick maxUpdates = 10);
 
 		virtual ~PlanetSystem() = default;
 
@@ -48,12 +51,20 @@ namespace sim
 	public:
 		virtual void update(ecs::Time t, ecs::Time dt);
 
+		// workaround for ImGuiSystem
+		void updateEntity(Entity e);
+
 
 	private:
-		Solver   m_solver{};
+		Solver m_solver{};
+
 		GravitationPtr         m_gravitation{};
 		GravitationJacobianPtr m_gravitationJacobian{};
+
 		Function m_graviHolder{};
 		Jacobian m_graviJacobianHolder{};
+
+		ecs::Time m_dt{};
+		ecs::Tick m_maxUpdates{};
 	};
 }

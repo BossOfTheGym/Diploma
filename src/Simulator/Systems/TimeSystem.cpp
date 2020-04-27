@@ -21,10 +21,12 @@ namespace sim
 
 		m_t0 += m_dt;
 		m_dt  = t1 - m_t;
-		if (m_dt.count() > 100'000'000)
+		// TEST
+		if (m_dt > Time(100'000'000))
 		{
 			m_dt = Time(100'000'000);
 		}
+		// END TEST
 
 		m_t0Warped += m_dtWarped;
 		m_dtWarped  = m_dt * m_warp;

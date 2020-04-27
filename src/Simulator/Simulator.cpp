@@ -14,6 +14,11 @@
 #include "Systems/SimulatorState.h"
 #include "Systems/GuiInfo/GuiInfo.h"
 
+#include "Systems/GuiInfo/OrbitComponentGui.h"
+#include "Systems/GuiInfo/RendezvousControlGui.h"
+#include "Systems/GuiInfo/SimulatorStateGui.h"
+#include "Systems/GuiInfo/TimeSystemGui.h"
+
 #include "Components/Player.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
@@ -50,18 +55,23 @@ namespace sim
 
 		// main loop
 		auto player = simulatorState->getPlayer();
-		auto target = simulatorState->getPlanet();
+		auto planet = simulatorState->getPlanet();
+		auto target = simulatorState->getTarget();
+		auto chaser = simulatorState->getChaser();
 
 		auto controller = playerSystem->getInputController();
 		controller->setControlledEntity(player);
+		contextSystem->pushController(controller);
 
-		getRegistry().get<comp::Player>(player).view = target;
+		getRegistry().get<comp::Player>(player).view = planet;
 
+		imguiSystem->registerEntity(planet);
+		imguiSystem->registerEntity(target);
+		imguiSystem->registerEntity(chaser);
 
 		timeSystem->resetTime();
 		contextSystem->showWindow();
 		contextSystem->setSwapInterval(1);
-		contextSystem->pushController(controller);
 		while(!contextSystem->shouldClose())
 		{
 			contextSystem->pollEvents();
@@ -70,12 +80,16 @@ namespace sim
 			auto  t = timeSystem->getTime();
 			auto dt = timeSystem->getDeltaTime();
 
-			rendezvousControlSystem->update(t, dt);
-			planetSystem->update(t, dt);
-			physicsSystem->update(t, dt);
+			if (!simulatorState->paused())
+			{
+				rendezvousControlSystem->update(t, dt);
+				planetSystem->update(t, dt);
+				physicsSystem->update(t, dt);
+				orbitSystem->update(t, dt);
+			}
 
-			orbitSystem->update(t, dt);
 			playerSystem->update(t, dt);
+
 			testRendererSystem->update(t, dt);
 			imguiSystem->update(t, dt);
 
@@ -120,44 +134,49 @@ namespace sim
 		Float fovy = glm::radians(45.0);
 		Float near = 1.0;
 		Float far  = 1000.0;
-		systemManager.add<ContextSystem>(&systemManager, info, true, fovy, near, far);
+		systemManager.add<ContextSystem>(info, true, fovy, near, far);
 
 		// CORE : graphics
-		systemManager.add<GraphicsSystem>(&systemManager);
+		systemManager.add<GraphicsSystem>();
 
 		// CORE : mesh system
-		systemManager.add<MeshSystem>(&systemManager);
+		systemManager.add<MeshSystem>();
 
 		// CORE : Time system
 		using Tick = TimeSystem::Tick;
 		Tick warp = 1;
 		Tick minWarp = 1;
-		Tick maxWarp = 1;
-		systemManager.add<TimeSystem>(&systemManager, warp, minWarp, maxWarp);
+		Tick maxWarp = 5;
+		systemManager.add<TimeSystem>(warp, minWarp, maxWarp);
 
 		// CORE : simulator state
-		systemManager.add<SimulatorState>(&systemManager);
+		systemManager.add<SimulatorState>();
 
 		// CORE : ImGuiSystem
-		systemManager.add<ImGuiSystem>(&systemManager);
-		// TODO : register components
+		systemManager.add<ImGuiSystem>();
+
+		auto* imGuiSystem = systemManager.get<ImGuiSystem>();
+		imGuiSystem->registerSystem<RendezvousSystemInfo>();
+		imGuiSystem->registerSystem<SimulatorStateGui>();
+		imGuiSystem->registerSystem<TimeSystemInfo>();
+		imGuiSystem->registerComponent<OrbitComponentGui>();
 
 		// PlanetSystem
-		systemManager.add<PlanetSystem>(&systemManager);
+		systemManager.add<PlanetSystem>();
 
 		// Rendezvous control system
-		systemManager.add<RendezvousControlSystem>(&systemManager);
+		systemManager.add<RendezvousControlSystem>();
 
 		// TestRendererSystem
-		systemManager.add<TestRendererSystem>(&systemManager);
+		systemManager.add<TestRendererSystem>();
 
 		// Physics system
-		systemManager.add<PhysicsSystem>(&systemManager);
+		systemManager.add<PhysicsSystem>();
 
 		// Player system
-		systemManager.add<PlayerSystem>(&systemManager);
+		systemManager.add<PlayerSystem>();
 
 		// OrbitSystem
-		systemManager.add<OrbitSystem>(&systemManager);
+		systemManager.add<OrbitSystem>();
 	}
 }

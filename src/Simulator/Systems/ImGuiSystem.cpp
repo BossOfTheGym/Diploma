@@ -35,6 +35,7 @@ namespace sim
 		ImGui::DestroyContext();
 	}
 
+
 	void ImGuiSystem::update(ecs::Time t, ecs::Time dt)
 	{
 		// TEST
@@ -72,40 +73,60 @@ namespace sim
 		// systems
 		if (ImGui::CollapsingHeader("Systems parameters"))
 		{
+			ImGui::Indent(10.0f);
+
 			for (auto& [sysID, sysInfo] : m_sysInfoRegistry)
 			{
 				ImGui::PushID(sysID);
 				ImGui::PushID("SystemInfo");
-				sysInfo->render();
+				if (ImGui::CollapsingHeader(sysInfo->name()))
+				{
+					sysInfo->render();
+				}
 				ImGui::PopID();
 				ImGui::PopID();
 			}
+
+			ImGui::Unindent(10.0f);
 		}
 
 		// components
+		char number[64];
 		if (ImGui::CollapsingHeader("Entity editor"))
 		{ 
+			ImGui::Indent(10.0f);
+
 			auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 
 			for (auto e : registry.view<comp::ImGuiTag>())
 			{
 				ImGui::PushID(entt::to_integral(e));
-				ImGui::Text("%u", entt::to_integral(e));
-				ImGui::Indent(10.0f);
-				for (auto& [compID, componentInfo] : m_compInfoRegistry)
+
+				sprintf_s(number, "%u", entt::to_integral(e));
+				if (ImGui::CollapsingHeader(number))
 				{
-					if (componentInfo->hasComponent(e))
+					ImGui::Indent(10.0f);
+					for (auto& [compID, componentInfo] : m_compInfoRegistry)
 					{
-						ImGui::PushID(compID);
-						ImGui::PushID("ComponentInfo");
-						componentInfo->render(e);
-						ImGui::PopID();
-						ImGui::PopID();
+						if (componentInfo->hasComponent(e))
+						{
+							if (ImGui::CollapsingHeader(componentInfo->name()))
+							{
+								ImGui::PushID(compID);
+								ImGui::PushID("ComponentInfo");
+								componentInfo->render(e);
+								ImGui::PopID();
+								ImGui::PopID();
+							}
+						}
 					}
+					ImGui::Unindent(10.0f);
 				}
-				ImGui::Unindent(10.0f);
+
 				ImGui::PopID();
 			}
+
+			ImGui::Unindent(10.0f);
 		}
 		ImGui::End();
 

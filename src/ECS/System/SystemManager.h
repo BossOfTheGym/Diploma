@@ -52,7 +52,7 @@ namespace ecs::sys
 		template<class System, class ... Args>
 		void add(Args&& ... args)
 		{
-			auto ptr = std::make_unique<System>(std::forward<Args>(args)...);
+			auto ptr = std::make_unique<System>(this, std::forward<Args>(args)...);
 
 			m_systemRegistry[System::TYPE_ID] = std::move(ptr);
 		}

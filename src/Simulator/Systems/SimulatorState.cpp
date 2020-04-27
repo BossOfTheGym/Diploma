@@ -106,6 +106,14 @@ namespace sim
 		buildChaser(registry);
 		buildChaser(registry);
 		buildChaser(registry);
+
+		buildChaser(registry);
+		buildChaser(registry);
+		buildChaser(registry);
+
+		buildChaser(registry);
+		buildChaser(registry);
+		buildChaser(registry);
 	}
 
 

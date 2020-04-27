@@ -293,7 +293,7 @@
       <Filter>src\SpaceUtils</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulator\Simulator.cpp">
-      <Filter>src\Simulator\Systems</Filter>
+      <Filter>src\Simulator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

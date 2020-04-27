@@ -43,7 +43,7 @@ namespace space_utils::orbit
 
 
 	public:
-		void setFromParameters(Float c, Float i, Float ra, Float e, Float ap, Float ta, Float mu);
+		void setFromParameters(Float h, Float i, Float ra, Float e, Float ap, Float ta, Float mu);
 
 		void setFromState(const StateVec& state, Float mu);
 

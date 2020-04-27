@@ -1,6 +1,8 @@
 #include "OrbitComponentGui.h"
 
 #include "../SimulatorState.h"
+#include "../PlanetSystem.h"
+
 #include "../../Components/Planet.h"
 #include "../../Components/SimData.h"
 
@@ -17,12 +19,13 @@ namespace sim
 		auto& registry   = engine->getRegistry();
 
 		auto* simulatorState = sysManager->get<SimulatorState>();
+		auto* planetSystem   = sysManager->get<PlanetSystem>();
 
 		auto& planetComp = registry.get<comp::Planet>(simulatorState->getPlanet());
 
 		auto& orbit      = registry.get<comp::Orbit>(entity);
 		auto& orbitState = orbit.getOrbit();
-		if (!simulatorState->paused())
+		if (simulatorState->paused())
 		{
 			char hStr[64];
 			char eStr[64];
@@ -47,24 +50,26 @@ namespace sim
 			double i  = glm::degrees(orbitState.i);
 			double ta = glm::degrees(orbitState.ta);
 
-			ImGui::SliderScalar("right ascension"    , ImGuiDataType_Double, &ra, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
-			ImGui::SliderScalar("argument of perigee", ImGuiDataType_Double, &ap, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
-			ImGui::SliderScalar("inclination"        , ImGuiDataType_Double, &i , &DEGREE_0, &DEGREE_180, "%.15f", 1.0f);
-			ImGui::SliderScalar("true anomaly"       , ImGuiDataType_Double, &ta, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
+			ImGui::SliderScalar("right ascension"    , ImGuiDataType_Double, &ra, &DEGREE_0, &DEGREE_360, "%.15f", 0.2f);
+			ImGui::SliderScalar("argument of perigee", ImGuiDataType_Double, &ap, &DEGREE_0, &DEGREE_360, "%.15f", 0.2f);
+			ImGui::SliderScalar("inclination"        , ImGuiDataType_Double, &i , &DEGREE_0, &DEGREE_180, "%.15f", 0.2f);
+			ImGui::SliderScalar("true anomaly"       , ImGuiDataType_Double, &ta, &DEGREE_0, &DEGREE_360, "%.15f", 0.2f);
 
 			orbit.setFromParameters(
-				h
+				  h
 				, glm::radians(i)
 				, glm::radians(ra)
 				, e
 				, glm::radians(ap)
 				, glm::radians(ta)
 				, planetComp.mu);
+
 			if (registry.has<comp::SimData>(entity))
 			{
 				auto& simData = registry.get<comp::SimData>(entity);
 				simData.setRadius(orbit.getState().r);
 				simData.setVelocity(orbit.getState().v);
+				planetSystem->updateEntity(entity);
 			}
 		}
 		else
