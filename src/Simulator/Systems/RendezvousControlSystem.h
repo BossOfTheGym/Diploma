@@ -3,11 +3,13 @@
 #include <ECS/Entity/Entity.h>
 #include <ECS/System/System.h>
 
+#include "../Components/Rendezvous.h"
+
 #include "Rendezvous/Actions.h"
-#include "Rendezvous/Circular.h"
 
 #include <unordered_map>
 #include <memory>
+
 
 namespace sim
 {
@@ -22,7 +24,7 @@ namespace sim
 
 		using ActionPtr      = std::unique_ptr<IAction>;
 		using ActionRegistry = std::unordered_map<Id, ActionPtr>;
-		
+
 
 	public:
 		RendezvousControlSystem(ecs::sys::SystemManager* manager);
@@ -41,32 +43,65 @@ namespace sim
 
 		bool rendezvousStarted(Entity e);
 
+		
 
-		// TODO : add convenient methods to push Actions
-		// TODO : that's weird
-		// works with Rendezvous component
-		void clear(Entity list);
+		template<class Action, class ... Args>
+		void registerAction(Args&& ... args)
+		{
+			m_actions[Action::TYPE_ID] = std::make_unique<Action>(this, std::forward<Args>(args)...);
+		}
 
-		void pushBack(Entity list, Entity e);
+		template<class Action>
+		void unregisterAction()
+		{
+			m_actions.erase(Action::TYPE_ID);
+		}
 
-		void pushFront(Entity list, Entity e);
 
-		void popFront(Entity list);
+		template<class ActionComponent, class ... Args>
+		void pushBack(Entity chaser, Args&& ... args)
+		{
+			auto& registry = getSystemManager()->getECSEngine()->getRegistry();
+
+			auto action = registry.create();
+			registry.assign<comp::Action>(action, null, ActionComponent::TYPE_ID);
+			registry.assign<ActionComponent>(action, std::forward<Args>(args)...);
+
+			pushBack(chaser, action);
+		};
+
+		template<class ActionComponent, class ... Args>
+		void pushFront(Entity chaser, Args&& ... args)
+		{
+			auto& registry = getSystemManager()->getECSEngine()->getRegistry();
+
+			auto action = registry.create();
+			registry.assign<comp::Action>(action, null, ActionComponent::TYPE_ID);
+			registry.assign<ActionComponent>(action, std::forward<Args>(args)...);
+
+			pushFront(chaser, action);
+		}
 
 
-		Entity back(Entity list);
+		// list entity should have Rendezvous component(it serves as holder of head and tail of a list)
+		// TODO : mayby there's some better way to work with list
+		void clear(Entity chaser);
 
-		Entity front(Entity list);
+		void pushBack(Entity chaser, Entity action);
 
-		bool empty(Entity list);
+		void pushFront(Entity chaser, Entity action);
+
+		void popFront(Entity chaser);
+
+
+		Entity back(Entity chaser);
+
+		Entity front(Entity chaser);
+
+		bool empty(Entity chaser);
 
 
 	private:
-		Simulator* m_simulator{nullptr};	
-
 		ActionRegistry m_actions{};
-
-		// TODO
-		ToCircular m_method;
 	};
 }

@@ -2,9 +2,11 @@
 
 #include "Method.h"
 
+// not used
+
 namespace sim
 {	
-	class ToCircular : public Method
+	class ToCircular : public TwoImpulsMethod
 	{
 	public:
 		ToCircular(RendezvousControlSystem* sys);
@@ -13,6 +15,6 @@ namespace sim
 
 
 	public:
-		virtual bool startRendezvous(Entity target, Entity chaser, Time t, Time dt) override;
+		virtual Data startRendezvous(Entity target, Entity chaser, Time t, Time dt) override;
 	};
 }

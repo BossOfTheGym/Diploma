@@ -64,7 +64,7 @@ namespace sim
 		controller->setControlledEntity(player);
 		contextSystem->pushController(controller);
 
-		getRegistry().get<comp::Player>(player).view = planet;
+		getRegistry().get<comp::Player>(player).view = target;
 
 		imguiSystem->registerEntity(planet);
 		imguiSystem->registerEntity(target);
@@ -74,26 +74,62 @@ namespace sim
 		timeSystem->resetTime();
 		contextSystem->showWindow();
 		contextSystem->setSwapInterval(1);
+
+		Time t{};
+		Time dt{};
 		while(!contextSystem->shouldClose())
 		{
 			contextSystem->pollEvents();
 			timeSystem->tick();
 
-			auto  t = timeSystem->getTime();
-			auto dt = timeSystem->getDeltaTime();
-
 			if (!simulatorState->paused())
 			{
+				t   = timeSystem->getTime();
+				dt += timeSystem->getDeltaTime();
+
+				Time tf = t + dt; // t-ime f-inal
+				while(timeSystem->hasTimeEvents() && timeSystem->peekTimeEvent() < tf)
+				{
+					Time ts = timeSystem->peekTimeEvent(); // t-ime s-afe
+					while(timeSystem->hasTimeEvents() && timeSystem->peekTimeEvent() == ts)
+					{
+						timeSystem->popTimeEvent();
+					}
+					
+					Time dts = ts - t; // dt s-afe
+
+					// TODO : move to seperate method
+					rendezvousControlSystem->update(t, dts);
+					planetSystem->update(t, dts);
+					physicsSystem->update(t, dts);
+					orbitSystem->update(t, dts);
+
+					t  += dts; // progress time
+					dt -= dts; // consume time
+					///////////
+				}
+				// TODO : move to seperate method
 				rendezvousControlSystem->update(t, dt);
 				planetSystem->update(t, dt);
 				physicsSystem->update(t, dt);
 				orbitSystem->update(t, dt);
+
+				t  += dt; // progress time
+				dt -= dt; // consume time
+				///////////
 			}
+			
+			// TODO : solve this problem with updating
+			// TODO : renderers should render object in-simulator state so should be updated using sim time
+			// TODO : add ability to time system to stop the time: real time updates always, warped(simulator, rename)
+			//		is updated only if simulation not stopped
+			Time tr  = timeSystem->getRealTime(); // t-ime r-eal
+			Time dtr = timeSystem->getRealTimeDelta();
 
-			playerSystem->update(t, dt);
-
-			testRendererSystem->update(t, dt);
-			imguiSystem->update(t, dt);
+			playerSystem->update(tr, dtr);
+			testRendererSystem->update(tr, dtr);
+			imguiSystem->update(tr, dtr);
+			simulatorState->update(t, dt);
 
 			contextSystem->swapBuffers();
 		}
@@ -119,8 +155,8 @@ namespace sim
 
 		// CORE : context
 		CreationInfo info{
-			  1280
-			, 720
+			  1800
+			, 900
 			, "Simulator"
 			, Hints{
 				  {GLFW_DOUBLEBUFFER, GLFW_TRUE}
@@ -134,8 +170,8 @@ namespace sim
 			}
 		};
 		Float fovy = glm::radians(45.0);
-		Float near = 1.0;
-		Float far  = 1000.0;
+		Float near = 0.01;
+		Float far  = 6000.0;
 		systemManager.add<ContextSystem>(info, true, fovy, near, far);
 
 		// CORE : graphics

@@ -38,7 +38,58 @@ namespace comp
 		const Id BaseAction<T>::TYPE_ID = ecs::util::TypeCounter<Id, T, BaseAction>::get(); 
 	}
 
+	// not used
+	struct Impuls : detail::BaseAction<Impuls>
+	{
+		Impuls(const Vec3& dvInit = {}, const Time& t = {}) 
+			: dv(dvInit), duration(t)
+		{}
 
+		Vec3 dv{};
+		Time duration{};
+	};
+
+	// not used
+	struct Wait : detail::BaseAction<Wait>
+	{
+		Wait(const Time& tInit = {}) 
+			: duration(tInit)
+		{}
+
+		Time duration{};
+	};
+
+	// used 
+	struct CWImpuls : detail::BaseAction<Wait>
+	{
+		enum Type : int
+		{
+			  First =  0
+			, Last  =  1
+			, None  = -1
+		};
+
+		CWImpuls(
+			  const Vec3& targetPos   = {}
+			, const Time& timeoutInit = {}
+			, const Time& transferTimeInit = {}
+			, Type type = {}
+		) 
+			: targetPosition{targetPos}
+			, impulsType{type}
+			, transferTime{transferTimeInit}
+			, timeout{timeoutInit}
+		{}
+
+		Vec3 targetPosition{};
+		Type impulsType{None};
+
+		Time transferTime{};
+		Time timeout{};
+	};
+
+
+	// general holder for all action components
 	struct Action
 	{
 		Entity nextAction{null};
@@ -46,26 +97,15 @@ namespace comp
 		Id actionStaticType{BAD_ID};
 	};
 
-	struct Impuls : detail::BaseAction<Impuls>
-	{
-		Impuls(const Vec3& dvInit, const Time& t) : dv(dvInit), duration(t)
-		{}
-
-		Vec3 dv{};
-		Time duration{};
-	};
-
-	struct Wait : detail::BaseAction<Wait>
-	{
-		Wait(const Time& tInit) : duration(tInit)
-		{}
-
-		Time duration{};
-	};
-
+	// main component
 	struct Rendezvous
 	{
+		Float propellantMass{};
 		Float propellantUsed{};
+
+		Float Isp{}; // some propellant constant(characteristic)? depends on propellant
+
+		Entity target{};
 
 		Entity actionHead{null};
 		Entity actionTail{null};

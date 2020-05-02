@@ -35,22 +35,14 @@ namespace
 
 	auto buildChaser(ecs::entity::EntityComponentRegistry& registry)
 	{
-		static Float m = 1.0;
-		static F32 m32 = 1.0f;
-		static F32 m64 = 1.0f;
-
 		Entity satellite = registry.create();
-		registry.assign<comp::Transform>      (satellite, m32 * test::CHA_TRANSLATE, test::CHA_ROTATION, test::CHA_SCALE);
-		registry.assign<comp::PhysicsData>    (satellite, m * test::CHA_RAD, test::CHA_VEL, test::CHA_ROT_AXIS, test::CHA_ROT_ANGLE, test::CHA_MASS);
-		registry.assign<comp::SimData>        (satellite, comp::fromRadVel(m * test::CHA_RAD, test::CHA_VEL));
+		registry.assign<comp::Transform>      (satellite, test::CHA_TRANSLATE, test::CHA_ROTATION, test::CHA_SCALE);
+		registry.assign<comp::PhysicsData>    (satellite, test::CHA_RAD, test::CHA_VEL, test::CHA_ROT_AXIS, test::CHA_ROT_ANGLE, test::CHA_MASS);
+		registry.assign<comp::SimData>        (satellite, comp::fromRadVel(test::CHA_RAD, test::CHA_VEL));
 		registry.assign<comp::Satellite>      (satellite, test::CHA_COLOR);
-		registry.assign<comp::Orbit>          (satellite, comp::Orbit({m * test::CHA_RAD, test::CHA_VEL}, test::PLANET_MU));
+		registry.assign<comp::Orbit>          (satellite, comp::Orbit({test::CHA_RAD, test::CHA_VEL}, test::PLANET_MU));
 		registry.assign<comp::TestRendererTag>(satellite);
-		registry.assign<comp::Rendezvous>     (satellite);
-
-		m   += 0.2;
-		m32 += 0.2;
-		m64 += 0.2;
+		registry.assign<comp::Rendezvous>     (satellite, test::PROP_MASS, 0.0, test::PROP_ISP);
 
 		return satellite;
 	}
@@ -78,10 +70,10 @@ namespace
 	auto buildPlanet(ecs::entity::EntityComponentRegistry& registry)
 	{
 		Entity planet = registry.create();
-		registry.assign<comp::Transform>      (planet, test::PLANET_RAD, test::PLANET_ROTATTION, test::PLANET_SCALE);
+		registry.assign<comp::Transform>      (planet, test::PLANET_RAD, test::PLANET_ROTATION, test::PLANET_SCALE);
 		registry.assign<comp::PhysicsData>    (planet, test::PLANET_RAD, test::PLANET_VEL, test::PLANET_ROT_AXIS, test::PLANET_ROT_ANGLE, test::PLANET_MASS);
 		registry.assign<comp::SimData>        (planet, comp::fromRadVel(test::PLANET_RAD, test::PLANET_VEL));
-		registry.assign<comp::Planet>         (planet, test::PLANET_MU, test::PLANET_R, 1.0);
+		registry.assign<comp::Planet>         (planet, test::PLANET_MU, test::PLANET_R, 1.0, test::PLANET_G0);
 		registry.assign<comp::TestRendererTag>(planet);
 		return planet;
 	}
@@ -98,10 +90,6 @@ namespace sim
 
 		m_target = buildTarget(registry);
 		m_chaser = buildChaser(registry);
-
-		/*buildChaser(registry);
-		buildChaser(registry);
-		buildChaser(registry);*/
 	}
 
 

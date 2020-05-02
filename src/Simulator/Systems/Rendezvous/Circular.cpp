@@ -27,14 +27,14 @@ namespace sim
 	using math::Mat3;
 
 
-	ToCircular::ToCircular(RendezvousControlSystem* sys) : Method(sys)
+	ToCircular::ToCircular(RendezvousControlSystem* sys) 
+		: TwoImpulsMethod(sys)
 	{}
 
-	bool ToCircular::startRendezvous(Entity target, Entity chaser, Time t, Time dt)
+	auto ToCircular::startRendezvous(Entity target, Entity chaser, Time t, Time dt) -> Data
 	{
 		// TODO : check for appropriate eccentricity
 		// TODO : far-stage & interorbital transition
-
 		auto* sys        = getSystem();
 		auto* sysManager = sys->getSystemManager();
 		auto* engine     = sysManager->getECSEngine();
@@ -94,15 +94,15 @@ namespace sim
 			Vec3 dvSecond = qi * dvSecondBefore;
 
 			// DEBUG
-			std::cout << "First : x:" << dvFirst.x  << " y: " << dvFirst.y  << " z: " << dvFirst.z  << std::endl;
-			std::cout << "Second: x:" << dvSecond.x << " y: " << dvSecond.y << " z: " << dvSecond.z << std::endl;
+			//std::cout << "First : x:" << dvFirst.x  << " y: " << dvFirst.y  << " z: " << dvFirst.z  << std::endl;
+			//std::cout << "Second: x:" << dvSecond.x << " y: " << dvSecond.y << " z: " << dvSecond.z << std::endl;
 
 			// TODO : add to rendezvous control system convenient methods to push actions
 			// first impuls
-			auto firstImpuls = registry.create();
-			registry.assign<comp::Action>(firstImpuls, null, comp::Impuls::TYPE_ID);
-			registry.assign<comp::Impuls>(firstImpuls, dvFirst, Time(0));
-			sys->pushBack(chaser, firstImpuls);
+			//auto firstImpuls = registry.create();
+			//registry.assign<comp::Action>(firstImpuls, null, comp::Impuls::TYPE_ID);
+			//registry.assign<comp::Impuls>(firstImpuls, dvFirst, Time(0));
+			//sys->pushBack(chaser, firstImpuls);
 
 			// wait
 			//auto wait = registry.create();
@@ -111,17 +111,17 @@ namespace sim
 			//sys->pushBack(chaser, wait);
 
 			// second impuls
-			auto secondImpuls = registry.create();
-			registry.assign<comp::Action>(secondImpuls, null, comp::Impuls::TYPE_ID);
-			registry.assign<comp::Impuls>(secondImpuls, dvSecond, dt);
-			sys->pushBack(chaser, secondImpuls);
+			///auto secondImpuls = registry.create();
+			///registry.assign<comp::Action>(secondImpuls, null, comp::Impuls::TYPE_ID);
+			///registry.assign<comp::Impuls>(secondImpuls, dvSecond, dt);
+			///sys->pushBack(chaser, secondImpuls);
 
 			// TODO : check
-			timeSys->addTimeEvent(t);
-			timeSys->addTimeEvent(t + dt);
+			//timeSys->addTimeEvent(t);
+			//timeSys->addTimeEvent(t + dt);
 
-			return true;
+			return {true, dvFirst, dvSecond};
 		}
-		return false;
+		return {false, {}, {}};
 	}
 }

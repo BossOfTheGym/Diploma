@@ -15,12 +15,20 @@ namespace sim
 	
 	using ecs::Time;
 
+	using math::Vec3;
+	using math::Float;
+	using math::Mat3;
+
+
 	class RendezvousControlSystem;
+
 
 	class IAction : public ecs::util::StaticType
 	{
 	public:
 		IAction(RendezvousControlSystem* sys, Id staticTypeId);
+
+		virtual ~IAction() = default;
 
 	public:
 		virtual void update(Entity e, Time t, Time dt) = 0;
@@ -62,6 +70,7 @@ namespace sim
 		virtual void update(Entity actionList, Time t, Time dt) override;
 	};
 
+
 	class WaitAction : public BaseAction<comp::Wait>
 	{
 	public:
@@ -69,5 +78,24 @@ namespace sim
 
 	public:
 		virtual void update(Entity actionList, Time t, Time dt) override;
+	};
+
+
+	class CWImpulsAction : public BaseAction<comp::CWImpuls>
+	{
+	public:
+		using this_t = CWImpulsAction;
+		using base_t = BaseAction<comp::CWImpuls>;
+
+	public:
+		CWImpulsAction(RendezvousControlSystem* sys);
+
+	public:
+		virtual void update(Entity chaser, Time t, Time dt) override;
+
+	private:
+		Vec3 computeFirstImpulse(Entity chaser, const comp::CWImpuls& impuls);
+
+		Vec3 computeSecondImpulse(Entity chaser, const comp::CWImpuls& impuls);
 	};
 }

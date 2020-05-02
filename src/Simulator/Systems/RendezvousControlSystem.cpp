@@ -1,34 +1,45 @@
 #include "RendezvousControlSystem.h"
 
+#include <ECS/ecs_engine.h>
 #include <ECS/System/SystemManager.h>
 
-#include "../Simulator.h"
+#include <Math/MathLib.h>
+
 #include "../Components/Rendezvous.h"
+#include "../Components/Orbit.h"
+#include "../Components/SimData.h"
 
+#include "TimeSystem.h"
 
+// DEBUG
+#include <iostream>
 
 namespace sim
 {
+	using math::operator "" _FL;
+
+
 	RendezvousControlSystem::RendezvousControlSystem(ecs::sys::SystemManager* manager)
 		: base_t(manager)
-		, m_method(this)
 	{
-		m_simulator = static_cast<Simulator*>(manager->getECSEngine());
-
-		m_actions[ImpulsAction::TYPE_ID] = std::make_unique<ImpulsAction>(this);
-		m_actions[WaitAction::TYPE_ID]   = std::make_unique<WaitAction>(this);
+		registerAction<ImpulsAction>();
+		registerAction<WaitAction>();
+		registerAction<CWImpulsAction>();
 	}
 
 
 	void RendezvousControlSystem::update(ecs::Time t, ecs::Time dt)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		for (auto chaser : registry.view<comp::Rendezvous>())
 		{
 			if (!empty(chaser))
 			{
 				auto& rendComp = registry.get<comp::Rendezvous>(chaser);
-				rendComp.duration -= dt;
+				if (rendComp.duration > dt)
+				{
+					rendComp.duration -= dt;	
+				}
 
 				auto nextAction = front(chaser);
 				if (registry.has<comp::Action>(nextAction))
@@ -38,6 +49,11 @@ namespace sim
 					{
 						(*it).second->update(chaser, t, dt);
 					}
+					else
+					{
+						// DEBUG
+						std::cout << "Action not found" << std::endl;
+					}
 				}
 			}
 		}
@@ -46,7 +62,90 @@ namespace sim
 
 	bool RendezvousControlSystem::startRendezvous(Entity target, Entity chaser, ecs::Time t, ecs::Time dt)
 	{
-		return m_method.startRendezvous(target, chaser, t, dt);
+		// TODO : for now implement here some simple alg
+		// TODO : logic should definitely moved into some RendezvousStrategy 
+
+		// TODO : far chase(interorbital transfer)
+
+		// close phase		
+		auto* sysManager = getSystemManager();
+		auto* engine     = sysManager->getECSEngine();
+		auto& registry   = engine->getRegistry();
+
+		auto* timeSys    = sysManager->get<TimeSystem>();
+
+		if (!registry.valid(chaser) || !registry.has<comp::Orbit, comp::SimData, comp::Rendezvous>(chaser) ||
+			!registry.valid(target) || !registry.has<comp::Orbit, comp::SimData>(target))
+		{
+			return false;
+		}
+
+		auto [chaserOrbit, chaserSim, rendComp] = registry.get<comp::Orbit, comp::SimData, comp::Rendezvous>(chaser);
+		auto [targetOrbit, targetSim]           = registry.get<comp::Orbit, comp::SimData>(target);
+
+		rendComp.target   = target;
+		rendComp.duration = dt;
+
+		//mean motion & time
+		Float n = targetOrbit.getOrbit().n;
+
+		//satellites parameters
+		Vec3 rChaser = chaserSim.getRadius();
+		Vec3 rTarget = targetSim.getRadius();
+
+		Vec3 vChaser = chaserSim.getVelocity();
+		Vec3 vTarget = targetSim.getVelocity();
+
+		//angular momentum
+		Vec3 h = glm::cross(rTarget, vTarget);
+
+		//angular velocity
+		Vec3 omega = h / glm::dot(rTarget, rTarget);
+
+		//transformation matrix
+		Vec3 i = rTarget / glm::length(rTarget);
+		Vec3 k = h / glm::length(h);
+		Vec3 j = glm::cross(k, i);
+
+		Mat3 qi = Mat3(i, j, k);
+		Mat3 q  = glm::transpose(qi);
+
+		//absolute
+		Vec3 dr = rChaser - rTarget;
+
+		//relative
+		Vec3 dr0 = q * dr;		
+		
+		// actions queue
+		const int SPLIT = 10;
+		
+		const Time FIRST_TO = Time(1'000'000); // first timeout, workaround to avoid zero time delta while update
+		const Time FIRST_TR = Time(2'000'000); // first transfer interval
+
+		Time dtPart = (dt + Time(SPLIT)) / SPLIT;		
+		Time timeTransfer = dtPart * SPLIT; // total time required for transfer without first timeout
+		
+		// time sync
+		Time timeEvent = t + FIRST_TO;
+
+		// first
+		pushBack<comp::CWImpuls>(chaser, dr0, FIRST_TO, FIRST_TR, comp::CWImpuls::First);
+		timeSys->addTimeEvent(timeEvent);
+		timeEvent += FIRST_TR;
+		for (int i = 1; i <= SPLIT; i++)
+		{
+			Vec3 pos = dr0 * (1.0_FL * (timeTransfer - i * dtPart) / timeTransfer);
+
+			// intermediate
+			pushBack<comp::CWImpuls>(chaser, pos, dtPart, dtPart, comp::CWImpuls::First);
+			timeSys->addTimeEvent(timeEvent);
+			timeEvent += dtPart;
+		}
+		// last
+		pushBack<comp::CWImpuls>(chaser, Vec3{0.0}, dtPart, Time(0), comp::CWImpuls::Last);
+		timeSys->addTimeEvent(timeEvent);
+
+		return true;
 	}
 
 	void RendezvousControlSystem::abortRendezvous(Entity e)
@@ -62,7 +161,7 @@ namespace sim
 
 	void RendezvousControlSystem::clear(Entity list)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		if (registry.has<comp::Rendezvous>(list))
 		{
 			auto& rendezvous = registry.get<comp::Rendezvous>(list);
@@ -87,7 +186,7 @@ namespace sim
 
 	void RendezvousControlSystem::pushBack(Entity list, Entity action)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		if (registry.has<comp::Rendezvous>(list))
 		{
 			auto& rendezvous = registry.get<comp::Rendezvous>(list);
@@ -113,7 +212,7 @@ namespace sim
 
 	void RendezvousControlSystem::pushFront(Entity list, Entity action)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		if (registry.has<comp::Rendezvous>(list))
 		{
 			auto& rendezvous = registry.get<comp::Rendezvous>(list);
@@ -134,7 +233,7 @@ namespace sim
 
 	void RendezvousControlSystem::popFront(Entity list)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		if (registry.has<comp::Rendezvous>(list))
 		{
 			auto& rendezvous = registry.get<comp::Rendezvous>(list);
@@ -156,7 +255,7 @@ namespace sim
 
 	Entity RendezvousControlSystem::back(Entity list)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		if (registry.has<comp::Rendezvous>(list))
 		{
 			auto& rendezvous = registry.get<comp::Rendezvous>(list);
@@ -168,7 +267,7 @@ namespace sim
 
 	Entity RendezvousControlSystem::front(Entity list)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		if (registry.has<comp::Rendezvous>(list))
 		{
 			auto& rendezvous = registry.get<comp::Rendezvous>(list);
@@ -180,7 +279,7 @@ namespace sim
 
 	bool RendezvousControlSystem::empty(Entity list)
 	{
-		auto& registry = m_simulator->getRegistry();
+		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
 		if (registry.has<comp::Rendezvous>(list))
 		{
 			auto& rendezvous = registry.get<comp::Rendezvous>(list);

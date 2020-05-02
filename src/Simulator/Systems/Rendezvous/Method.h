@@ -6,23 +6,38 @@
 
 #include "../../Components/Timer.h"
 
+// not used
+
 namespace sim
 {
 	using ecs::entity::Entity;
 	using ecs::Time;
 
+	using math::Vec3;
+
+
 	class RendezvousControlSystem;
 
-	class Method
+	class TwoImpulsMethod
 	{
 	public:
-		Method(RendezvousControlSystem* sys);
+		struct Data
+		{
+			bool started{};
 
-		virtual ~Method() = default;
+			Vec3 dv1{};
+			Vec3 dv2{};
+		};
 
 
 	public:
-		virtual bool startRendezvous(Entity target, Entity chaser, Time t, Time dt) = 0;
+		TwoImpulsMethod(RendezvousControlSystem* sys);
+
+		virtual ~TwoImpulsMethod() = default;
+
+
+	public:
+		virtual Data startRendezvous(Entity target, Entity chaser, Time t, Time dt) = 0;
 
 
 	public:

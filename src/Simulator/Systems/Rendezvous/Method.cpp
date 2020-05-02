@@ -2,13 +2,13 @@
 
 namespace sim
 {
-	Method::Method(RendezvousControlSystem* sys)
+	TwoImpulsMethod::TwoImpulsMethod(RendezvousControlSystem* sys)
 		: m_sys(sys)
 	{
 		// TODO : assert
 	}
 
-	RendezvousControlSystem* Method::getSystem() const
+	RendezvousControlSystem* TwoImpulsMethod::getSystem() const
 	{
 		return m_sys;
 	}
