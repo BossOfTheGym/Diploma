@@ -41,6 +41,7 @@ namespace sim
 		void resume();
 
 
+		// TODO : remove
 		// TEST
 		void startRendezvous(ecs::Time t, ecs::Time dt);
 
@@ -48,6 +49,11 @@ namespace sim
 
 		bool rendezvousStarted();
 		// END TEST
+
+
+		bool cameraBoundToNaturalAxes() const;
+
+		void setCameraBindValue(bool bindToAxes);
 
 
 	private:
@@ -58,5 +64,7 @@ namespace sim
 
 		bool m_paused{false};
 		bool m_rendezvousStarted{false};
+		bool m_bindCamToNaturalAxes{false};
+		bool m_lastTimeBind{false};
 	};
 }

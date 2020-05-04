@@ -4,8 +4,8 @@ in vec3 pos;
 
 out vec4 color;
 
-const vec3 lightPos  = vec3(0.0, 10000.0, 0.0);
-const vec3 lightColor = vec3(1e8);
+const vec3 lightPos  = vec3(0.0, 1e5, 0.0);
+const vec3 lightColor = vec3(1e10);
 const vec3 ambientColor = vec3(0.005);
 const vec3 diffuseColor = vec3(1.0, 0.6, 0.0);
 const vec3 specColor 	= vec3(1.0, 0.6, 0.0);

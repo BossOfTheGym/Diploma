@@ -17,5 +17,7 @@ namespace space_utils
 	Mat3 phi_vv(Float t, Float n);
 
 
+	Mat3 naturalAxes(const Vec3& r, const Vec3& v);
+
 	StateVec dr_dv(const Vec3& dr0, const Vec3& dv0, Float t, Float n);
 }

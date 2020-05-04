@@ -335,11 +335,16 @@ namespace gl
 	// TODO : add another formats like GL_RGBA32F
 	enum class InternalFormat : GLint
 	{
-		  Red            = GL_RED
-		, RG             = GL_RG
-		, RGB            = GL_RGB
-		, RGBA           = GL_RGBA
-		, DepthComponent = GL_DEPTH_COMPONENT
+		  RG   = GL_RG
+		, RGB  = GL_RGB
+		, RGBA = GL_RGBA
+
+		, DepthComponent    = GL_DEPTH_COMPONENT
+		, DepthComponent16  = GL_DEPTH_COMPONENT16
+		, DepthComponent24  = GL_DEPTH_COMPONENT24
+		, DepthComponent32  = GL_DEPTH_COMPONENT32
+		, DepthComponent32F = GL_DEPTH_COMPONENT32F
+
 		, DepthStencil   = GL_DEPTH_STENCIL
 
 		, R16F    = GL_R16F

@@ -26,5 +26,7 @@ namespace sim
 
 	private:
 		double m_transferTime{};
+
+		bool m_axesBound{false};
 	};
 }

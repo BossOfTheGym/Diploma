@@ -84,7 +84,7 @@ namespace sim
 
 
 		// list entity should have Rendezvous component(it serves as holder of head and tail of a list)
-		// TODO : mayby there's some better way to work with list
+		// TODO : maybe there's some better way to work with list
 		void clear(Entity chaser);
 
 		void pushBack(Entity chaser, Entity action);

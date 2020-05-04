@@ -103,7 +103,7 @@ namespace comp
 		Float propellantMass{};
 		Float propellantUsed{};
 
-		Float Isp{}; // some propellant constant(characteristic)? depends on propellant
+		Float Isp{}; // some propellant constant(characteristic), depends on propellant
 
 		Entity target{};
 

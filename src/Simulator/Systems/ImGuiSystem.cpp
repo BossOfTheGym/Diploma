@@ -10,7 +10,20 @@
 #include <imgui_impl_opengl3.h>
 
 #include "../Components/ImGuiTag.h"
+
 #include "ContextSystem.h"
+
+#include "GuiInfo/GuiInfo.h"
+
+#include "GuiInfo/RendezvousControlGui.h"
+#include "GuiInfo/SimulatorStateGui.h"
+#include "GuiInfo/TimeSystemGui.h"
+
+#include "GuiInfo/OrbitComponentGui.h"
+#include "GuiInfo/PlanetComponentGui.h"
+#include "GuiInfo/PlayerComponentGui.h"
+#include "GuiInfo/RendezvousComponentGui.h"
+
 
 namespace sim
 {
@@ -21,17 +34,28 @@ namespace sim
 		auto* contextSys = manager->get<ContextSystem>();
 
 		IMGUI_CHECKVERSION();
+
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
 
 		ImGui_ImplGlfw_InitForOpenGL(contextSys->getHandle(), true);
 		ImGui_ImplOpenGL3_Init("#version 450 core");
+
+		registerSystem<RendezvousSystemInfo>();
+		registerSystem<SimulatorStateGui>();
+		registerSystem<TimeSystemInfo>();
+
+		registerComponent<OrbitComponentGui>();
+		registerComponent<PlanetComponentGui>();
+		registerComponent<PlayerComponentGui>();
+		registerComponent<RendezvousComponentGui>();
 	}
 
 	ImGuiSystem::~ImGuiSystem()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
+
 		ImGui::DestroyContext();
 	}
 

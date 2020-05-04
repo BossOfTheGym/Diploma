@@ -4,8 +4,11 @@
 #include <ECS/System/SystemManager.h>
 
 #include <Math/MathLib.h>
+
 #include <GraphicsEngine/ResourceLoaders/ShaderLoaders/ShaderLoader.h>
 #include <GraphicsEngine/ResourceLoaders/ShaderProgramBuilders/ShaderProgramBuilder.h>
+
+#include <iostream>
 
 #include "../Components/TestRendererTag.h"
 #include "../Components/Transform.h"
@@ -15,6 +18,8 @@
 #include "ContextSystem.h"
 #include "GraphicsSystem.h"
 #include "SimulatorState.h"
+
+#include "Rendering/SomeTextureBuilders.h"
 
 #include "../Test.h"
 
@@ -26,6 +31,10 @@ namespace sim
 	TestRendererSystem::TestRendererSystem(ecs::sys::SystemManager* manager)
 		: base_t(manager)
 	{
+		auto* systemManager  = getSystemManager();
+		auto* contextSystem  = systemManager->get<ContextSystem>();
+
+		// shader
 		graphics::SimpleShaderLoader loader;
 		graphics::ShaderProgramBuilder builder;
 
@@ -35,15 +44,77 @@ namespace sim
 		m_pvmLocation = m_program.getUniformLocation("uPVM");
 		m_mLocation  = m_program.getUniformLocation("uM");
 		m_eyeLocation = m_program.getUniformLocation("uEye");
+
+		// depth
+		auto extents = contextSystem->getWindowSize();
+		m_depth.createTexture(gl::TextureTarget::Texture2D);
+		m_depth.texImage2D(
+			gl::Texture::Image2D_Data
+			{
+				  gl::TextureTarget::Texture2D
+				, 0
+				, gl::InternalFormat::RGBA32F
+				, extents.x
+				, extents.y
+				, gl::PixelDataFormat::None
+				, gl::DataType::None
+				, nullptr
+			}
+		);
+		m_depth.textureParameteri(gl::TextureParameter::TextureMinFilter, static_cast<GLint>(gl::TextureParameterValue::Nearest)    );
+		m_depth.textureParameteri(gl::TextureParameter::TextureMagFilter, static_cast<GLint>(gl::TextureParameterValue::Nearest)    );
+		m_depth.textureParameteri(gl::TextureParameter::TextureWrapS    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
+		m_depth.textureParameteri(gl::TextureParameter::TextureWrapT    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
+
+		// color
+		m_color.createTexture(gl::TextureTarget::Texture2D);
+		m_color.texImage2D(
+			gl::Texture::Image2D_Data
+			{
+				  gl::TextureTarget::Texture2D
+				, 0
+				, gl::InternalFormat::DepthComponent32F
+				, extents.x
+				, extents.y
+				, gl::PixelDataFormat::None
+				, gl::DataType::None
+				, nullptr
+			}
+		);
+		m_color.textureParameteri(gl::TextureParameter::TextureMinFilter, static_cast<GLint>(gl::TextureParameterValue::Linear)    );
+		m_color.textureParameteri(gl::TextureParameter::TextureMagFilter, static_cast<GLint>(gl::TextureParameterValue::Linear)    );
+		m_color.textureParameteri(gl::TextureParameter::TextureWrapS    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
+		m_color.textureParameteri(gl::TextureParameter::TextureWrapT    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
+
+		// framebuffer
+		m_offScreen.createFramebuffer();
+		m_offScreen.namedFramebufferTexture(
+			static_cast<gl::FramebufferAttachment>(gl::FramebufferAttachments::Color)
+			, m_color
+			, 0
+		);
+		m_offScreen.namedFramebufferTexture(
+			static_cast<gl::FramebufferAttachment>(gl::FramebufferAttachments::Depth)
+			, m_depth
+			, 0
+		);
+		auto status = m_offScreen.checkNamedFramebufferStatus(gl::FramebufferTarget::Framebuffer);
+		if (status != gl::FramebufferStatus::Complete)
+		{
+			// DEBUG
+			std::cout << "Failed to create color framebuffer" << std::endl;
+		}
+		auto drawBuffer = static_cast<gl::DrawBuffer>(gl::FramebufferDrawBuffer::ColorAttachment0);
+		m_offScreen.namedDrawBuffers(1, &drawBuffer);
 	}
 
 	void TestRendererSystem::update(ecs::Time t, ecs::Time dt)
 	{
 		auto* systemManager  = getSystemManager();
-		auto* simulatorState = systemManager->get<SimulatorState>();
 		auto& registry       = systemManager->getECSEngine()->getRegistry();
+		auto* simulatorState = systemManager->get<SimulatorState>();
+		auto* contextSystem  = systemManager->get<ContextSystem>();
 
-		auto contextSystem = systemManager->get<ContextSystem>();
 		if (!contextSystem)
 		{
 			// TODO : notify about error

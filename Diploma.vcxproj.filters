@@ -101,6 +101,9 @@
     <Filter Include="src\Simulator\Systems\GuiInfo">
       <UniqueIdentifier>{c9ba8cc0-98c9-45fb-a638-09b523257de7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Simulator\Systems\Rendering">
+      <UniqueIdentifier>{d1fd870a-9aee-4962-82ec-ecdcfccf260f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -297,6 +300,15 @@
     </ClCompile>
     <ClCompile Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.cpp">
       <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\PlayerComponentGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\RendezvousComponentGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\Rendering\SomeTextureBuilders.cpp">
+      <Filter>src\Simulator\Systems\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -602,6 +614,15 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.h">
       <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\PlayerComponentGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\RendezvousComponentGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\Rendering\SomeTextureBuilders.h">
+      <Filter>src\Simulator\Systems\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

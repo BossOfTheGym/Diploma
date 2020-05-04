@@ -17,11 +17,14 @@
 #include "../Components/Player.h"
 
 // TEST
+#include <SpaceUtils/ClohessyWiltshire.h>
+
 #include "../Components/TestRendererTag.h"
 
 #include "../Test.h"
 
 #include "RendezvousControlSystem.h"
+// END TEST
 
 namespace
 {	
@@ -63,7 +66,8 @@ namespace
 	{
 		auto player = registry.create();
 		registry.assign<comp::Player>         (player, player);
-		registry.assign<comp::Camera3rdPerson>(player, Vec3f32{}, math::PI_3, 0.0, 0.0, 1.0, 1.0, 500.0);
+		registry.assign<comp::Transform>      (player, Vec3f32{1.5 * test::PLANET_R});
+		registry.assign<comp::Camera3rdPerson>(player, Vec3f32{}, math::PI_3, 0.0, 0.0, 1.0, 0.05, 500.0);
 		return player;
 	}
 
@@ -96,9 +100,32 @@ namespace sim
 	void SimulatorState::update(ecs::Time t, ecs::Time dt)
 	{
 		auto* sysManager = getSystemManager();
+		auto* engine     = sysManager->getECSEngine();
+		auto& registry   = engine->getRegistry();
+
 		auto* rendezvousControlSystem = sysManager->get<RendezvousControlSystem>();
 
 		m_rendezvousStarted = rendezvousControlSystem->rendezvousStarted(m_chaser);
+
+		// TODO : update player's camera
+		// TODO : event system
+		auto [player, camera] = registry.get<comp::Player, comp::Camera3rdPerson>(m_player);
+		if (m_bindCamToNaturalAxes)
+		{
+			if (registry.valid(player.view) && registry.has<comp::PhysicsData>(player.view))
+			{
+				auto& physData = registry.get<comp::PhysicsData>(player.view);
+
+				camera.setAxes(space_utils::naturalAxes(physData.r, physData.v));
+			}
+		}
+		if (m_lastTimeBind && !m_bindCamToNaturalAxes)
+		{
+			camera.resetAxes();
+		}
+		//
+
+		m_lastTimeBind = m_bindCamToNaturalAxes;
 	}
 
 
@@ -139,6 +166,8 @@ namespace sim
 	}
 
 
+	// TODO : remove
+	// TEST
 	void SimulatorState::startRendezvous(ecs::Time t, ecs::Time dt)
 	{
 		auto* sysManager = getSystemManager();
@@ -163,5 +192,16 @@ namespace sim
 		auto* rendezvousControl = sysManager->get<RendezvousControlSystem>();
 
 		return rendezvousControl->rendezvousStarted(m_chaser);
+	}
+	// END TEST
+
+	bool SimulatorState::cameraBoundToNaturalAxes() const
+	{
+		return m_bindCamToNaturalAxes;
+	}
+
+	void SimulatorState::setCameraBindValue(bool bindToAxes)
+	{
+		m_bindCamToNaturalAxes = bindToAxes;
 	}
 }

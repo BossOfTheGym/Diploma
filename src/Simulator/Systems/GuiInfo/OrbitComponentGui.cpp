@@ -33,8 +33,8 @@ namespace sim
 			double h = orbitState.h;
 			double e = orbitState.e;
 
-			sprintf_s(hStr, "%.15f", h);
-			sprintf_s(eStr, "%.15f", e);
+			sprintf_s(hStr, "%.15lf", h);
+			sprintf_s(eStr, "%.15lf", e);
 
 			ImGui::InputText("h", hStr, 64, ImGuiInputTextFlags_CharsDecimal);
 			ImGui::InputText("e", eStr, 64, ImGuiInputTextFlags_CharsDecimal);
@@ -49,10 +49,10 @@ namespace sim
 			double i  = glm::degrees(orbitState.i);
 			double ta = glm::degrees(orbitState.ta);
 
-			ImGui::SliderScalar("ra", ImGuiDataType_Double, &ra, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
-			ImGui::SliderScalar("ap", ImGuiDataType_Double, &ap, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
-			ImGui::SliderScalar("i" , ImGuiDataType_Double, &i , &DEGREE_0, &DEGREE_180, "%.15f", 1.0f);
-			ImGui::SliderScalar("ta", ImGuiDataType_Double, &ta, &DEGREE_0, &DEGREE_360, "%.15f", 1.0f);
+			ImGui::SliderScalar("ra", ImGuiDataType_Double, &ra, &DEGREE_0, &DEGREE_360, "%.15lf", 1.0f);
+			ImGui::SliderScalar("ap", ImGuiDataType_Double, &ap, &DEGREE_0, &DEGREE_360, "%.15lf", 1.0f);
+			ImGui::SliderScalar("i" , ImGuiDataType_Double, &i , &DEGREE_0, &DEGREE_180, "%.15lf", 1.0f);
+			ImGui::SliderScalar("ta", ImGuiDataType_Double, &ta, &DEGREE_0, &DEGREE_360, "%.15lf", 1.0f);
 
 			orbit.setFromParameters(
 				  h
@@ -73,17 +73,17 @@ namespace sim
 		}
 		else
 		{
-			ImGui::Text("h : %f", orbitState.h);
-			ImGui::Text("ra: %f", orbitState.ra);
-			ImGui::Text("ap: %f", orbitState.ap);
-			ImGui::Text("i : %f", orbitState.i);
-			ImGui::Text("e : %f", orbitState.e);
-			ImGui::Text("ta: %f", orbitState.ta);
+			ImGui::Text("h : %lf", orbitState.h);
+			ImGui::Text("ra: %lf", orbitState.ra);
+			ImGui::Text("ap: %lf", orbitState.ap);
+			ImGui::Text("i : %lf", orbitState.i);
+			ImGui::Text("e : %lf", orbitState.e);
+			ImGui::Text("ta: %lf", orbitState.ta);
 			ImGui::Text("");
-			ImGui::Text("ea: %f", orbitState.ea);
-			ImGui::Text("a : %f", orbitState.a);
-			ImGui::Text("T : %f", orbitState.T);
-			ImGui::Text("t : %f", orbitState.t);
+			ImGui::Text("ea: %lf", orbitState.ea);
+			ImGui::Text("a : %lf", orbitState.a);
+			ImGui::Text("T : %lf", orbitState.T);
+			ImGui::Text("t : %lf", orbitState.t);
 		}
 	}
 

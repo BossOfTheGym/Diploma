@@ -13,13 +13,6 @@
 #include "Systems/ImGuiSystem.h"
 #include "Systems/SimulatorState.h"
 
-#include "Systems/GuiInfo/GuiInfo.h"
-#include "Systems/GuiInfo/OrbitComponentGui.h"
-#include "Systems/GuiInfo/RendezvousControlGui.h"
-#include "Systems/GuiInfo/SimulatorStateGui.h"
-#include "Systems/GuiInfo/TimeSystemGui.h"
-#include "Systems/GuiInfo/PlanetComponentGui.h"
-
 #include "Components/Player.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
@@ -161,7 +154,7 @@ namespace sim
 			, Hints{
 				  {GLFW_DOUBLEBUFFER, GLFW_TRUE}
 				, {GLFW_CENTER_CURSOR, GLFW_TRUE}
-				, {GLFW_DEPTH_BITS  , 24}
+				, {GLFW_DEPTH_BITS  , 32}
 				, {GLFW_STENCIL_BITS, 8}
 				, {GLFW_CONTEXT_VERSION_MAJOR, 4}
 				, {GLFW_CONTEXT_VERSION_MINOR, 5}
@@ -169,8 +162,8 @@ namespace sim
 				, {GLFW_RESIZABLE, GLFW_FALSE}
 			}
 		};
-		Float fovy = glm::radians(45.0);
-		Float near = 0.01;
+		Float fovy = glm::radians(60.0);
+		Float near = 0.001;
 		Float far  = 6000.0;
 		systemManager.add<ContextSystem>(info, true, fovy, near, far);
 
@@ -194,11 +187,6 @@ namespace sim
 		systemManager.add<ImGuiSystem>();
 
 		auto* imGuiSystem = systemManager.get<ImGuiSystem>();
-		imGuiSystem->registerSystem<RendezvousSystemInfo>();
-		imGuiSystem->registerSystem<SimulatorStateGui>();
-		imGuiSystem->registerSystem<TimeSystemInfo>();
-		imGuiSystem->registerComponent<OrbitComponentGui>();
-		imGuiSystem->registerComponent<PlanetComponentGui>();
 
 		// PlanetSystem
 		systemManager.add<PlanetSystem>();

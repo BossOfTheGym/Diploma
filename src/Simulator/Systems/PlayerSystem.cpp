@@ -23,15 +23,19 @@ namespace sim
 	void PlayerSystem::update(ecs::Time t, ecs::Time dt)
 	{
 		auto& registry = m_simulator->getRegistry();
-		for (auto e : registry.view<comp::Player, comp::Camera3rdPerson>())
+		for (auto e : registry.view<comp::Player, comp::Transform, comp::Camera3rdPerson>())
 		{
 			auto [player, camera] = registry.get<comp::Player, comp::Camera3rdPerson>(e);
 
-			if (player.view != e && registry.valid(player.view) && registry.has<comp::Transform>(player.view))
+			if (registry.valid(player.view) && registry.has<comp::Transform>(player.view))
 			{
 				auto& transform = registry.get<comp::Transform>(player.view);
 
 				camera.setCenter(transform.translate);
+			}
+			else
+			{
+				player.view = e;
 			}
 		}
 	}

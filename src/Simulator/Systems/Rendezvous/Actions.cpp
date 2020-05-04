@@ -173,7 +173,8 @@ namespace sim
 		}
 		simData.setVelocity(simData.getVelocity() + dv);
 
-		std::cout << "CWImpuls: impuls " << dv.x << " " << dv.y << " " << dv.z << std::endl;
+		// DEBUG
+		std::cout << "CWImpuls: impuls x:" << dv.x << " y:" << dv.y << " z:" << dv.z << " mag:" << glm::length(dv) << std::endl;
 
 		auto g0  = planetComp.g0;
 		auto Isp = rendComp.Isp; 
@@ -181,6 +182,7 @@ namespace sim
 		auto m  = physicsData.mass + rendComp.propellantMass;
 		auto dm = m * (1 - std::exp(-glm::length(dv) / (g0 * Isp)));
 
+		rendComp.propellantMass -= dm; // TODO : check for correctness
 		rendComp.propellantUsed += dm; // TODO : check for correctness 
 
 		sys->popFront(chaser);

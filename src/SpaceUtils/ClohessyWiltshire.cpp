@@ -59,6 +59,23 @@ namespace space_utils
 		);
 	}
 
+
+	Mat3 naturalAxes(const Vec3& r, const Vec3& v)
+	{
+		//angular momentum
+		Vec3 h = glm::cross(r, v);
+
+		//angular velocity
+		Vec3 omega = h / glm::dot(r, r);
+
+		//transformation matrix
+		Vec3 i = r / glm::length(r);
+		Vec3 k = h / glm::length(h);
+		Vec3 j = glm::cross(k, i);
+
+		return Mat3(i, j, k);
+	}
+
 	StateVec dr_dv(const Vec3& dr0, const Vec3& dv0, Float t, Float n)
 	{
 		return {

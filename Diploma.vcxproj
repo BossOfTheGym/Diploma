@@ -56,6 +56,8 @@
     <ClCompile Include="src\Simulator\Systems\GuiInfo\GuiInfo.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\OrbitComponentGui.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.cpp" />
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\PlayerComponentGui.cpp" />
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\RendezvousComponentGui.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\RendezvousControlGui.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\SimulatorStateGui.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\TimeSystemGui.cpp" />
@@ -73,6 +75,7 @@
     <ClCompile Include="src\Simulator\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\PlanetSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\PlayerSystem.cpp" />
+    <ClCompile Include="src\Simulator\Systems\Rendering\SomeTextureBuilders.cpp" />
     <ClCompile Include="src\Simulator\Systems\RendezvousControlSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\Rendezvous\Actions.cpp" />
     <ClCompile Include="src\Simulator\Systems\Rendezvous\Circular.cpp" />
@@ -153,6 +156,8 @@
     <ClInclude Include="src\Simulator\Systems\GuiInfo\GuiInfo.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\OrbitComponentGui.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.h" />
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\PlayerComponentGui.h" />
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\RendezvousComponentGui.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\RendezvousControlGui.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\SimulatorStateGui.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\TimeSystemGui.h" />
@@ -170,6 +175,7 @@
     <ClInclude Include="src\Simulator\Systems\PhysicsSystem.h" />
     <ClInclude Include="src\Simulator\Systems\PlanetSystem.h" />
     <ClInclude Include="src\Simulator\Systems\PlayerSystem.h" />
+    <ClInclude Include="src\Simulator\Systems\Rendering\SomeTextureBuilders.h" />
     <ClInclude Include="src\Simulator\Systems\RendezvousControlSystem.h" />
     <ClInclude Include="src\Simulator\Systems\Rendezvous\Actions.h" />
     <ClInclude Include="src\Simulator\Systems\Rendezvous\Circular.h" />

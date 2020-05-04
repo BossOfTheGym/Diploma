@@ -20,21 +20,21 @@ namespace sim
 
 		auto& planet = registry.get<comp::Planet>(e);
 
-		char muStr[64];
-		sprintf_s(muStr, "%.15f", planet.mu);
-
 		if (simulatorState->paused())
 		{
-			ImGui::InputText("planet mu", muStr, 64, ImGuiInputTextFlags_CharsDecimal);
-			// TODO : planet radius
-			// TODO : planet angular velocity
+			char muStr[64];
+			sprintf_s(muStr, "%.15f", planet.mu);
+
+			ImGui::InputText("mu", muStr, 64, ImGuiInputTextFlags_CharsDecimal);
 
 			planet.mu = atof(muStr);	
 		}
 		else
 		{
-			ImGui::Text(muStr);
+			ImGui::Text( "mu: %.6f", planet.mu);
 		}
+		ImGui::Text("R : %.6f", planet.R);
+		ImGui::Text("g0: %.6f", planet.g0);
 	}
 
 	const char* PlanetComponentGui::name() const

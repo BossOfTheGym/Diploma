@@ -36,10 +36,7 @@ namespace sim
 			if (!empty(chaser))
 			{
 				auto& rendComp = registry.get<comp::Rendezvous>(chaser);
-				if (rendComp.duration > dt)
-				{
-					rendComp.duration -= dt;	
-				}
+				rendComp.duration -= dt;	
 
 				auto nextAction = front(chaser);
 				if (registry.has<comp::Action>(nextAction))
@@ -83,8 +80,10 @@ namespace sim
 		auto [chaserOrbit, chaserSim, rendComp] = registry.get<comp::Orbit, comp::SimData, comp::Rendezvous>(chaser);
 		auto [targetOrbit, targetSim]           = registry.get<comp::Orbit, comp::SimData>(target);
 
+		clear(chaser);
+		
+		rendComp.propellantMass = 100.0;
 		rendComp.target   = target;
-		rendComp.duration = dt;
 
 		//mean motion & time
 		Float n = targetOrbit.getOrbit().n;
@@ -117,7 +116,7 @@ namespace sim
 		Vec3 dr0 = q * dr;		
 		
 		// actions queue
-		const int SPLIT = 10;
+		const int SPLIT = 25;
 		
 		const Time FIRST_TO = Time(1'000'000); // first timeout, workaround to avoid zero time delta while update
 		const Time FIRST_TR = Time(2'000'000); // first transfer interval
@@ -132,18 +131,25 @@ namespace sim
 		pushBack<comp::CWImpuls>(chaser, dr0, FIRST_TO, FIRST_TR, comp::CWImpuls::First);
 		timeSys->addTimeEvent(timeEvent);
 		timeEvent += FIRST_TR;
+
+		Time prevTO = FIRST_TR;
 		for (int i = 1; i <= SPLIT; i++)
 		{
 			Vec3 pos = dr0 * (1.0_FL * (timeTransfer - i * dtPart) / timeTransfer);
 
 			// intermediate
-			pushBack<comp::CWImpuls>(chaser, pos, dtPart, dtPart, comp::CWImpuls::First);
+			pushBack<comp::CWImpuls>(chaser, pos, prevTO, dtPart, comp::CWImpuls::First);
 			timeSys->addTimeEvent(timeEvent);
 			timeEvent += dtPart;
+
+			prevTO = dtPart;
 		}
 		// last
 		pushBack<comp::CWImpuls>(chaser, Vec3{0.0}, dtPart, Time(0), comp::CWImpuls::Last);
 		timeSys->addTimeEvent(timeEvent);
+		 
+		// init duration
+		rendComp.duration = FIRST_TO + FIRST_TR + SPLIT * dtPart;
 
 		return true;
 	}
@@ -179,8 +185,12 @@ namespace sim
 					curr = next;
 				}
 			}
+			rendezvous.target = null;
 			rendezvous.actionHead = null;
 			rendezvous.actionTail = null;
+			rendezvous.propellantMass = 0.0;
+			rendezvous.propellantUsed = 0.0;
+			rendezvous.duration = Time{};
 		}
 	}
 

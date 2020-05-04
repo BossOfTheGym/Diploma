@@ -47,6 +47,12 @@ namespace comp
 		m_needUpdate = true;
 	}
 
+	void Camera3rdPerson::setAxes(const Mat3f32& axes)
+	{
+		m_axes = axes;
+	}
+
+
 	void Camera3rdPerson::travelDir(const Vec3f32& dir)
 	{
 		m_center += dir;
@@ -56,7 +62,7 @@ namespace comp
 	void Camera3rdPerson::changeDistance(F32 distDelta)
 	{
 		m_dist += distDelta;
-		m_dist = std::min(std::max(std::abs(m_dist), m_minDist), m_maxDist);
+		m_dist = std::min(std::max(m_dist, m_minDist), m_maxDist);
 		m_needUpdate = true;
 	}
 
@@ -74,14 +80,15 @@ namespace comp
 		m_needUpdate = true;
 	}
 
-
-	const Mat4f32& Camera3rdPerson::viewMat()
+	void Camera3rdPerson::resetAxes()
 	{
-		if (m_needUpdate)
-		{
-			updateCamera();
-		}
-		return m_camera;
+		m_axes = Mat3f32{1.0};
+	}
+
+
+	const Mat3f32& Camera3rdPerson::getAxes()
+	{
+		return m_axes;
 	}
 
 	const Vec3f32& Camera3rdPerson::getPosition()
@@ -98,6 +105,14 @@ namespace comp
 		return m_center;
 	}
 
+	const Mat4f32& Camera3rdPerson::viewMat()
+	{
+		if (m_needUpdate)
+		{
+			updateCamera();
+		}
+		return m_camera;
+	}
 
 
 	void Camera3rdPerson::setMinDist(F32 minDist)
@@ -121,13 +136,8 @@ namespace comp
 		F32 cosR = std::cos(m_rotation);
 		F32 sinR = std::sin(m_rotation);
 
-		Vec3f32 r = Vec3f32 // -roll
-		{
-			  cosP * cosR
-			, sinP
-			, cosP * sinR
-		};
-		Vec3f32 p = glm::normalize(glm::cross(Vec3f32{0.0f, 1.0f, 0.0f}, r)); // -pitch
+		Vec3f32 r = m_axes[0] * (cosP * cosR) + m_axes[1] * (sinP) + m_axes[2] * (cosP * sinR);
+		Vec3f32 p = glm::normalize(glm::cross(m_axes[1], r)); // -pitch
 		Vec3f32 y = glm::normalize(glm::cross(r, p)); // yaw
 
 		m_position = r * m_dist + m_center;

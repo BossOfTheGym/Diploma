@@ -13,6 +13,14 @@ namespace sim
 		: base_t(manager)
 	{
 		m_transferTime = 3600.0;
+
+		auto* sysManager = getSystemManager();
+		auto* engine     = sysManager->getECSEngine();
+		auto& registry   = engine->getRegistry();
+
+		auto* simulatorState = sysManager->get<SimulatorState>();
+
+		m_axesBound = simulatorState->cameraBoundToNaturalAxes();
 	}
 
 	void SimulatorStateGui::render()
@@ -84,6 +92,10 @@ namespace sim
 			{
 				simulatorState->abortRendezvous();
 			}
+		}
+		if (ImGui::Checkbox("Bind camera to natural axes", &m_axesBound))
+		{
+			simulatorState->setCameraBindValue(m_axesBound);
 		}
 	}
 

@@ -45,6 +45,8 @@ namespace comp
 	public:
 		void setCenter(const Vec3f32& center);
 
+		void setAxes(const Mat3f32& axes);
+
 
 		void travelDir(const Vec3f32& dir);
 
@@ -54,6 +56,10 @@ namespace comp
 
 		void rotatePitch(F32 angleDelta);
 
+		void resetAxes();
+
+
+		const Mat3f32& getAxes();
 
 		const Vec3f32& getPosition();
 
@@ -74,6 +80,8 @@ namespace comp
 
 	private:
 		Mat4f32 m_camera{1.0f};
+
+		Mat3f32 m_axes{1.0f};
 
 		Vec3f32 m_center{0.0f};
 		Vec3f32 m_position{0.0f};
