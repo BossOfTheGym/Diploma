@@ -165,6 +165,14 @@ namespace sim
 	}
 
 
+	// TEST
+	bool RendezvousControlSystem::startLambertTransfer(Entity chaser, const Vec3& dest)
+	{
+		return false;
+	}
+	// END TEST
+
+
 	void RendezvousControlSystem::clear(Entity list)
 	{
 		auto& registry = getSystemManager()->getECSEngine()->getRegistry();

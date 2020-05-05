@@ -44,6 +44,10 @@ namespace sim
 		bool rendezvousStarted(Entity e);
 
 		
+		// TEST
+		bool startLambertTransfer(Entity chaser, const Vec3& dest);
+		//END TEST
+
 
 		template<class Action, class ... Args>
 		void registerAction(Args&& ... args)

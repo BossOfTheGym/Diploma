@@ -131,7 +131,7 @@ namespace sim
 		}
 
 		auto next = sys->front(chaser);
-		if (!registry.valid(next) || !registry.has<comp::CWImpuls>(next))
+		if (!registry.valid(next) || !registry.has<comp::Action, comp::CWImpuls>(next))
 		{
 			// TODO : error, notify
 			std::cout << "CWImpuls: failed to fetch action" << std::endl;
@@ -285,5 +285,37 @@ namespace sim
 
 		//actions
 		return -dv;
+	}
+
+
+	// LambertImpulsAction
+	LambertImpulsAction::LambertImpulsAction(RendezvousControlSystem* sys)
+		: base_t(sys)
+	{}
+
+	void LambertImpulsAction::update(Entity chaser, Time t, Time dt)
+	{
+		auto* sys        = getSystem();
+		auto* sysManager = sys->getSystemManager();
+		auto* engine     = sysManager->getECSEngine();
+		auto& registry   = engine->getRegistry();
+
+		if (!registry.has<comp::PhysicsData, comp::SimData, comp::Orbit, comp::Rendezvous>(chaser))
+		{
+			std::cout << "LambertImpuls : bad chaser" << std::endl;
+			return;
+		}
+		auto [physicsData, simData, orbit, rendComp] = registry.get<comp::PhysicsData, comp::SimData, comp::Orbit, comp::Rendezvous>(chaser);
+
+		auto next = sys->front(chaser);
+		if (!registry.valid(next) || !registry.has<comp::Action, comp::LambertImpuls>(next))
+		{
+			std::cout << "LambertImpuls : bad action" << std::endl;
+		}
+		auto& lambertImpuls = registry.get<comp::LambertImpuls>(next);
+
+		space_utils::lambert::solve(
+			  simData.getRadius(), ecs::toSeconds<Float>(t).count()
+			, 
 	}
 }

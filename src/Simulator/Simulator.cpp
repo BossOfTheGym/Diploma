@@ -163,8 +163,8 @@ namespace sim
 			}
 		};
 		Float fovy = glm::radians(60.0);
-		Float near = 0.001;
-		Float far  = 6000.0;
+		Float near = 1.0;
+		Float far  = 3000.0;
 		systemManager.add<ContextSystem>(info, true, fovy, near, far);
 
 		// CORE : graphics

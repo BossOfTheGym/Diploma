@@ -67,7 +67,7 @@ namespace
 		auto player = registry.create();
 		registry.assign<comp::Player>         (player, player);
 		registry.assign<comp::Transform>      (player, Vec3f32{1.5 * test::PLANET_R});
-		registry.assign<comp::Camera3rdPerson>(player, Vec3f32{}, math::PI_3, 0.0, 0.0, 1.0, 0.05, 500.0);
+		registry.assign<comp::Camera3rdPerson>(player, Vec3f32{}, math::PI_3, 0.0, 0.0, 2.0, 2.0, 500.0);
 		return player;
 	}
 

@@ -310,6 +310,9 @@
     <ClCompile Include="src\Simulator\Systems\Rendering\SomeTextureBuilders.cpp">
       <Filter>src\Simulator\Systems\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\PhysicsComponentGui.cpp">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Solver\ISolver.h">
@@ -623,6 +626,9 @@
     </ClInclude>
     <ClInclude Include="src\Simulator\Systems\Rendering\SomeTextureBuilders.h">
       <Filter>src\Simulator\Systems\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\PhysicsComponentGui.h">
+      <Filter>src\Simulator\Systems\GuiInfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

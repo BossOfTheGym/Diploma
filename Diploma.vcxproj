@@ -55,6 +55,7 @@
     <ClCompile Include="src\Simulator\Systems\GraphicsSystem.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\GuiInfo.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\OrbitComponentGui.cpp" />
+    <ClCompile Include="src\Simulator\Systems\GuiInfo\PhysicsComponentGui.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\PlayerComponentGui.cpp" />
     <ClCompile Include="src\Simulator\Systems\GuiInfo\RendezvousComponentGui.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="src\Simulator\Systems\GraphicsSystem.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\GuiInfo.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\OrbitComponentGui.h" />
+    <ClInclude Include="src\Simulator\Systems\GuiInfo\PhysicsComponentGui.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\PlanetComponentGui.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\PlayerComponentGui.h" />
     <ClInclude Include="src\Simulator\Systems\GuiInfo\RendezvousComponentGui.h" />

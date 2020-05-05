@@ -23,7 +23,7 @@
 #include "GuiInfo/PlanetComponentGui.h"
 #include "GuiInfo/PlayerComponentGui.h"
 #include "GuiInfo/RendezvousComponentGui.h"
-
+#include "GuiInfo/PhysicsComponentGui.h"
 
 namespace sim
 {
@@ -49,6 +49,7 @@ namespace sim
 		registerComponent<PlanetComponentGui>();
 		registerComponent<PlayerComponentGui>();
 		registerComponent<RendezvousComponentGui>();
+		registerComponent<PhysicsComponentGui>();
 	}
 
 	ImGuiSystem::~ImGuiSystem()

@@ -98,4 +98,19 @@ namespace sim
 
 		Vec3 computeSecondImpulse(Entity chaser, const comp::CWImpuls& impuls);
 	};
+
+
+	class LambertImpulsAction : public BaseAction<comp::LambertImpuls>
+	{
+	public:
+		using this_t = LambertImpulsAction;
+		using base_t = BaseAction<comp::LambertImpuls>;
+
+
+	public:
+		LambertImpulsAction(RendezvousControlSystem* sys);
+
+	public:
+		virtual void update(Entity chaser, Time t, Time dt) override;
+	};
 }

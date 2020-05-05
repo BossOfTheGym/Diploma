@@ -48,27 +48,8 @@ namespace sim
 		// depth
 		auto extents = contextSystem->getWindowSize();
 		m_depth.createTexture(gl::TextureTarget::Texture2D);
+		m_depth.bind(gl::TextureTarget::Texture2D);
 		m_depth.texImage2D(
-			gl::Texture::Image2D_Data
-			{
-				  gl::TextureTarget::Texture2D
-				, 0
-				, gl::InternalFormat::RGBA32F
-				, extents.x
-				, extents.y
-				, gl::PixelDataFormat::None
-				, gl::DataType::None
-				, nullptr
-			}
-		);
-		m_depth.textureParameteri(gl::TextureParameter::TextureMinFilter, static_cast<GLint>(gl::TextureParameterValue::Nearest)    );
-		m_depth.textureParameteri(gl::TextureParameter::TextureMagFilter, static_cast<GLint>(gl::TextureParameterValue::Nearest)    );
-		m_depth.textureParameteri(gl::TextureParameter::TextureWrapS    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
-		m_depth.textureParameteri(gl::TextureParameter::TextureWrapT    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
-
-		// color
-		m_color.createTexture(gl::TextureTarget::Texture2D);
-		m_color.texImage2D(
 			gl::Texture::Image2D_Data
 			{
 				  gl::TextureTarget::Texture2D
@@ -76,8 +57,30 @@ namespace sim
 				, gl::InternalFormat::DepthComponent32F
 				, extents.x
 				, extents.y
-				, gl::PixelDataFormat::None
-				, gl::DataType::None
+				, gl::PixelDataFormat::DepthComponent
+				, gl::DataType::Float
+				, nullptr
+			}
+		);
+		m_depth.textureParameteri(gl::TextureParameter::TextureMinFilter, static_cast<GLint>(gl::TextureParameterValue::Nearest)    );
+		m_depth.textureParameteri(gl::TextureParameter::TextureMagFilter, static_cast<GLint>(gl::TextureParameterValue::Nearest)    );
+		m_depth.textureParameteri(gl::TextureParameter::TextureWrapS    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
+		m_depth.textureParameteri(gl::TextureParameter::TextureWrapT    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
+		m_depth.unbind(gl::TextureTarget::Texture2D);
+
+		// color
+		m_color.createTexture(gl::TextureTarget::Texture2D);
+		m_color.bind(gl::TextureTarget::Texture2D);
+		m_color.texImage2D(
+			gl::Texture::Image2D_Data
+			{
+				  gl::TextureTarget::Texture2D
+				, 0
+				, gl::InternalFormat::RGBA32F
+				, extents.x
+				, extents.y
+				, gl::PixelDataFormat::RGBA
+				, gl::DataType::Float
 				, nullptr
 			}
 		);
@@ -85,6 +88,7 @@ namespace sim
 		m_color.textureParameteri(gl::TextureParameter::TextureMagFilter, static_cast<GLint>(gl::TextureParameterValue::Linear)    );
 		m_color.textureParameteri(gl::TextureParameter::TextureWrapS    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
 		m_color.textureParameteri(gl::TextureParameter::TextureWrapT    , static_cast<GLint>(gl::TextureParameterValue::ClampToEdge));
+		m_color.unbind(gl::TextureTarget::Texture2D);
 
 		// framebuffer
 		m_offScreen.createFramebuffer();
@@ -151,10 +155,17 @@ namespace sim
 		gl::state::enable(gl::Capability::DepthTest);
 		gl::state::disable(gl::Capability::CullFace);
 
-		gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
-		frame.clearColor(0.0, 0.0, 0.0, 0.0);
-		frame.clearDepth(1.0);
-		frame.clear(gl::ClearMask::ColorDepth);
+		//gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
+		//frame.clearColor(0.0, 0.0, 0.0, 0.0);
+		//frame.clearDepth(1.0);
+		//frame.clear(gl::ClearMask::ColorDepth);
+
+		// TEST
+		m_offScreen.bindFramebuffer(gl::FramebufferTarget::Framebuffer);
+		m_offScreen.clearColor(0.0, 0.0, 0.0, 1.0);
+		m_offScreen.clearDepth(1.0);
+		m_offScreen.clear(gl::ClearMask::ColorDepth);
+		// END TEST
 
 		m_program.bind();
 
@@ -187,5 +198,13 @@ namespace sim
 		vertexArray.unbind();
 
 		m_program.unbind();
+
+		// TEST
+		auto extents = contextSystem->getWindowSize();
+		gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
+		frame.bindFramebuffer(gl::FramebufferTarget::Framebuffer);
+		frame.clear(gl::ClearMask::Color);
+		frame.blitNamedFramebuffer({0, 0, extents.x, extents.y}, m_offScreen, {0, 0, extents.x, extents.y}, gl::BlitMask::Color, gl::FramebufferFilter::Nearest);
+		// END TEST
 	}
 }
