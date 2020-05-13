@@ -27,6 +27,10 @@ namespace sim
 	private:
 		double m_transferTime{};
 
+		double m_destX{};
+		double m_destY{};
+		double m_destZ{};
+
 		bool m_axesBound{false};
 	};
 }

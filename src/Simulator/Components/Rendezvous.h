@@ -25,6 +25,9 @@ namespace comp
 
 	namespace detail
 	{
+		struct IAction
+		{};
+
 		template<class T>
 		struct BaseAction : ecs::util::StaticType
 		{
@@ -35,7 +38,7 @@ namespace comp
 		};
 
 		template<class T>
-		const Id BaseAction<T>::TYPE_ID = ecs::util::TypeCounter<Id, T, BaseAction>::get(); 
+		const Id BaseAction<T>::TYPE_ID = ecs::util::TypeCounter<Id, T, IAction>::get(); 
 	}
 
 	// not used
@@ -91,27 +94,17 @@ namespace comp
 
 	struct LambertImpuls : detail::BaseAction<LambertImpuls>
 	{
-		enum Type : int
-		{
-			  First =  0
-			, Last  =  1
-			, None  = -1
-		};
-
 		LambertImpuls(
 			  const Vec3& targetPos   = {}
 			, const Time& timeoutInit = {}
 			, const Time& transferTimeInit = {}
-			, Type type = {}
 			) 
 			: targetPosition{targetPos}
-			, impulsType{type}
 			, transferTime{transferTimeInit}
 			, timeout{timeoutInit}
 		{}
 
 		Vec3 targetPosition{};
-		Type impulsType{None};
 
 		Time transferTime{};
 		Time timeout{};

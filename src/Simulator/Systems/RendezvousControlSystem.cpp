@@ -24,6 +24,7 @@ namespace sim
 	{
 		registerAction<ImpulsAction>();
 		registerAction<WaitAction>();
+		registerAction<LambertImpulsAction>();
 		registerAction<CWImpulsAction>();
 	}
 
@@ -60,9 +61,11 @@ namespace sim
 	bool RendezvousControlSystem::startRendezvous(Entity target, Entity chaser, ecs::Time t, ecs::Time dt)
 	{
 		// TODO : for now implement here some simple alg
-		// TODO : logic should definitely moved into some RendezvousStrategy 
+		// TODO : logic should be definitely moved into some RendezvousStrategy 
 
 		// TODO : far chase(interorbital transfer)
+
+		// TODO : add lambert problem usage if it works correctly
 
 		// close phase		
 		auto* sysManager = getSystemManager();
@@ -83,7 +86,8 @@ namespace sim
 		clear(chaser);
 		
 		rendComp.propellantMass = 100.0;
-		rendComp.target   = target;
+		rendComp.propellantUsed = 0.0;
+		rendComp.target = target;
 
 		//mean motion & time
 		Float n = targetOrbit.getOrbit().n;
@@ -166,9 +170,30 @@ namespace sim
 
 
 	// TEST
-	bool RendezvousControlSystem::startLambertTransfer(Entity chaser, const Vec3& dest)
+	bool RendezvousControlSystem::startLambertTransfer(Entity chaser, const Vec3& dest, ecs::Time transfer)
 	{
-		return false;
+		//auto* sysManager = getSystemManager();
+		//auto* ecsEngine  = sysManager->getECSEngine();
+		//auto& registry   = ecsEngine->getRegistry();
+		//
+		//if (!registry.valid(chaser) || !registry.has<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser))
+		//{
+		//	// DEBUG
+		//	std::cout << "RendezvousControl: bad chaser" << std::endl;
+		//	return false;
+		//}
+		//auto [rendComp, orbit, simData] = registry.get<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser);
+		//
+		//rendComp.propellantMass = 200.0;
+		//rendComp.propellantUsed = 0.0;
+		//
+		//clear(chaser);
+		//
+		//pushBack<comp::LambertImpuls>(chaser, dest, Time(1'000), transfer);
+		//
+		//rendComp.duration = Time(1'000) + transfer;
+
+		return true;
 	}
 	// END TEST
 

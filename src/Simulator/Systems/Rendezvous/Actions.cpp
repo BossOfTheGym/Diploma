@@ -150,11 +150,12 @@ namespace sim
 		auto planetComp = registry.get<comp::Planet>(planet);
 
 		auto& impuls = registry.get<comp::CWImpuls>(next);
-		if (impuls.timeout >= dt)
+		if (impuls.timeout > dt)
 		{
 			impuls.timeout -= dt;
 			return;
 		}
+		impuls.timeout = Time(0);
 
 		Vec3 dv{};
 		switch(impuls.impulsType)
@@ -300,12 +301,22 @@ namespace sim
 		auto* engine     = sysManager->getECSEngine();
 		auto& registry   = engine->getRegistry();
 
+		auto* simulatorState = sysManager->get<SimulatorState>();
+
 		if (!registry.has<comp::PhysicsData, comp::SimData, comp::Orbit, comp::Rendezvous>(chaser))
 		{
 			std::cout << "LambertImpuls : bad chaser" << std::endl;
 			return;
 		}
 		auto [physicsData, simData, orbit, rendComp] = registry.get<comp::PhysicsData, comp::SimData, comp::Orbit, comp::Rendezvous>(chaser);
+
+		auto planet = simulatorState->getPlanet();
+		if (!registry.valid(planet) || !registry.has<comp::Planet>(planet))
+		{
+			std::cout << "Lambert impuls: bad planet entity at simulator state" << std::endl;
+			return;
+		}
+		auto& planetComp = registry.get<comp::Planet>(planet);
 
 		auto next = sys->front(chaser);
 		if (!registry.valid(next) || !registry.has<comp::Action, comp::LambertImpuls>(next))
@@ -314,8 +325,34 @@ namespace sim
 		}
 		auto& lambertImpuls = registry.get<comp::LambertImpuls>(next);
 
-		space_utils::lambert::solve(
+		if (lambertImpuls.timeout > dt)
+		{
+			lambertImpuls.timeout -= dt;
+			return;
+		}
+		lambertImpuls.timeout = Time(0);
+
+		auto solution = space_utils::lambert::solve(
 			  simData.getRadius(), ecs::toSeconds<Float>(t).count()
-			, 
+			, lambertImpuls.targetPosition, ecs::toSeconds<Float>(t + lambertImpuls.transferTime).count()
+			, glm::cross(simData.getRadius(), simData.getVelocity())
+			, planetComp.mu
+			, 1
+		);
+		
+		auto dv = solution.vel1 - simData.getVelocity();
+
+		auto g0  = planetComp.g0;
+		auto Isp = rendComp.Isp; 
+
+		auto m  = physicsData.mass + rendComp.propellantMass;
+		auto dm = m * (1 - std::exp(-glm::length(dv) / (g0 * Isp)));
+
+		rendComp.propellantMass -= dm; // TODO : check for correctness
+		rendComp.propellantUsed += dm; // TODO : check for correctness 
+
+		simData.setVelocity(solution.vel1);
+
+		sys->popFront(chaser);
 	}
 }

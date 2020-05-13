@@ -19,8 +19,6 @@ namespace ecs::sys
 		System(SystemManager* manager) : ISystem(manager, TYPE_ID)
 		{}
 
-		virtual ~System() = default;		
-
 
 	public:
 		virtual void update(Time t, Time dt) override

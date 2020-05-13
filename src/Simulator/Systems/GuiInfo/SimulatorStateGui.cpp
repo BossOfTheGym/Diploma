@@ -65,6 +65,9 @@ namespace sim
 
 					simulatorState->startRendezvous(t, dt);
 				}
+
+				char destStr[64];
+				
 			}
 		}
 
