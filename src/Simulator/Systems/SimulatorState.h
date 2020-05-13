@@ -3,11 +3,15 @@
 #include <ECS/System/System.h>
 #include <ECS/Entity/Entity.h>
 
+#include <Math/MathLib.h>
+
+
 namespace sim
 {
 	using ecs::entity::Entity;
 	using ecs::entity::null;
 
+	using math::Vec3;
 
 	class SimulatorState : public ecs::sys::System<SimulatorState>
 	{
@@ -48,6 +52,8 @@ namespace sim
 		void abortRendezvous();
 
 		bool rendezvousStarted();
+
+		void startLambertTransfer(const Vec3& dest, ecs::Time dt);
 		// END TEST
 
 

@@ -13,6 +13,9 @@ namespace sim
 		: base_t(manager)
 	{
 		m_transferTime = 3600.0;
+		m_destX = 0.0;
+		m_destY = 0.0;
+		m_destZ = 0.0;
 
 		auto* sysManager = getSystemManager();
 		auto* engine     = sysManager->getECSEngine();
@@ -66,8 +69,29 @@ namespace sim
 					simulatorState->startRendezvous(t, dt);
 				}
 
+				// TEST
 				char destStr[64];
 				
+				sprintf_s(destStr, "%.15Lf", m_destX);
+				ImGui::InputText("x", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
+				m_destX = atof(destStr);
+
+				sprintf_s(destStr, "%.15Lf", m_destY);
+				ImGui::InputText("y", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
+				m_destY = atof(destStr);
+
+				sprintf_s(destStr, "%.15Lf", m_destZ);
+				ImGui::InputText("z", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
+				m_destZ = atof(destStr);
+
+				if (ImGui::Button("Test Lambert"))
+				{
+					auto t = timeSystem->getTime();
+					auto dt = ecs::toTime<ecs::Tick>(ecs::Seconds<double>(m_transferTime));
+
+					simulatorState->startLambertTransfer({m_destX, m_destY, m_destZ}, dt);
+				}
+				// END TEST
 			}
 		}
 

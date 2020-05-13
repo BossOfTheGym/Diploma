@@ -172,26 +172,27 @@ namespace sim
 	// TEST
 	bool RendezvousControlSystem::startLambertTransfer(Entity chaser, const Vec3& dest, ecs::Time transfer)
 	{
-		//auto* sysManager = getSystemManager();
-		//auto* ecsEngine  = sysManager->getECSEngine();
-		//auto& registry   = ecsEngine->getRegistry();
-		//
-		//if (!registry.valid(chaser) || !registry.has<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser))
-		//{
-		//	// DEBUG
-		//	std::cout << "RendezvousControl: bad chaser" << std::endl;
-		//	return false;
-		//}
-		//auto [rendComp, orbit, simData] = registry.get<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser);
-		//
-		//rendComp.propellantMass = 200.0;
-		//rendComp.propellantUsed = 0.0;
-		//
-		//clear(chaser);
-		//
-		//pushBack<comp::LambertImpuls>(chaser, dest, Time(1'000), transfer);
-		//
-		//rendComp.duration = Time(1'000) + transfer;
+		auto* sysManager = getSystemManager();
+		auto* ecsEngine  = sysManager->getECSEngine();
+		auto& registry   = ecsEngine->getRegistry();
+		
+		if (!registry.valid(chaser) || !registry.has<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser))
+		{
+			// DEBUG
+			std::cout << "RendezvousControl: bad chaser" << std::endl;
+			return false;
+		}
+		auto [rendComp, orbit, simData] = registry.get<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser);
+		
+		clear(chaser);
+
+		rendComp.propellantMass = 1000.0;
+		rendComp.propellantUsed = 0.0;
+		
+		pushBack<comp::LambertImpuls>(chaser, dest, Time(1'000), transfer);
+		pushBack<comp::Wait>(chaser, transfer);
+
+		rendComp.duration = Time(1'000) + transfer;
 
 		return true;
 	}
@@ -214,7 +215,7 @@ namespace sim
 
 					auto next = action.nextAction;
 					registry.destroy(curr);
-
+					// TODO : also destroy action, here is destroyed only holder
 					curr = next;
 				}
 			}
@@ -286,6 +287,7 @@ namespace sim
 
 				auto next = action.nextAction;
 				registry.destroy(rendezvous.actionHead);
+				// TODO : also destroy action, here is destroyed only holder
 
 				rendezvous.actionHead = next;
 				if (rendezvous.actionHead == null) // we deleted last action

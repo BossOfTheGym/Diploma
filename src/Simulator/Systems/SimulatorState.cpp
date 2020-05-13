@@ -193,6 +193,14 @@ namespace sim
 
 		return rendezvousControl->rendezvousStarted(m_chaser);
 	}
+
+	void SimulatorState::startLambertTransfer(const Vec3& dest, ecs::Time dt)
+	{
+		auto* sysManager = getSystemManager();
+		auto* rendezvousControl = sysManager->get<RendezvousControlSystem>();
+
+		m_rendezvousStarted = rendezvousControl->startLambertTransfer(m_chaser, dest, dt);
+	}
 	// END TEST
 
 	bool SimulatorState::cameraBoundToNaturalAxes() const

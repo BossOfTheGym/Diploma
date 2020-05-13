@@ -155,17 +155,17 @@ namespace sim
 		gl::state::enable(gl::Capability::DepthTest);
 		gl::state::disable(gl::Capability::CullFace);
 
-		//gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
-		//frame.clearColor(0.0, 0.0, 0.0, 0.0);
-		//frame.clearDepth(1.0);
-		//frame.clear(gl::ClearMask::ColorDepth);
+		gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
+		frame.clearColor(0.0, 0.0, 0.0, 0.0);
+		frame.clearDepth(1.0);
+		frame.clear(gl::ClearMask::ColorDepth);
 
-		// TEST
-		m_offScreen.bindFramebuffer(gl::FramebufferTarget::Framebuffer);
-		m_offScreen.clearColor(0.0, 0.0, 0.0, 1.0);
-		m_offScreen.clearDepth(1.0);
-		m_offScreen.clear(gl::ClearMask::ColorDepth);
-		// END TEST
+		//// TEST
+		//m_offScreen.bindFramebuffer(gl::FramebufferTarget::Framebuffer);
+		//m_offScreen.clearColor(0.0, 0.0, 0.0, 1.0);
+		//m_offScreen.clearDepth(1.0);
+		//m_offScreen.clear(gl::ClearMask::ColorDepth);
+		//// END TEST
 
 		m_program.bind();
 
@@ -199,12 +199,12 @@ namespace sim
 
 		m_program.unbind();
 
-		// TEST
-		auto extents = contextSystem->getWindowSize();
-		gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
-		frame.bindFramebuffer(gl::FramebufferTarget::Framebuffer);
-		frame.clear(gl::ClearMask::Color);
-		frame.blitNamedFramebuffer({0, 0, extents.x, extents.y}, m_offScreen, {0, 0, extents.x, extents.y}, gl::BlitMask::Color, gl::FramebufferFilter::Nearest);
-		// END TEST
+		//// TEST
+		//auto extents = contextSystem->getWindowSize();
+		//gl::Framebuffer frame = gl::Framebuffer::getDefaultFramebuffer();
+		//frame.bindFramebuffer(gl::FramebufferTarget::Framebuffer);
+		//frame.clear(gl::ClearMask::Color);
+		//frame.blitNamedFramebuffer({0, 0, extents.x, extents.y}, m_offScreen, {0, 0, extents.x, extents.y}, gl::BlitMask::Color, gl::FramebufferFilter::Nearest);
+		//// END TEST
 	}
 }

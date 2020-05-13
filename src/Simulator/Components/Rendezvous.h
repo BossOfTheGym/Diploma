@@ -114,6 +114,7 @@ namespace comp
 	// general holder for all action components
 	struct Action
 	{
+		// do not touch(only if needed)
 		Entity nextAction{null};
 
 		Id actionStaticType{BAD_ID};
@@ -129,9 +130,10 @@ namespace comp
 
 		Entity target{};
 
+		Time duration{};
+
+		// do not touch(only if needed) to prevent list structure corruption
 		Entity actionHead{null};
 		Entity actionTail{null};
-
-		Time duration{};
 	};
 }
