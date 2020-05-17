@@ -57,7 +57,7 @@ namespace sim
 
 		bool rendezvousStarted();
 
-		void startLambertTransfer(const Vec3& dest, ecs::Time dt);
+		//void startLambertTransfer(const Vec3& dest, ecs::Time dt);
 
 		void logDvImpuls(const Vec3& dv);
 		// END TEST

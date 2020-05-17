@@ -70,27 +70,27 @@ namespace sim
 				}
 
 				// TEST
-				char destStr[64];
-				
-				sprintf_s(destStr, "%.15Lf", m_destX);
-				ImGui::InputText("x", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
-				m_destX = atof(destStr);
-
-				sprintf_s(destStr, "%.15Lf", m_destY);
-				ImGui::InputText("y", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
-				m_destY = atof(destStr);
-
-				sprintf_s(destStr, "%.15Lf", m_destZ);
-				ImGui::InputText("z", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
-				m_destZ = atof(destStr);
-
-				if (ImGui::Button("Test Lambert"))
-				{
-					auto t = timeSystem->getTime();
-					auto dt = ecs::toTime<ecs::Tick>(ecs::Seconds<double>(m_transferTime));
-
-					simulatorState->startLambertTransfer({m_destX, m_destY, m_destZ}, dt);
-				}
+				//char destStr[64];
+				//
+				//sprintf_s(destStr, "%.15Lf", m_destX);
+				//ImGui::InputText("x", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
+				//m_destX = atof(destStr);
+				//
+				//sprintf_s(destStr, "%.15Lf", m_destY);
+				//ImGui::InputText("y", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
+				//m_destY = atof(destStr);
+				//
+				//sprintf_s(destStr, "%.15Lf", m_destZ);
+				//ImGui::InputText("z", destStr, 64, ImGuiInputTextFlags_CharsDecimal);
+				//m_destZ = atof(destStr);
+				//
+				//if (ImGui::Button("Test Lambert"))
+				//{
+				//	auto t = timeSystem->getTime();
+				//	auto dt = ecs::toTime<ecs::Tick>(ecs::Seconds<double>(m_transferTime));
+				//
+				//	simulatorState->startLambertTransfer({m_destX, m_destY, m_destZ}, dt);
+				//}
 				// END TEST
 			}
 		}

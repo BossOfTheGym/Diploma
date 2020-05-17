@@ -172,30 +172,30 @@ namespace sim
 	// TEST
 	bool RendezvousControlSystem::startLambertTransfer(Entity chaser, const Vec3& dest, ecs::Time transfer)
 	{
-		auto* sysManager = getSystemManager();
-		auto* ecsEngine  = sysManager->getECSEngine();
-		auto& registry   = ecsEngine->getRegistry();
-		
-		if (!registry.valid(chaser) || !registry.has<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser))
-		{
-			// DEBUG
-			std::cout << "RendezvousControl: bad chaser" << std::endl;
-			return false;
-		}
-		auto [rendComp, orbit, simData] = registry.get<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser);
-		
-		clear(chaser);
+		//auto* sysManager = getSystemManager();
+		//auto* ecsEngine  = sysManager->getECSEngine();
+		//auto& registry   = ecsEngine->getRegistry();
+		//
+		//if (!registry.valid(chaser) || !registry.has<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser))
+		//{
+		//	// DEBUG
+		//	std::cout << "RendezvousControl: bad chaser" << std::endl;
+		//	return false;
+		//}
+		//auto [rendComp, orbit, simData] = registry.get<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser);
+		//
+		//clear(chaser);
+		//
+		//// TODO : 
+		////rendComp.propellantMass = 1000.0;
+		//rendComp.propellantUsed = 0.0;
+		//
+		//pushBack<comp::LambertImpuls>(chaser, dest, Time(1'000), transfer);
+		//pushBack<comp::Wait>(chaser, transfer);
+		//
+		//rendComp.duration = Time(1'000) + transfer;
 
-		// TODO : 
-		//rendComp.propellantMass = 1000.0;
-		rendComp.propellantUsed = 0.0;
-		
-		pushBack<comp::LambertImpuls>(chaser, dest, Time(1'000), transfer);
-		pushBack<comp::Wait>(chaser, transfer);
-
-		rendComp.duration = Time(1'000) + transfer;
-
-		return true;
+		return false;
 	}
 	// END TEST
 
