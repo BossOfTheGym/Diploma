@@ -5,6 +5,10 @@
 
 #include <Math/MathLib.h>
 
+#include <vector>
+#include <list>
+#include <future>
+#include <string>
 
 namespace sim
 {
@@ -19,7 +23,7 @@ namespace sim
 		using this_t = SimulatorState;
 		using base_t = ecs::sys::System<SimulatorState>;
 
-
+		
 	public:
 		SimulatorState(ecs::sys::SystemManager* manager);
 
@@ -54,6 +58,8 @@ namespace sim
 		bool rendezvousStarted();
 
 		void startLambertTransfer(const Vec3& dest, ecs::Time dt);
+
+		void logDvImpuls(const Vec3& dv);
 		// END TEST
 
 
@@ -70,7 +76,26 @@ namespace sim
 
 		bool m_paused{false};
 		bool m_rendezvousStarted{false};
+		bool m_lastRendezvousStarted{false};
 		bool m_bindCamToNaturalAxes{false};
 		bool m_lastTimeBind{false};
+		
+		std::string m_baseName;
+		std::vector<Vec3> m_chaserRadLog;
+		std::vector<Vec3> m_chaserVelLog;
+		std::vector<Vec3> m_targetRadLog;
+		std::vector<Vec3> m_targetVelLog;
+		
+		std::vector<Vec3> m_dvImpulses;
+		std::vector<Vec3> m_chaserRadImpLog;
+		std::vector<Vec3> m_chaserVelImpLog;
+		std::vector<Vec3> m_targetRadImpLog;
+		std::vector<Vec3> m_targetVelImpLog;
+
+		std::future<bool> m_logWritten{};
+
+		int m_fileNum{0};
+		int m_logUpdates{0};
+		int m_logEvery{10};
 	};
 }

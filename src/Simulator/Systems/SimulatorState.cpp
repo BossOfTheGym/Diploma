@@ -26,6 +26,9 @@
 #include "RendezvousControlSystem.h"
 // END TEST
 
+#include <fstream>
+#include <iostream>
+
 namespace
 {	
 	using ecs::entity::Entity;
@@ -81,6 +84,68 @@ namespace
 		registry.assign<comp::TestRendererTag>(planet);
 		return planet;
 	}
+
+	using math::Vec3;
+
+	bool writeLogData(
+		  std::string fileName
+		, std::vector<Vec3> chaserRad
+		, std::vector<Vec3> chaserVel
+		, std::vector<Vec3> targetRad
+		, std::vector<Vec3> targetVel
+		, std::vector<Vec3> dvImpuls
+		, std::vector<Vec3> chaserRadImp
+		, std::vector<Vec3> chaserVelImp
+		, std::vector<Vec3> targetRadImp
+		, std::vector<Vec3> targetVelImp)
+	{
+		std::ofstream output(fileName);
+		if (!output.is_open())
+		{
+			return false;
+		}
+
+		output << "[[chaser]]" << std::endl;
+		int n = chaserRad.size();
+		for (int i = 0; i < n; i++)
+		{
+			auto& rad = chaserRad[i];
+			auto& vel = chaserVel[i];
+
+			output << rad.x << " " << rad.y << " " << rad.z << " " 
+				<< vel.x << " " << vel.y << " " << vel.z << std::endl;
+		}
+
+		output << "[[target]]" << std::endl;
+		n = chaserRad.size();
+		for (int i = 0; i < n; i++)
+		{
+			auto& rad = targetRad[i];
+			auto& vel = targetVel[i];
+
+			output << rad.x << " " << rad.y << " " << rad.z << " " 
+				<< vel.x << " " << vel.y << " " << vel.z << std::endl;
+		}
+		
+		output << "[[impulses]]" << std::endl;
+		n = dvImpuls.size();
+		for(int i = 0; i < n; i++)
+		{
+			auto& dv = dvImpuls[i];
+			auto& crad = chaserRadImp[i];
+			auto& cvel = chaserVelImp[i];
+			auto& trad = targetRadImp[i];
+			auto& tvel = targetVelImp[i];
+
+			output << dv.x << " " << dv.y << " " << dv.z << " "
+				<< crad.x << " " << crad.y << " " << crad.z << " "
+				<< cvel.x << " " << cvel.y << " " << cvel.z << " "
+				<< trad.x << " " << trad.y << " " << trad.z << " "
+				<< tvel.x << " " << tvel.y << " " << tvel.z << std::endl;
+		}
+
+		return true;
+	}
 }
 
 namespace sim
@@ -94,6 +159,8 @@ namespace sim
 
 		m_target = buildTarget(registry);
 		m_chaser = buildChaser(registry);
+
+		m_baseName = "simLog/log";
 	}
 
 
@@ -106,6 +173,52 @@ namespace sim
 		auto* rendezvousControlSystem = sysManager->get<RendezvousControlSystem>();
 
 		m_rendezvousStarted = rendezvousControlSystem->rendezvousStarted(m_chaser);
+		if (!m_lastRendezvousStarted && m_rendezvousStarted)
+		{
+			m_logUpdates = 0;
+		}
+		if (m_rendezvousStarted)
+		{
+			if (registry.valid(m_target) && registry.has<comp::SimData>(m_target)
+				&& registry.valid(m_chaser) && registry.has<comp::SimData>(m_chaser)
+				&& m_logUpdates % m_logEvery == 0)
+			{
+				auto& chaserSimData = registry.get<comp::SimData>(m_chaser);
+				auto& targetSimData = registry.get<comp::SimData>(m_target);
+
+				m_chaserRadLog.push_back(chaserSimData.getRadius());
+				m_chaserVelLog.push_back(chaserSimData.getVelocity());
+				m_targetRadLog.push_back(targetSimData.getRadius());
+				m_targetVelLog.push_back(targetSimData.getVelocity());
+			}
+			m_logUpdates++;
+		}
+		if (m_lastRendezvousStarted && !m_rendezvousStarted)
+		{
+			if (m_logWritten.valid())
+			{
+				if (!m_logWritten.get())
+				{
+					std::cout << "Simulator state: failed to write log file" << std::endl; 
+				}
+			}
+			m_logWritten = std::async(
+				  std::launch::async
+				, &writeLogData
+				, m_baseName + std::to_string(m_fileNum) + ".log"
+				, std::move(m_chaserRadLog)
+				, std::move(m_chaserVelLog)
+				, std::move(m_targetRadLog)
+				, std::move(m_targetVelLog)
+				, std::move(m_dvImpulses)
+				, std::move(m_chaserRadImpLog)
+				, std::move(m_chaserVelImpLog)
+				, std::move(m_targetRadImpLog)
+				, std::move(m_targetVelImpLog)
+			);
+			m_fileNum++;
+		}
+		m_lastRendezvousStarted = m_rendezvousStarted;
 
 		// TODO : update player's camera
 		// TODO : event system
@@ -200,6 +313,26 @@ namespace sim
 		auto* rendezvousControl = sysManager->get<RendezvousControlSystem>();
 
 		m_rendezvousStarted = rendezvousControl->startLambertTransfer(m_chaser, dest, dt);
+	}
+
+	void SimulatorState::logDvImpuls(const Vec3& dv)
+	{
+		auto* sysManager = getSystemManager();
+		auto* ecsEngine = sysManager->getECSEngine();
+		auto& registry = ecsEngine->getRegistry();
+
+		if (registry.valid(m_chaser) && registry.has<comp::SimData>(m_chaser)
+			&& registry.valid(m_target) && registry.has<comp::SimData>(m_target))
+		{
+			auto& chaserSimData = registry.get<comp::SimData>(m_chaser);
+			auto& targetSimData = registry.get<comp::SimData>(m_target);
+
+			m_dvImpulses.push_back(dv);
+			m_chaserRadImpLog.push_back(chaserSimData.getRadius());
+			m_chaserVelImpLog.push_back(chaserSimData.getVelocity());
+			m_targetRadImpLog.push_back(targetSimData.getRadius());
+			m_targetVelImpLog.push_back(targetSimData.getVelocity());
+		}
 	}
 	// END TEST
 

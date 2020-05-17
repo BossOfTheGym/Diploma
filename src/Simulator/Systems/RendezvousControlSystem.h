@@ -105,7 +105,14 @@ namespace sim
 		bool empty(Entity chaser);
 
 
+		void setSplit(int split);
+
+		int getSplit() const;
+
+
 	private:
 		ActionRegistry m_actions{};
+
+		int m_split{20};
 	};
 }

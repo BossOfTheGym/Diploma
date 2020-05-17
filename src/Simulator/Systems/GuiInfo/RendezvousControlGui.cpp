@@ -1,5 +1,7 @@
 #include "RendezvousControlGui.h"
 
+#include "../SimulatorState.h"
+
 namespace sim
 {
 	RendezvousSystemInfo::RendezvousSystemInfo(ecs::sys::SystemManager* manager)
@@ -8,8 +10,23 @@ namespace sim
 
 	void RendezvousSystemInfo::render()
 	{
-		// TODO or not TODO
-		ImGui::Text("Hello from rendezvous control system");
+		auto* sysManager = getSystemManager();
+		auto* engine     = sysManager->getECSEngine();
+		auto& registry   = engine->getRegistry();
+
+		auto* rendezvousSystem = sysManager->get<RendezvousControlSystem>();
+		auto* simulatorState   = sysManager->get<SimulatorState>();
+
+		if (!simulatorState->paused())
+		{
+			ImGui::Text("Trajectory split: %d", rendezvousSystem->getSplit());
+		}
+		else
+		{
+			int split = rendezvousSystem->getSplit();
+			ImGui::SliderInt("Trajectory split", &split, 1, 1000);
+			rendezvousSystem->setSplit(split);
+		}
 	}
 
 	const char* RendezvousSystemInfo::name() const

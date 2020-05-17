@@ -129,6 +129,7 @@ namespace sim
 			sys->abortRendezvous(chaser);
 			return;
 		}
+		auto& targetSimData = registry.get<comp::SimData>(rendComp.target);
 
 		auto next = sys->front(chaser);
 		if (!registry.valid(next) || !registry.has<comp::Action, comp::CWImpuls>(next))
@@ -175,7 +176,17 @@ namespace sim
 		simData.setVelocity(simData.getVelocity() + dv);
 
 		// DEBUG
-		std::cout << "CWImpuls: impuls x:" << dv.x << " y:" << dv.y << " z:" << dv.z << " mag:" << glm::length(dv) << std::endl;
+		auto crad = simData.getRadius();         // chaser radius
+		auto cvel = simData.getVelocity();       // chaser velocity 
+		auto trad = targetSimData.getRadius();   // target radius
+		auto tvel = targetSimData.getVelocity(); // target velocity
+		std::cout << "CWImpuls: dv x:" << dv.x << " y:" << dv.y << " z:" << dv.z << " mag:" << glm::length(dv) << std::endl;
+		std::cout << "CWImpuls: cpos x: " << crad.x << " y: " << crad.y << " z: " << crad.z << std::endl;
+		std::cout << "CWImpuls: cvel x: " << cvel.x << " y: " << cvel.y << " z: " << cvel.z << std::endl;
+		std::cout << "CWImpuls: tpos x: " << trad.x << " y: " << trad.y << " z: " << trad.z << std::endl;
+		std::cout << "CWImpuls: tvel x: " << tvel.x << " y: " << tvel.y << " z: " << tvel.z << std::endl;
+		simulatorState->logDvImpuls(dv);
+		// end DEBUG
 
 		auto g0  = planetComp.g0;
 		auto Isp = rendComp.Isp; 
@@ -196,8 +207,9 @@ namespace sim
 		auto* sysManager = sys->getSystemManager();
 		auto* engine     = sysManager->getECSEngine();
 		auto& registry   = engine->getRegistry();
-		auto* timeSys    = sysManager->get<TimeSystem>();
 
+		auto* timeSys        = sysManager->get<TimeSystem>();
+		auto* simulatorState = sysManager->get<SimulatorState>();
 
 		auto [chaserOrbit, chaserSim, rendComp] = registry.get<comp::Orbit, comp::SimData, comp::Rendezvous>(chaser);
 		auto [targetOrbit, targetSim]           = registry.get<comp::Orbit, comp::SimData>(rendComp.target);

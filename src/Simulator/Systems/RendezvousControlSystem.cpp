@@ -13,6 +13,7 @@
 
 // DEBUG
 #include <iostream>
+#include <algorithm>
 
 namespace sim
 {
@@ -85,7 +86,8 @@ namespace sim
 
 		clear(chaser);
 		
-		rendComp.propellantMass = 100.0;
+		// TODO :
+		//rendComp.propellantMass = 100.0;
 		rendComp.propellantUsed = 0.0;
 		rendComp.target = target;
 
@@ -119,14 +121,12 @@ namespace sim
 		//relative
 		Vec3 dr0 = q * dr;		
 		
-		// actions queue
-		const int SPLIT = 25;
-		
+		// actions queue		
 		const Time FIRST_TO = Time(1'000'000); // first timeout, workaround to avoid zero time delta while update
 		const Time FIRST_TR = Time(2'000'000); // first transfer interval
 
-		Time dtPart = (dt + Time(SPLIT)) / SPLIT;		
-		Time timeTransfer = dtPart * SPLIT; // total time required for transfer without first timeout
+		Time dtPart = (dt + Time(m_split)) / m_split;		
+		Time timeTransfer = dtPart * m_split; // total time required for transfer without first timeout
 		
 		// time sync
 		Time timeEvent = t + FIRST_TO;
@@ -137,7 +137,7 @@ namespace sim
 		timeEvent += FIRST_TR;
 
 		Time prevTO = FIRST_TR;
-		for (int i = 1; i <= SPLIT; i++)
+		for (int i = 1; i <= m_split; i++)
 		{
 			Vec3 pos = dr0 * (1.0_FL * (timeTransfer - i * dtPart) / timeTransfer);
 
@@ -153,7 +153,7 @@ namespace sim
 		timeSys->addTimeEvent(timeEvent);
 		 
 		// init duration
-		rendComp.duration = FIRST_TO + FIRST_TR + SPLIT * dtPart;
+		rendComp.duration = FIRST_TO + FIRST_TR + m_split * dtPart;
 
 		return true;
 	}
@@ -186,7 +186,8 @@ namespace sim
 		
 		clear(chaser);
 
-		rendComp.propellantMass = 1000.0;
+		// TODO : 
+		//rendComp.propellantMass = 1000.0;
 		rendComp.propellantUsed = 0.0;
 		
 		pushBack<comp::LambertImpuls>(chaser, dest, Time(1'000), transfer);
@@ -215,14 +216,14 @@ namespace sim
 
 					auto next = action.nextAction;
 					registry.destroy(curr);
-					// TODO : also destroy action, here is destroyed only holder
 					curr = next;
 				}
 			}
 			rendezvous.target = null;
 			rendezvous.actionHead = null;
 			rendezvous.actionTail = null;
-			rendezvous.propellantMass = 0.0;
+			// TODO
+			//rendezvous.propellantMass = 0.0;
 			rendezvous.propellantUsed = 0.0;
 			rendezvous.duration = Time{};
 		}
@@ -287,7 +288,6 @@ namespace sim
 
 				auto next = action.nextAction;
 				registry.destroy(rendezvous.actionHead);
-				// TODO : also destroy action, here is destroyed only holder
 
 				rendezvous.actionHead = next;
 				if (rendezvous.actionHead == null) // we deleted last action
@@ -332,5 +332,17 @@ namespace sim
 			return rendezvous.actionHead == null;// && rendezvous.actionTail == null;
 		}
 		return false;
+	}
+
+
+	void RendezvousControlSystem::setSplit(int split)
+	{
+		m_split = split;
+		m_split = std::max(std::min(m_split, 1000), 1);
+	}
+
+	int RendezvousControlSystem::getSplit() const
+	{
+		return m_split;
 	}
 }
