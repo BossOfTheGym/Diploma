@@ -17,6 +17,7 @@ namespace sim
 
 		ImGui::Text("r x: %lf y: %lf z: %lf", (double)physics.r.x, (double)physics.r.y, (double)physics.r.z);
 		ImGui::Text("v x: %lf y: %lf z: %lf", (double)physics.v.x, (double)physics.v.y, (double)physics.v.z);
+		ImGui::Text("m %lf", (double)physics.mass);
 	}
 
 	const char* PhysicsComponentGui::name() const

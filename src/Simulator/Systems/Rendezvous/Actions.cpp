@@ -180,11 +180,13 @@ namespace sim
 		auto cvel = simData.getVelocity();       // chaser velocity 
 		auto trad = targetSimData.getRadius();   // target radius
 		auto tvel = targetSimData.getVelocity(); // target velocity
-		std::cout << "CWImpuls: dv x:" << dv.x << " y:" << dv.y << " z:" << dv.z << " mag:" << glm::length(dv) << std::endl;
-		std::cout << "CWImpuls: cpos x: " << crad.x << " y: " << crad.y << " z: " << crad.z << std::endl;
-		std::cout << "CWImpuls: cvel x: " << cvel.x << " y: " << cvel.y << " z: " << cvel.z << std::endl;
-		std::cout << "CWImpuls: tpos x: " << trad.x << " y: " << trad.y << " z: " << trad.z << std::endl;
-		std::cout << "CWImpuls: tvel x: " << tvel.x << " y: " << tvel.y << " z: " << tvel.z << std::endl;
+		std::cout << "CWImpuls" << std::endl;
+		std::cout << "    time " << ecs::toSeconds<double>(t).count() << std::endl;
+		std::cout << "    dv x:" << dv.x << " y:" << dv.y << " z:" << dv.z << " mag:" << glm::length(dv) << std::endl;
+		std::cout << "    cpos x: " << crad.x << " y: " << crad.y << " z: " << crad.z << std::endl;
+		std::cout << "    cvel x: " << cvel.x << " y: " << cvel.y << " z: " << cvel.z << std::endl;
+		std::cout << "    tpos x: " << trad.x << " y: " << trad.y << " z: " << trad.z << std::endl;
+		std::cout << "    tvel x: " << tvel.x << " y: " << tvel.y << " z: " << tvel.z << std::endl;
 		simulatorState->logDvImpuls(dv);
 		// end DEBUG
 

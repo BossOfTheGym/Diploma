@@ -69,6 +69,10 @@ namespace sim
 					simulatorState->startRendezvous(t, dt);
 				}
 
+				if (ImGui::Button("Reset state"))
+				{
+					simulatorState->resetTestState();
+				}
 				// TEST
 				//char destStr[64];
 				//

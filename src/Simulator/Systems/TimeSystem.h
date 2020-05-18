@@ -62,6 +62,13 @@ namespace sim
 		bool hasTimeEvents() const;
 
 
+		bool stopped();
+
+		void stop();
+
+		void resume();
+
+
 	private:
 		Clock m_clock{};
 
@@ -78,5 +85,7 @@ namespace sim
 		Time m_dtWarped{}; // warped delta time
 
 		Heap m_timeEvents{}; // used for producing correct time deltas
+
+		bool m_stopped{false};
 	};
 }

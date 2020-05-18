@@ -16,6 +16,10 @@
 #include "../Components/Planet.h"
 #include "../Components/Player.h"
 
+#include "TimeSystem.h"
+#include "RendezvousControlSystem.h"
+#include "PlanetSystem.h"
+
 // TEST
 #include <SpaceUtils/ClohessyWiltshire.h>
 
@@ -23,11 +27,11 @@
 
 #include "../Test.h"
 
-#include "RendezvousControlSystem.h"
 // END TEST
 
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 namespace
 {	
@@ -202,10 +206,12 @@ namespace sim
 					std::cout << "Simulator state: failed to write log file" << std::endl; 
 				}
 			}
+
+			auto logTime = std::time(nullptr);
 			m_logWritten = std::async(
 				  std::launch::async
 				, &writeLogData
-				, m_baseName + std::to_string(m_fileNum) + ".log"
+				, m_baseName /*+ std::asctime(std::gmtime(&logTime))*/ + "_" + std::to_string(m_fileNum) + ".log"
 				, std::move(m_chaserRadLog)
 				, std::move(m_chaserVelLog)
 				, std::move(m_targetRadLog)
@@ -270,11 +276,19 @@ namespace sim
 
 	void SimulatorState::pause()
 	{
+		auto* sysManager = getSystemManager();
+		auto* timeSystem = sysManager->get<TimeSystem>();
+
+		timeSystem->stop();
 		m_paused = true;
 	}
 
 	void SimulatorState::resume()
 	{
+		auto* sysManager = getSystemManager();
+		auto* timeSystem = sysManager->get<TimeSystem>();
+
+		timeSystem->resume();
 		m_paused = false;
 	}
 
@@ -314,6 +328,44 @@ namespace sim
 	//
 	//	m_rendezvousStarted = rendezvousControl->startLambertTransfer(m_chaser, dest, dt);
 	//}
+
+	void SimulatorState::resetTestState()
+	{
+		auto* sysManager = getSystemManager();
+		auto* ecsEngine = sysManager->getECSEngine();
+		auto& registry = ecsEngine->getRegistry();
+
+		auto* planetSystem = sysManager->get<PlanetSystem>();
+		auto* timeSystem   = sysManager->get<TimeSystem>();
+
+		if (!registry.valid(m_chaser) || !registry.has<comp::SimData>(m_chaser) || !registry.has<comp::Orbit>(m_chaser) || !registry.has<comp::Rendezvous>(m_chaser)
+			|| !registry.valid(m_target) || !registry.has<comp::SimData>(m_target) || !registry.has<comp::Orbit>(m_target)
+			|| !registry.valid(m_planet) || !registry.has<comp::Planet>(m_planet))
+		{
+			return;
+		}
+
+		auto [chaserSimData, chaserOrbit, chaserRend] = registry.get<comp::SimData, comp::Orbit, comp::Rendezvous>(m_chaser);
+		auto [targetSimData, targetOrbit]             = registry.get<comp::SimData, comp::Orbit>(m_target);
+
+		auto& planet = registry.get<comp::Planet>(m_planet);
+
+		chaserOrbit.setFromParameters(52000.0, glm::radians(5.0), glm::radians(0.0), 0.001, glm::radians(0.0), glm::radians(0.0), planet.mu);
+		chaserSimData.setRadius(chaserOrbit.getState().r);
+		chaserSimData.setVelocity(chaserOrbit.getState().v);
+
+		targetOrbit.setFromParameters(52000.0, glm::radians(5.0), glm::radians(0.0), 0.001, glm::radians(0.0), glm::radians(0.5), planet.mu);
+		targetSimData.setRadius(targetOrbit.getState().r);
+		targetSimData.setVelocity(targetOrbit.getState().v);
+
+		chaserRend.propellantMass = 500.0;
+		chaserRend.Isp = 400.0;
+
+		planetSystem->updateEntity(m_chaser);
+		planetSystem->updateEntity(m_target);
+
+		timeSystem->resetTime();
+	}
 
 	void SimulatorState::logDvImpuls(const Vec3& dv)
 	{

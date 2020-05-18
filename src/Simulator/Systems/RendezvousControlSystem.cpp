@@ -131,6 +131,8 @@ namespace sim
 		// time sync
 		Time timeEvent = t + FIRST_TO;
 
+		// TODO : Fix time duration
+
 		// first
 		pushBack<comp::CWImpuls>(chaser, dr0, FIRST_TO, FIRST_TR, comp::CWImpuls::First);
 		timeSys->addTimeEvent(timeEvent);

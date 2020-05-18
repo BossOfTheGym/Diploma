@@ -16,11 +16,12 @@ namespace sim
 
 
 	void TimeSystem::tick()
-	{
+	{		
 		auto t1 = m_clock.now().time_since_epoch();
 
 		m_t0 += m_dt;
 		m_dt  = t1 - m_t;
+
 		// TEST
 		if (m_dt > Time(100'000'000))
 		{
@@ -28,8 +29,11 @@ namespace sim
 		}
 		// END TEST
 
-		m_t0Warped += m_dtWarped;
-		m_dtWarped  = m_dt * m_warp;
+		if (!m_stopped)
+		{
+			m_t0Warped += m_dtWarped;
+			m_dtWarped  = m_dt * m_warp;
+		}
 
 		m_t = t1;
 	}
@@ -119,5 +123,21 @@ namespace sim
 	bool TimeSystem::hasTimeEvents() const
 	{
 		return !m_timeEvents.empty();
+	}
+
+
+	bool TimeSystem::stopped()
+	{
+		return false;
+	}
+
+	void TimeSystem::stop()
+	{
+		m_stopped = true;
+	}
+
+	void TimeSystem::resume()
+	{
+		m_stopped = false;
 	}
 }
