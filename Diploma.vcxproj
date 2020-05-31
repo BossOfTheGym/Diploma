@@ -208,6 +208,7 @@
     <None Include="assets\shaders\voxel.frag" />
     <None Include="assets\shaders\voxel.geom" />
     <None Include="assets\shaders\voxel.vert" />
+    <None Include="simLog\log_viewer.py" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

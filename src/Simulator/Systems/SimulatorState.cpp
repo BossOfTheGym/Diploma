@@ -101,7 +101,8 @@ namespace
 		, std::vector<Vec3> chaserRadImp
 		, std::vector<Vec3> chaserVelImp
 		, std::vector<Vec3> targetRadImp
-		, std::vector<Vec3> targetVelImp)
+		, std::vector<Vec3> targetVelImp
+		, Float mass)
 	{
 		std::ofstream output(fileName);
 		if (!output.is_open())
@@ -148,6 +149,9 @@ namespace
 				<< tvel.x << " " << tvel.y << " " << tvel.z << std::endl;
 		}
 
+		output << "[[mass]]" << std::endl;
+		output << mass << std::endl;
+
 		return true;
 	}
 }
@@ -185,7 +189,7 @@ namespace sim
 		{
 			if (registry.valid(m_target) && registry.has<comp::SimData>(m_target)
 				&& registry.valid(m_chaser) && registry.has<comp::SimData>(m_chaser)
-				&& m_logUpdates % m_logEvery == 0)
+				&& !paused())
 			{
 				auto& chaserSimData = registry.get<comp::SimData>(m_chaser);
 				auto& targetSimData = registry.get<comp::SimData>(m_target);
@@ -207,11 +211,12 @@ namespace sim
 				}
 			}
 
-			auto logTime = std::time(nullptr);
+			// TODO : safe checks
+			auto& rendComp = registry.get<comp::Rendezvous>(m_chaser);
 			m_logWritten = std::async(
 				  std::launch::async
 				, &writeLogData
-				, m_baseName /*+ std::asctime(std::gmtime(&logTime))*/ + "_" + std::to_string(m_fileNum) + ".log"
+				, m_baseName + "_" + std::to_string(m_fileNum) + ".log"
 				, std::move(m_chaserRadLog)
 				, std::move(m_chaserVelLog)
 				, std::move(m_targetRadLog)
@@ -221,6 +226,7 @@ namespace sim
 				, std::move(m_chaserVelImpLog)
 				, std::move(m_targetRadImpLog)
 				, std::move(m_targetVelImpLog)
+				, rendComp.propellantUsed
 			);
 			m_fileNum++;
 		}
@@ -350,11 +356,11 @@ namespace sim
 
 		auto& planet = registry.get<comp::Planet>(m_planet);
 
-		chaserOrbit.setFromParameters(52000.0, glm::radians(5.0), glm::radians(0.0), 0.001, glm::radians(0.0), glm::radians(0.0), planet.mu);
+		chaserOrbit.setFromParameters(51000.0, glm::radians(50.0), glm::radians(0.0), 0.001, glm::radians(0.0), glm::radians(10.0), planet.mu);
 		chaserSimData.setRadius(chaserOrbit.getState().r);
 		chaserSimData.setVelocity(chaserOrbit.getState().v);
 
-		targetOrbit.setFromParameters(52000.0, glm::radians(5.0), glm::radians(0.0), 0.001, glm::radians(0.0), glm::radians(0.5), planet.mu);
+		targetOrbit.setFromParameters(51000.0, glm::radians(50.0), glm::radians(0.0), 0.001, glm::radians(0.0), glm::radians(10.5), planet.mu);
 		targetSimData.setRadius(targetOrbit.getState().r);
 		targetSimData.setVelocity(targetOrbit.getState().v);
 

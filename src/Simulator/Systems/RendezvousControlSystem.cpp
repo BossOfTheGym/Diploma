@@ -23,9 +23,9 @@ namespace sim
 	RendezvousControlSystem::RendezvousControlSystem(ecs::sys::SystemManager* manager)
 		: base_t(manager)
 	{
-		registerAction<ImpulsAction>();
-		registerAction<WaitAction>();
-		registerAction<LambertImpulsAction>();
+		//registerAction<ImpulsAction>();
+		//registerAction<WaitAction>();
+		//registerAction<LambertImpulsAction>();
 		registerAction<CWImpulsAction>();
 	}
 
@@ -122,8 +122,8 @@ namespace sim
 		Vec3 dr0 = q * dr;		
 		
 		// actions queue		
-		const Time FIRST_TO = Time(1'000'000); // first timeout, workaround to avoid zero time delta while update
-		const Time FIRST_TR = Time(2'000'000); // first transfer interval
+		const Time FIRST_TO = Time(10'000'000); // first timeout, workaround to avoid zero time delta while update
+		const Time FIRST_TR = Time(20'000'000); // first transfer interval
 
 		Time dtPart = (dt + Time(m_split)) / m_split;		
 		Time timeTransfer = dtPart * m_split; // total time required for transfer without first timeout
@@ -170,6 +170,11 @@ namespace sim
 		return !empty(e);
 	}
 
+
+	void RendezvousControlSystem::testWaitActions(Entity chaser)
+	{
+		
+	}
 
 	// TEST
 	bool RendezvousControlSystem::startLambertTransfer(Entity chaser, const Vec3& dest, ecs::Time transfer)

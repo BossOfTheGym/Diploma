@@ -104,6 +104,9 @@
     <Filter Include="src\Simulator\Systems\Rendering">
       <UniqueIdentifier>{d1fd870a-9aee-4962-82ec-ecdcfccf260f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="simLog">
+      <UniqueIdentifier>{4a9255da-00e7-4614-acd5-35b248919823}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -664,6 +667,9 @@
     </None>
     <None Include="assets\shaders\test.vert">
       <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="simLog\log_viewer.py">
+      <Filter>simLog</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -95,11 +95,12 @@ namespace sim
 
 	void TimeSystem::addTimeEvent(Time time)
 	{
+		// TODO : common comparator
 		m_timeEvents.push_back(time);
 		std::push_heap(m_timeEvents.begin(), m_timeEvents.end(),
 			[] (auto& t1, auto& t2)
 			{
-				return t1 < t2;
+				return t1 > t2;
 			}
 		);
 	}
@@ -111,10 +112,11 @@ namespace sim
 
 	void TimeSystem::popTimeEvent()
 	{
+		// TODO : common comparator
 		std::pop_heap(m_timeEvents.begin(), m_timeEvents.end(),
 			[] (auto& t1, auto& t2)
 			{
-				return t1 < t2;
+				return t1 > t2;
 			}
 		);
 		m_timeEvents.pop_back();

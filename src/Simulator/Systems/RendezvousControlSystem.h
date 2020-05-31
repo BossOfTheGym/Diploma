@@ -45,6 +45,8 @@ namespace sim
 
 		
 		// TEST
+		void testWaitActions(Entity chaser);
+
 		bool startLambertTransfer(Entity chaser, const Vec3& dest, ecs::Time transfer);
 		//END TEST
 

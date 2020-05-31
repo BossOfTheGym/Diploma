@@ -13,6 +13,8 @@
 #include "SimulatorState.h"
 #include "PhysicsSystem.h"
 
+#include <iostream>
+
 namespace sim
 {
 	using comp::StateVec;
@@ -35,7 +37,7 @@ namespace sim
 		m_graviHolder         = Function(m_gravitation);
 		m_graviJacobianHolder = Jacobian(m_gravitationJacobian);
 		
-		m_solver = solvers::gaussLegendre6<Float, 6>(1e-15, 30);
+		m_solver = solvers::classic4<Float, 6>();
 	}
 
 	void PlanetSystem::update(ecs::Time t, ecs::Time dt)
@@ -45,11 +47,6 @@ namespace sim
 		auto* simulatorState = getSystemManager()->get<SimulatorState>();
 
 		auto planet = simulatorState->getPlanet();
-		if (!registry.valid(planet) || !registry.has<Planet, SimData>(planet))
-		{
-			// TODO : notify about error
-			return;
-		}
 
 		auto center = registry.get<SimData>(planet).getRadius();
 		auto mu     = registry.get<Planet>(planet).mu;
@@ -65,6 +62,7 @@ namespace sim
 		}
 		auto stepSec = ecs::toSeconds<Float>(step).count();
 
+		// TEST
 		for (auto e : registry.view<PhysicsData, SimData>(entt::exclude<Planet>))
 		{
 			auto tUpdate  = t;
@@ -73,7 +71,7 @@ namespace sim
 			auto& simData = registry.get<SimData>(e);
 
 			auto state = simData.state;
-			for (int i = 1; i < updates; i++)
+			for (int i = 1; i < updates - 1; i++)
 			{
 				auto tSec  = ecs::toSeconds<Float>(tUpdate).count();
 				state = m_solver.solve(m_graviHolder, m_graviJacobianHolder, tSec, state, stepSec);

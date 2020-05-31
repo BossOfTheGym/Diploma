@@ -53,13 +53,10 @@ namespace sim
 				auto& impuls  = registry.get<comp::Impuls>(next);
 				auto& simData = registry.get<comp::SimData>(actionList);
 
-				if (impuls.duration >= dt)
+				impuls.duration -= dt;
+				if (impuls.duration.count() > 0)
 				{
-					impuls.duration -= dt;
-				}
-				if (impuls.duration == Time(0))
-				{
-					sys->popFront(actionList);
+					return;
 				}
 
 				simData.setVelocity(simData.getVelocity() + impuls.dv);
@@ -87,14 +84,14 @@ namespace sim
 			if (next != null && registry.has<comp::Wait>(next))
 			{
 				auto& wait = registry.get<comp::Wait>(next);
-				if (wait.duration >= dt)
+
+				wait.duration -= dt;
+				if (wait.duration.count() > 0)
 				{
-					wait.duration -= dt;
+					return;
 				}
-				if (wait.duration == Time(0))
-				{
-					sys->popFront(actionList);
-				}
+
+				sys->popFront(actionList);
 			}
 		}
 	}
@@ -124,7 +121,6 @@ namespace sim
 
 		if (!registry.valid(rendComp.target) || !registry.has<comp::Orbit, comp::SimData>(rendComp.target))
 		{
-			// TODO : in fact not an error but still should notify
 			std::cout << "CWImpuls: bad target" << std::endl;
 			sys->abortRendezvous(chaser);
 			return;
@@ -139,6 +135,7 @@ namespace sim
 			sys->abortRendezvous(chaser);
 			return;
 		}
+		auto& impuls = registry.get<comp::CWImpuls>(next);
 
 		auto planet = simulatorState->getPlanet();
 		if (!registry.valid(planet) || !registry.has<comp::Planet>(planet))
@@ -150,13 +147,11 @@ namespace sim
 		}
 		auto planetComp = registry.get<comp::Planet>(planet);
 
-		auto& impuls = registry.get<comp::CWImpuls>(next);
-		if (impuls.timeout > dt)
+		impuls.timeout -= dt;
+		if (impuls.timeout.count() > 0)
 		{
-			impuls.timeout -= dt;
 			return;
 		}
-		impuls.timeout = Time(0);
 
 		Vec3 dv{};
 		switch(impuls.impulsType)
@@ -173,7 +168,8 @@ namespace sim
 				break;
 			}
 		}
-		simData.setVelocity(simData.getVelocity() + dv);
+		auto newV = simData.getVelocity() + dv;
+		simData.setVelocity(newV);
 
 		// DEBUG
 		auto crad = simData.getRadius();         // chaser radius
@@ -181,14 +177,15 @@ namespace sim
 		auto trad = targetSimData.getRadius();   // target radius
 		auto tvel = targetSimData.getVelocity(); // target velocity
 		std::cout << "CWImpuls" << std::endl;
+		std::cout << "    to " << impuls.timeout.count() << std::endl;
 		std::cout << "    time " << ecs::toSeconds<double>(t).count() << std::endl;
 		std::cout << "    dv x:" << dv.x << " y:" << dv.y << " z:" << dv.z << " mag:" << glm::length(dv) << std::endl;
 		std::cout << "    cpos x: " << crad.x << " y: " << crad.y << " z: " << crad.z << std::endl;
 		std::cout << "    cvel x: " << cvel.x << " y: " << cvel.y << " z: " << cvel.z << std::endl;
 		std::cout << "    tpos x: " << trad.x << " y: " << trad.y << " z: " << trad.z << std::endl;
 		std::cout << "    tvel x: " << tvel.x << " y: " << tvel.y << " z: " << tvel.z << std::endl;
-		simulatorState->logDvImpuls(dv);
 		// end DEBUG
+		simulatorState->logDvImpuls(dv);
 
 		auto g0  = planetComp.g0;
 		auto Isp = rendComp.Isp; 
@@ -287,12 +284,12 @@ namespace sim
 		Vec3 omega = h / glm::dot(rTarget, rTarget);
 
 		//transformation matrix
-		Vec3 i = rTarget / glm::length(rTarget);
-		Vec3 k = h / glm::length(h);
-		Vec3 j = glm::cross(k, i);
-
-		Mat3 qi = Mat3(i, j, k);
-		Mat3 q  = glm::transpose(qi);
+		//Vec3 i = rTarget / glm::length(rTarget);
+		//Vec3 k = h / glm::length(h);
+		//Vec3 j = glm::cross(k, i);
+		//
+		//Mat3 qi = Mat3(i, j, k);
+		//Mat3 q  = glm::transpose(qi);
 
 		//absolute
 		Vec3 dr = rChaser - rTarget;
