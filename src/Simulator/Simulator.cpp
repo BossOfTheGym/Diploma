@@ -68,10 +68,29 @@ namespace sim
 		contextSystem->showWindow();
 		contextSystem->setSwapInterval(1);
 
+		timeSystem->setWarp(100);
+		simulatorState->resume();
+
 		Time t{};
 		Time dt{};
+		Time tod{2'000'000'000'000};
+		Time to{};
+		int count{1};
 		while(!contextSystem->shouldClose())
 		{
+			// TEST
+			if (count > 61)
+			{
+				break;
+			}
+			if (to.count() <= 0)
+			{
+				to = tod;
+				simulatorState->resetTestState(Time(),Time(1'800'000'000'000), count);
+				count++;
+			}
+			// END TEST
+
 			contextSystem->pollEvents();
 			timeSystem->tick();
 
@@ -79,6 +98,10 @@ namespace sim
 			{
 				t   = timeSystem->getTime();
 				dt += timeSystem->getDeltaTime();
+
+				// TEST
+				to -= dt;
+				// END TEST
 
 				Time tf = t + dt; // t-ime f-inal
 				while(timeSystem->hasTimeEvents() && timeSystem->peekTimeEvent() < tf)

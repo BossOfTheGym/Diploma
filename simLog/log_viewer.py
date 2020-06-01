@@ -206,10 +206,13 @@ def traverse_dir(dir_name):
 			print('parsing ', str(d), ' ...')
 			log_data.append(parse_log_file(str(d)))
 			print()
+	log_data.sort(key = lambda x: len(x[2]))
 
 	print('plotting...')
+	to_plot = [3, 6, 10, 18, 34]
 	for chaser, target, impulses, mass in log_data:
-		plot_log(chaser, target, impulses)
+		if len(impulses) in to_plot:
+			plot_log(chaser, target, impulses)
 
 	n = []
 	m = []

@@ -59,6 +59,8 @@ namespace sim
 
 		//void startLambertTransfer(const Vec3& dest, ecs::Time dt);
 
+		void resetTestState(ecs::Time t, ecs::Time dt, int impulses);
+
 		void resetTestState();
 
 		void logDvImpuls(const Vec3& dv);

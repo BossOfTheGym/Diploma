@@ -335,6 +335,19 @@ namespace sim
 	//	m_rendezvousStarted = rendezvousControl->startLambertTransfer(m_chaser, dest, dt);
 	//}
 
+	void SimulatorState::resetTestState(ecs::Time t, ecs::Time dt, int impulses)
+	{
+		auto* sysManager = getSystemManager();
+		
+		auto* rendSystem = sysManager->get<RendezvousControlSystem>();
+		auto* timeSystem = sysManager->get<TimeSystem>();
+
+		rendSystem->setSplit(impulses);
+
+		resetTestState();
+		startRendezvous(timeSystem->getTime(), dt);
+	}
+
 	void SimulatorState::resetTestState()
 	{
 		auto* sysManager = getSystemManager();
@@ -365,6 +378,7 @@ namespace sim
 		targetSimData.setVelocity(targetOrbit.getState().v);
 
 		chaserRend.propellantMass = 500.0;
+		chaserRend.propellantUsed = 0.0;
 		chaserRend.Isp = 400.0;
 
 		planetSystem->updateEntity(m_chaser);
