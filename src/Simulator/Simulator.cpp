@@ -73,13 +73,13 @@ namespace sim
 
 		Time t{};
 		Time dt{};
-		Time tod{2'000'000'000'000};
+		Time tod{2'400'000'000'000};
 		Time to{};
-		int count{1};
+		int count{30};
 		while(!contextSystem->shouldClose())
 		{
 			// TEST
-			if (count > 61)
+			if (count > 81)
 			{
 				break;
 			}
@@ -120,6 +120,8 @@ namespace sim
 					physicsSystem->update(t, dts);
 					orbitSystem->update(t, dts);
 
+					simulatorState->update(t, dt);
+
 					t  += dts; // progress time
 					dt -= dts; // consume time
 					///////////
@@ -129,6 +131,8 @@ namespace sim
 				planetSystem->update(t, dt);
 				physicsSystem->update(t, dt);
 				orbitSystem->update(t, dt);
+
+				simulatorState->update(t, dt);
 
 				t  += dt; // progress time
 				dt -= dt; // consume time
@@ -145,7 +149,8 @@ namespace sim
 			playerSystem->update(tr, dtr);
 			testRendererSystem->update(tr, dtr);
 			imguiSystem->update(tr, dtr);
-			simulatorState->update(t, dt);
+			// TODO : move logging to separate system
+			simulatorState->update(tr, dtr);
 
 			contextSystem->swapBuffers();
 		}

@@ -7,6 +7,7 @@
 
 #include "../Components/SimData.h"
 #include "../Components/PhysicsData.h"
+#include "../Components/Orbit.h"
 #include "../Components/Transform.h"
 #include "../Components/Planet.h"
 
@@ -34,8 +35,14 @@ namespace sim
 		m_gravitation.reset(new Gravitation());
 		m_gravitationJacobian.reset(new GravitationJacobian());
 
-		m_graviHolder         = Function(m_gravitation);
+		// TEST
+		m_gravitationPerturbed.reset(new GravitationPerturbed());
+		m_graviHolder         = Function(m_gravitationPerturbed);
 		m_graviJacobianHolder = Jacobian(m_gravitationJacobian);
+		// END TEST
+
+		//m_graviHolder         = Function(m_gravitation);
+		//m_graviJacobianHolder = Jacobian(m_gravitationJacobian);
 		
 		m_solver = solvers::gaussLegendre6<Float, 6>(1e-15, 50);
 		//m_solver = solvers::classic4<Float, 6>();
@@ -47,13 +54,21 @@ namespace sim
 
 		auto* simulatorState = getSystemManager()->get<SimulatorState>();
 
-		auto planet = simulatorState->getPlanet();
+		auto  planetEntity = simulatorState->getPlanet();
+		auto& planetComp   = registry.get<Planet>(planetEntity);  
 
-		auto center = registry.get<SimData>(planet).getRadius();
-		auto mu     = registry.get<Planet>(planet).mu;
-		m_gravitation->setMu(mu);
-		m_gravitationJacobian->setMu(mu);
+		// setup gravitation parameters
+		//m_gravitation->setMu(planetComp.mu);
+		//m_gravitationJacobian->setMu(planetComp.mu);
 
+		// TEST
+		m_gravitationPerturbed->setMu(planetComp.mu);
+		m_gravitationPerturbed->setJ2(planetComp.J2);
+		m_gravitationPerturbed->setR(planetComp.R);
+		m_gravitationJacobian->setMu(planetComp.mu);
+		// END TEST
+
+		// calculating updates count
 		auto updates = dt / m_dt;
 		auto step = m_dt;
 		if (updates > m_maxUpdates)
@@ -63,33 +78,53 @@ namespace sim
 		}
 		auto stepSec = ecs::toSeconds<Float>(step).count();
 
-		// TEST
-		for (auto e : registry.view<PhysicsData, SimData>(entt::exclude<Planet>))
+		for (auto e : registry.view<comp::Orbit, comp::SimData, comp::PhysicsData>(entt::exclude<Planet>))
 		{
+			// orbit & simData & physics components of an updated entity
+			auto [orbit, simData, physics] = registry.get<comp::Orbit, comp::SimData, comp::PhysicsData>(e);
+
+			// current update time & current time delta that will be used
 			auto tUpdate  = t;
 			auto dtUpdate = dt;
 
-			auto& simData = registry.get<SimData>(e);
-
-			auto state = simData.state;
 			for (int i = 1; i < updates - 1; i++)
 			{
+				// TEST : setup
+				orbit.setFromState({simData.getRadius(), simData.getVelocity()}, planetComp.mu);
+				m_gravitationPerturbed->setAP(orbit.getOrbit().ap);
+				m_gravitationPerturbed->setI(orbit.getOrbit().i);
+				m_gravitationPerturbed->setRA(orbit.getOrbit().ra);
+				m_gravitationPerturbed->setr(glm::length(simData.getRadius()));
+				// END TEST
+
 				auto tSec  = ecs::toSeconds<Float>(tUpdate).count();
-				state = m_solver.solve(m_graviHolder, m_graviJacobianHolder, tSec, state, stepSec);
+				simData.state = m_solver.solve(m_graviHolder, m_graviJacobianHolder, tSec, simData.state, stepSec);
 
 				tUpdate  += step;
 				dtUpdate -= step;
 			}
+			// TEST : setup
+			orbit.setFromState({simData.getRadius(), simData.getVelocity()}, planetComp.mu);
+			m_gravitationPerturbed->setAP(orbit.getOrbit().ap);
+			m_gravitationPerturbed->setI(orbit.getOrbit().i);
+			m_gravitationPerturbed->setRA(orbit.getOrbit().ra);
+			m_gravitationPerturbed->setr(glm::length(simData.getRadius()));
+			// END TEST
+
 			auto tSec  = ecs::toSeconds<Float>(tUpdate).count();
 			auto dtSec = ecs::toSeconds<Float>(dtUpdate).count();
-			simData.state = m_solver.solve(m_graviHolder, m_graviJacobianHolder, tSec, state, dtSec);
+			simData.state = m_solver.solve(m_graviHolder, m_graviJacobianHolder, tSec, simData.state, dtSec);
 
-			auto& physics = registry.get<PhysicsData>(e);
+			// update physics component
 			physics.r = simData.getRadius();
 			physics.v = simData.getVelocity();
+
+			// final update for orbit
+			orbit.setFromState({simData.getRadius(), simData.getVelocity()}, planetComp.mu);
 		}
 	}
-
+	
+	// TEST
 	void PlanetSystem::updateEntity(Entity e)
 	{
 		auto& registry = getSystemManager()->getECSEngine()->getRegistry();
@@ -111,4 +146,5 @@ namespace sim
 			}
 		}
 	}
+	// END TEST
 }

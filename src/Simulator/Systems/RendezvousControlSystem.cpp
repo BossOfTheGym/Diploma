@@ -141,6 +141,7 @@ namespace sim
 		Time prevTO = FIRST_TR;
 		for (int i = 1; i <= m_split; i++)
 		{
+			// dr * t
 			Vec3 pos = dr0 * (1.0_FL * (timeTransfer - i * dtPart) / timeTransfer);
 
 			// intermediate

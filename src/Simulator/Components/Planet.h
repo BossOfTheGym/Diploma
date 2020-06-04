@@ -12,5 +12,6 @@ namespace comp
 		Float R{};
 		Float w{};
 		Float g0{};
+		Float J2{};
 	};
 }

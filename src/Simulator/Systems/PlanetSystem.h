@@ -24,14 +24,15 @@ namespace sim
 
 	using math::Float;
 
-	using Gravitation         = funcs::Gravitation<Float, 3>;
-	using GravitationJacobian = funcs::GravitationJacobian<Float, 3>;
-	using GravitationPtr         = std::shared_ptr<Gravitation>;
-	using GravitationJacobianPtr = std::shared_ptr<GravitationJacobian>;
+	using Gravitation          = funcs::Gravitation<Float, 3>;
+	using GravitationJacobian  = funcs::GravitationJacobian<Float, 3>;
+	using GravitationPerturbed = funcs::GravitationPerturbed<Float, 3>;
 
+	using GravitationPtr          = std::shared_ptr<Gravitation>;
+	using GravitationJacobianPtr  = std::shared_ptr<GravitationJacobian>;
+	using GravitationPerturbedPtr = std::shared_ptr<GravitationPerturbed>;
 
 	using ecs::entity::Entity;
-
 
 	class Simulator;
 
@@ -43,21 +44,30 @@ namespace sim
 
 
 	public:
-		PlanetSystem(ecs::sys::SystemManager* manager, ecs::Time dt = ecs::Time(50'000'000), ecs::Tick maxUpdates = 10000);
+		PlanetSystem(ecs::sys::SystemManager* manager, ecs::Time dt = ecs::Time(50'000'000), ecs::Tick maxUpdates = 20000);
 
 
 	public:
 		virtual void update(ecs::Time t, ecs::Time dt);
 
 		// workaround for ImGuiSystem
+		// TODO : remove
+		// TODO : unite with orbit system
+		// TODO : unite simData and Orbit
+		// TODO : unite it in GUI section
+		// TEST
 		void updateEntity(Entity e);
-
+		// END TEST
 
 	private:
 		Solver m_solver{};
 
 		GravitationPtr         m_gravitation{};
 		GravitationJacobianPtr m_gravitationJacobian{};
+
+		// TEST
+		GravitationPerturbedPtr m_gravitationPerturbed{}; // we need only gravitation, jacobian is the same
+		// END TEST
 
 		Function m_graviHolder{};
 		Jacobian m_graviJacobianHolder{};

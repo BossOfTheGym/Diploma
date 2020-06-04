@@ -185,8 +185,55 @@ def plot_log(chaser, target, impulses):
 	# ax.set_zlabel('z')
 	ax.legend(['chaser trajectory'])
 	pyplot.show()
+
+def plot_log_3D():
+	c_x = []
+	c_y = []
+	c_z = []
+	for i in range(len(chaser)):
+		t_r = target[i][0]
+		t_v = target[i][1]
+		c_r = chaser[i][0]
+		c_v = chaser[i][1]
+
+		q = natural_axes_mat(t_r, t_v)
+
+		r_rel = q @ (c_r - t_r)
+		c_x.append(r_rel[0])
+		c_y.append(r_rel[1])
+		c_z.append(r_rel[2])
 	
+	i_x = []
+	i_y = []
+	i_z = []
+	for i in range(len(impulses)):
+		i_v = impulses[i][0]
+		c_r = impulses[i][1]
+		c_v = impulses[i][2]
+		t_r = impulses[i][3]
+		t_v = impulses[i][4]
+
+		q = natural_axes_mat(t_r, t_v)
+		r_rel = q @ (c_r - t_r)
+		i_x.append(r_rel[0])
+		i_y.append(r_rel[1])
+		i_z.append(r_rel[2])
+
+	fig = pyplot.figure()
+	# ax = fig.add_subplot(1, 1, 1, projection='3d')
+	ax = fig.add_subplot(1, 1, 1)
+	ax.plot(c_x, c_z);
+	# ax.scatter3D(i_x, i_y, i_z, s = 5, c = 'r')
+	ax.scatter(i_x, i_z, s = 25, c = 'r')
+	ax.set_xlabel('x')
+	ax.set_ylabel('y')
+	# ax.set_xlabel('x')
+	# ax.set_ylabel('y')
+	# ax.set_zlabel('z')
+	ax.legend(['chaser trajectory'])
+	pyplot.show()
 	
+
 def plot_mass_consumption(impulses_count, mass_cons):
 	fig = pyplot.figure()
 	ax = fig.add_subplot(1, 1, 1)
@@ -209,7 +256,7 @@ def traverse_dir(dir_name):
 	log_data.sort(key = lambda x: len(x[2]))
 
 	print('plotting...')
-	to_plot = [3, 6, 10, 18, 34]
+	to_plot = [3, 6, 10, 18, 34, 40, 50]
 	for chaser, target, impulses, mass in log_data:
 		if len(impulses) in to_plot:
 			plot_log(chaser, target, impulses)

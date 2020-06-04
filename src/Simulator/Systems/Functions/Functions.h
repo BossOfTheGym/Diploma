@@ -1,5 +1,8 @@
 #pragma once
 
+#include <ECS/ecs_engine.h>
+#include <ECS/Entity/Entity.h>
+
 #include <Numerics/Arg/ArgN.h>
 #include <Math/MathLib.h>
 
@@ -213,86 +216,169 @@ namespace funcs
 	};
 
 
-	// returns tuple of gravitation function and its jacobian
-	template<class Scalar, int Order>
-	auto gravitationForce(Scalar&& planetMu)
+	using math::Vec3;
+	using math::Float;
+
+	using ecs::entity::Entity;
+	using ecs::entity::null;
+
+	template<class Scalar, int Dim>
+	class GravitationPerturbed : public FunctionInterface<Scalar, 2 * Dim>
 	{
-		// equation of motiion is the second order equation
-		using traits = func_traits<Scalar, 2 * Order>;
+		static_assert(Dim == 3, "Dim != 3, dim should be equal to 3");
 
-		using Type = typename traits::Type;
+	public:
+		using this_t = Gravitation;
+		using base_t = FunctionInterface<Scalar, 2 * Dim>;
 
-		using Time  = typename traits::Time;
-		using Value = typename traits::Value;
+		using Time  = func_traits_time<Scalar, 2 * Dim>;
+		using Value = func_traits_val<Scalar, 2 * Dim>; 
 
-		using Mat = typename traits::Mat;
-		using Vec = typename traits::Vec;
+		using Pointer = typename base_t::Pointer;
 
-		using Function = typename traits::Function;
-		using Jacobian = typename traits::Jacobian;
 
-		// u: packed radius and velocity vectors, (r, v)
-		auto equ = [mu = planetMu] (const Time& t, const Value& u)
+	public:
+		GravitationPerturbed()
+		{}
+
+		GravitationPerturbed(const GravitationPerturbed&) = default;
+		GravitationPerturbed(GravitationPerturbed&&)      = default;
+
+		virtual ~GravitationPerturbed() = default;
+
+		GravitationPerturbed& operator = (const GravitationPerturbed&) = default;
+		GravitationPerturbed& operator = (GravitationPerturbed&&)      = default;
+
+
+	public: // ICopy
+		virtual Pointer copy() const override
 		{
-			
-		};
+			return Pointer(new GravitationPerturbed(*this));
+		}
 
-		auto jac = [mu = planetMu] (const Time& t, const Value& u)
+
+	public: // IFunction
+		virtual Value operator() (const Time& t, const Value& u) override
 		{
-			auto d = [] (auto i, auto j)
+			if (m_needUpdate)
 			{
-				return (i == j ? 1 : 0);
-			};
-
-			Mat res{};
-			for (int i = 0; i < Order; i++)
-			{
-				res[i][Order + i] = Type(1.0);
+				updatePerturbationForce();
 			}
 
-			Type sumSquares{};
-			for (int i = 0; i < Order; i++)
+			Vec3 r{u[0], u[1], u[2]};
+			Vec3 v{u[3], u[4], u[5]};
+			Vec3 h{};
+
+			r = glm::normalize(r);
+			v = glm::normalize(v);
+			h = glm::normalize(glm::cross(r, v));
+			v = glm::normalize(glm::cross(h, r));
+
+			Vec3 force = r * m_pr + v * m_pt + h * m_ph;
+
+			Value res{};
+			for (int i = 0; i < Dim; i++)
+			{
+				res[i] = u[Dim + i];
+			}
+
+			Scalar sumSquares{};
+			for (int i = 0; i < Dim; i++)
 			{
 				sumSquares += u[i] * u[i];
 			}
 
-			Type mult = -mu / std::pow(sumSquares, Type(3.0 / 2.0));
-			for (int i = 0; i < Order; i++)
+			Scalar mult = -m_mu / std::pow(sumSquares, Scalar(3.0 / 2.0));
+			for (int i = 0; i < Dim; i++)
 			{
-				for (int j = 0; j < Order; j++)
-				{
-					res[Order + i][j] = mult * (d(i, j) - 3 * u[i] * u[j] / sumSquares);
-				}
+				res[Dim + i] = mult * u[i] + force[i];
 			}
 
 			return res;
-		};
+		}
 
-		return std::make_tuple(Function(equ), Jacobian(jac));
-	}
+		virtual Value operator() (const Time& t, const Value& value) const override
+		{
+			return const_cast<GravitationPerturbed&>(*this)(t, value);
+		}
 
 
-	//	auto jacob = [&] (const Time& t, const Value& u)
-	//	{
-	//		
-	//	};
-	//
-	//	return 0;
-	//}
-	//
-	//// returns tuple of perturbed gravitation function and its jacobian 
-	//template<
-	//	  class Scalar
-	//	, int Order
-	//	, class Perturbation
-	//	, class PerturbationJacobian
-	//>
-	//auto gravitatationForcePerturbed(
-	//	  Scalar&& planetMu
-	//	, Perturbation&& perturbation
-	//	, PerturbationJacobian&& perturbationJacobian
-	//)
-	//{
-	//	return 0;
-	//}
+	public:
+		void setMu(Float mu)
+		{
+			m_mu = mu;
+			m_needUpdate = true;
+		}
+
+		void setJ2(Float J2)
+		{
+			m_J2 = J2;
+			m_needUpdate = true;
+		}
+
+		void setI(Float i)
+		{
+			m_i = i;
+			m_needUpdate = true;
+		}
+
+		void setRA(Float ra)
+		{
+			m_ra = ra;
+			m_needUpdate = true;
+		}
+
+		void setAP(Float ap)
+		{
+			m_ap = ap;
+			m_needUpdate = true;
+		}
+
+		void setR(Float R)
+		{
+			m_R = R;
+			m_needUpdate = true;
+		}
+
+		void setr(Float r)
+		{
+			m_r = r;
+			m_needUpdate = true;
+		}
+
+
+	private:
+		void updatePerturbationForce() const 
+		{
+			auto coef = -m_mu / (m_r * m_r) * m_J2 * 1.5 * (m_R / m_r) * (m_R / m_r);
+
+			auto sini  = std::sin(m_i);
+			auto sin2i = std::sin(2 * m_i);
+			auto sinRaAp  = std::sin(m_ra + m_ap);
+			auto sin2RaAp = std::sin(2 * (m_ra + m_ap));
+
+			m_pr = coef * (static_cast<Float>(1.0) -3 * sini * sini * sinRaAp * sinRaAp);
+			m_pt = coef * sini * sini * sin2RaAp;
+			m_ph = coef * sin2i * sinRaAp;
+
+			m_needUpdate = false;
+		}
+
+	private:
+		mutable bool m_needUpdate{false};
+
+		Float m_mu{};
+		Float m_R{};
+		Float m_J2{};
+
+		Float m_r{};
+
+		Float m_i{};  // inclination
+		Float m_ra{}; // right ascention
+		Float m_ap{}; // argument of perigee
+
+		mutable Float m_pr{}; // radial
+		mutable Float m_pt{}; // transverse
+		mutable Float m_ph{}; // normal
+	};
 }

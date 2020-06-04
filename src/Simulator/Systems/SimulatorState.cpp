@@ -84,7 +84,7 @@ namespace
 		registry.assign<comp::Transform>      (planet, test::PLANET_RAD, test::PLANET_ROTATION, test::PLANET_SCALE);
 		registry.assign<comp::PhysicsData>    (planet, test::PLANET_RAD, test::PLANET_VEL, test::PLANET_ROT_AXIS, test::PLANET_ROT_ANGLE, test::PLANET_MASS);
 		registry.assign<comp::SimData>        (planet, comp::fromRadVel(test::PLANET_RAD, test::PLANET_VEL));
-		registry.assign<comp::Planet>         (planet, test::PLANET_MU, test::PLANET_R, 1.0, test::PLANET_G0);
+		registry.assign<comp::Planet>         (planet, test::PLANET_MU, test::PLANET_R, 1.0, test::PLANET_G0, test::PLANET_J2);
 		registry.assign<comp::TestRendererTag>(planet);
 		return planet;
 	}

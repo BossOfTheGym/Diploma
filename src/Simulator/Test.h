@@ -14,7 +14,8 @@ namespace test
 	// Planet
 	const Float PLANET_R    = 6378.0;
 	const Float PLANET_MASS = 5.97e24;
-	const Float PLANET_MU   = 398600.0; // almost G * M
+	const Float PLANET_MU   = 398600.0;
+	const Float PLANET_J2   = 1.08263e-3;
 
 	const Float PLANET_G0 = PLANET_MU / PLANET_R / PLANET_R;
 
