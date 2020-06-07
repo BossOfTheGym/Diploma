@@ -44,8 +44,8 @@ namespace sim
 		//m_graviHolder         = Function(m_gravitation);
 		//m_graviJacobianHolder = Jacobian(m_gravitationJacobian);
 		
-		m_solver = solvers::gaussLegendre6<Float, 6>(1e-15, 50);
-		//m_solver = solvers::classic4<Float, 6>();
+		//m_solver = solvers::gaussLegendre6<Float, 6>(1e-15, 50);
+		m_solver = solvers::classic4<Float, 6>();
 	}
 
 	void PlanetSystem::update(ecs::Time t, ecs::Time dt)
@@ -65,6 +65,7 @@ namespace sim
 		m_gravitationPerturbed->setMu(planetComp.mu);
 		m_gravitationPerturbed->setJ2(planetComp.J2);
 		m_gravitationPerturbed->setR(planetComp.R);
+
 		m_gravitationJacobian->setMu(planetComp.mu);
 		// END TEST
 
@@ -93,7 +94,7 @@ namespace sim
 				orbit.setFromState({simData.getRadius(), simData.getVelocity()}, planetComp.mu);
 				m_gravitationPerturbed->setAP(orbit.getOrbit().ap);
 				m_gravitationPerturbed->setI(orbit.getOrbit().i);
-				m_gravitationPerturbed->setRA(orbit.getOrbit().ra);
+				m_gravitationPerturbed->setTA(orbit.getOrbit().ta);
 				m_gravitationPerturbed->setr(glm::length(simData.getRadius()));
 				// END TEST
 
@@ -107,7 +108,7 @@ namespace sim
 			orbit.setFromState({simData.getRadius(), simData.getVelocity()}, planetComp.mu);
 			m_gravitationPerturbed->setAP(orbit.getOrbit().ap);
 			m_gravitationPerturbed->setI(orbit.getOrbit().i);
-			m_gravitationPerturbed->setRA(orbit.getOrbit().ra);
+			m_gravitationPerturbed->setTA(orbit.getOrbit().ta);
 			m_gravitationPerturbed->setr(glm::length(simData.getRadius()));
 			// END TEST
 
