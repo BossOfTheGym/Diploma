@@ -322,9 +322,9 @@ namespace funcs
 			m_needUpdate = true;
 		}
 
-		void setRA(Float ra)
+		void setTA(Float ta)
 		{
-			m_ra = ra;
+			m_ta = ta;
 			m_needUpdate = true;
 		}
 
@@ -354,12 +354,12 @@ namespace funcs
 
 			auto sini  = std::sin(m_i);
 			auto sin2i = std::sin(2 * m_i);
-			auto sinRaAp  = std::sin(m_ra + m_ap);
-			auto sin2RaAp = std::sin(2 * (m_ra + m_ap));
+			auto sinTaAp  = std::sin(m_ta + m_ap);
+			auto sin2TaAp = std::sin(2 * (m_ta + m_ap));
 
-			m_pr = coef * (static_cast<Float>(1.0) -3 * sini * sini * sinRaAp * sinRaAp);
-			m_pt = coef * sini * sini * sin2RaAp;
-			m_ph = coef * sin2i * sinRaAp;
+			m_pr = coef * (static_cast<Float>(1.0) -3 * sini * sini * sinTaAp * sinTaAp);
+			m_pt = coef * sini * sini * sin2TaAp;
+			m_ph = coef * sin2i * sinTaAp;
 
 			m_needUpdate = false;
 		}
@@ -374,7 +374,7 @@ namespace funcs
 		Float m_r{};
 
 		Float m_i{};  // inclination
-		Float m_ra{}; // right ascention
+		Float m_ta{}; // true anomaly
 		Float m_ap{}; // argument of perigee
 
 		mutable Float m_pr{}; // radial

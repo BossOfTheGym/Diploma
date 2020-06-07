@@ -73,21 +73,21 @@ namespace sim
 
 		Time t{};
 		Time dt{};
-		Time tod{2'400'000'000'000};
+		Time tod{8'000'000'000'000};
 		Time to{};
 		int count{30};
 		while(!contextSystem->shouldClose())
 		{
 			// TEST
-			if (count > 81)
+			if (count > 101)
 			{
 				break;
 			}
 			if (to.count() <= 0)
 			{
 				to = tod;
-				simulatorState->resetTestState(Time(),Time(1'800'000'000'000), count);
-				count++;
+				simulatorState->resetTestState(Time(),Time(3'600'000'000'000), count);
+				count+=10;
 			}
 			// END TEST
 

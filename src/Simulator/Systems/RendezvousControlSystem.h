@@ -43,13 +43,6 @@ namespace sim
 
 		bool rendezvousStarted(Entity e);
 
-		
-		// TEST
-		void testWaitActions(Entity chaser);
-
-		bool startLambertTransfer(Entity chaser, const Vec3& dest, ecs::Time transfer);
-		//END TEST
-
 
 		template<class Action, class ... Args>
 		void registerAction(Args&& ... args)
@@ -91,6 +84,7 @@ namespace sim
 
 		// list entity should have Rendezvous component(it serves as holder of head and tail of a list)
 		// TODO : maybe there's some better way to work with list
+		// TODO : implement data structures using EC-registry
 		void clear(Entity chaser);
 
 		void pushBack(Entity chaser, Entity action);

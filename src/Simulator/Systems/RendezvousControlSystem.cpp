@@ -23,9 +23,9 @@ namespace sim
 	RendezvousControlSystem::RendezvousControlSystem(ecs::sys::SystemManager* manager)
 		: base_t(manager)
 	{
-		//registerAction<ImpulsAction>();
-		//registerAction<WaitAction>();
-		//registerAction<LambertImpulsAction>();
+		registerAction<ImpulsAction>();
+		registerAction<WaitAction>();
+		registerAction<LambertImpulsAction>();
 		registerAction<CWImpulsAction>();
 	}
 
@@ -66,7 +66,7 @@ namespace sim
 
 		// TODO : far chase(interorbital transfer)
 
-		// TODO : add lambert problem usage if it works correctly
+		// TODO : refactor, this looks like shit
 
 		// close phase		
 		auto* sysManager = getSystemManager();
@@ -119,44 +119,98 @@ namespace sim
 		Vec3 dr = rChaser - rTarget;
 
 		//relative
-		Vec3 dr0 = q * dr;		
-		
-		// actions queue		
-		const Time FIRST_TO = Time(10'000'000); // first timeout, workaround to avoid zero time delta while update
-		const Time FIRST_TR = Time(20'000'000); // first transfer interval
+		Vec3 dr0  = q * dr;
+		Float r0  = glm::length(dr0);
+		Vec3 dr0u = dr0 / r0;
 
-		Time dtPart = (dt + Time(m_split)) / m_split;		
-		Time timeTransfer = dtPart * m_split; // total time required for transfer without first timeout
-		
-		// time sync
-		Time timeEvent = t + FIRST_TO;
+		// consts	
+		const Time FIRST_TO    = Time(1'000'000'000); // first timeout, workaround to avoid zero & negative time delta while update
+		const Time FIRST_TR    = Time(2'000'000'000); // first transfer interval
 
-		// TODO : Fix time duration
+		const Time ONE_KM_TIME = Time(3'600'000'000'000); // time interval...(TODO : reasonable comment)
 
-		// first
-		pushBack<comp::CWImpuls>(chaser, dr0, FIRST_TO, FIRST_TR, comp::CWImpuls::First);
-		timeSys->addTimeEvent(timeEvent);
-		timeEvent += FIRST_TR;
+		const int ONE_KM_SPLIT_COUNT = 100; // split of final 1km path
 
-		Time prevTO = FIRST_TR;
-		for (int i = 1; i <= m_split; i++)
+		// rendezvous parameters
+		Vec3 drT            = dr0; // dr travel, distance that spacecraft will travel while rendezvous
+		int trajSplit       = m_split; // trajectory split
+		Time transferTime   = dt; // transfer time for main path segment
+
+		bool distLessThanKm = (r0 <= 1.0_FL);
+		if (distLessThanKm)
 		{
-			// dr * t
-			Vec3 pos = dr0 * (1.0_FL * (timeTransfer - i * dtPart) / timeTransfer);
+			trajSplit = ONE_KM_SPLIT_COUNT;
 
-			// intermediate
-			pushBack<comp::CWImpuls>(chaser, pos, prevTO, dtPart, comp::CWImpuls::First);
-			timeSys->addTimeEvent(timeEvent);
-			timeEvent += dtPart;
-
-			prevTO = dtPart;
+			transferTime = ONE_KM_TIME;
 		}
-		// last
-		pushBack<comp::CWImpuls>(chaser, Vec3{0.0}, dtPart, Time(0), comp::CWImpuls::Last);
-		timeSys->addTimeEvent(timeEvent);
-		 
-		// init duration
-		rendComp.duration = FIRST_TO + FIRST_TR + m_split * dtPart;
+		else
+		{
+			drT = dr0u * (r0 - 1.0_FL);
+		}
+
+		// time sync
+		Time lastTransfer = FIRST_TR;
+
+		// first impuls
+		pushBack<comp::CWImpuls>(chaser, dr0, FIRST_TO, FIRST_TR, comp::CWImpuls::First);
+		timeSys->addTimeEvent(t + FIRST_TO);
+
+		for (int i = 1; i <= trajSplit; i++)
+		{
+			Float parammi = static_cast<Float>(i - 1) / trajSplit;
+			Float parami  = static_cast<Float>(  i  ) / trajSplit;
+			Float dParam = parami - parammi;
+
+			Time dtTransfer = ecs::toTime<ecs::Tick>(dParam * transferTime);
+
+			Vec3 pos = dr0 - parami * drT;
+
+			// in between
+			pushBack<comp::CWImpuls>(chaser, pos, lastTransfer, dtTransfer, comp::CWImpuls::First);
+			timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + ecs::toTime<ecs::Tick>(transferTime * parammi));
+
+			// store current transferTime to last transferTime
+			lastTransfer = dtTransfer;
+		}
+
+		// if distance was more than 1km - we should pass this 1 km
+		if (!distLessThanKm)
+		{
+			for (int i = 1; i <= ONE_KM_SPLIT_COUNT; i++)
+			{
+				Float parammi = static_cast<Float>(i - 1) / ONE_KM_SPLIT_COUNT;
+				Float parami  = static_cast<Float>(  i  ) / ONE_KM_SPLIT_COUNT;
+				Float dParam = parami - parammi;
+
+				Time dtTransfer = ecs::toTime<ecs::Tick>(dParam * ONE_KM_TIME);
+
+				Vec3 pos = dr0u * (1.0_FL - parami);
+
+				// in between
+				pushBack<comp::CWImpuls>(chaser, pos, lastTransfer, dtTransfer, comp::CWImpuls::First);
+				timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + transferTime + ecs::toTime<ecs::Tick>(ONE_KM_TIME * parammi));
+
+				// store current transferTime to last transferTime
+				lastTransfer = dtTransfer;
+			}
+		}
+
+		//last impuls
+		pushBack<comp::CWImpuls>(chaser, Vec3{}, lastTransfer, Time{}, comp::CWImpuls::Last);
+		if (distLessThanKm)
+		{
+			timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + transferTime);
+
+			// duration
+			rendComp.duration = FIRST_TO + FIRST_TR + transferTime;
+		}
+		else
+		{	
+			timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + transferTime + ONE_KM_TIME);
+
+			// duration
+			rendComp.duration = FIRST_TO + FIRST_TR + transferTime + ONE_KM_TIME;
+		}
 
 		return true;
 	}
@@ -170,42 +224,6 @@ namespace sim
 	{
 		return !empty(e);
 	}
-
-
-	void RendezvousControlSystem::testWaitActions(Entity chaser)
-	{
-		
-	}
-
-	// TEST
-	bool RendezvousControlSystem::startLambertTransfer(Entity chaser, const Vec3& dest, ecs::Time transfer)
-	{
-		//auto* sysManager = getSystemManager();
-		//auto* ecsEngine  = sysManager->getECSEngine();
-		//auto& registry   = ecsEngine->getRegistry();
-		//
-		//if (!registry.valid(chaser) || !registry.has<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser))
-		//{
-		//	// DEBUG
-		//	std::cout << "RendezvousControl: bad chaser" << std::endl;
-		//	return false;
-		//}
-		//auto [rendComp, orbit, simData] = registry.get<comp::Rendezvous, comp::Orbit, comp::SimData>(chaser);
-		//
-		//clear(chaser);
-		//
-		//// TODO : 
-		////rendComp.propellantMass = 1000.0;
-		//rendComp.propellantUsed = 0.0;
-		//
-		//pushBack<comp::LambertImpuls>(chaser, dest, Time(1'000), transfer);
-		//pushBack<comp::Wait>(chaser, transfer);
-		//
-		//rendComp.duration = Time(1'000) + transfer;
-
-		return false;
-	}
-	// END TEST
 
 
 	void RendezvousControlSystem::clear(Entity list)
