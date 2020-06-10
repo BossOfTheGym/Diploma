@@ -27,8 +27,8 @@ namespace sim
 
 	PlanetSystem::PlanetSystem(ecs::sys::SystemManager* manager, ecs::Time dt, ecs::Tick maxUpdates)
 		: base_t(manager)
-		, m_dt{dt}
-		, m_maxUpdates{maxUpdates}
+		, m_dt{ecs::Time(1'000'000)}
+		, m_maxUpdates{5000}
 	{
 		m_maxUpdates = (m_maxUpdates != 0 ? m_maxUpdates : 1);
 

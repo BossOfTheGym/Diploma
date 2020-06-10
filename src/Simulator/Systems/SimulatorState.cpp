@@ -74,7 +74,7 @@ namespace
 		auto player = registry.create();
 		registry.assign<comp::Player>         (player, player);
 		registry.assign<comp::Transform>      (player, Vec3f32{1.5 * test::PLANET_R});
-		registry.assign<comp::Camera3rdPerson>(player, Vec3f32{}, math::PI_3, 0.0, 0.0, 2.0, 2.0, 500.0);
+		registry.assign<comp::Camera3rdPerson>(player, Vec3f32{}, math::PI_3, 0.0, 0.0, 2.0, 0.05, 500.0);
 		return player;
 	}
 
@@ -93,15 +93,16 @@ namespace
 
 	bool writeLogData(
 		  std::string fileName
-		, std::vector<Vec3> chaserRad
-		, std::vector<Vec3> chaserVel
-		, std::vector<Vec3> targetRad
-		, std::vector<Vec3> targetVel
-		, std::vector<Vec3> dvImpuls
-		, std::vector<Vec3> chaserRadImp
-		, std::vector<Vec3> chaserVelImp
-		, std::vector<Vec3> targetRadImp
-		, std::vector<Vec3> targetVelImp
+		, std::vector<Vec3>      chaserRad
+		, std::vector<Vec3>      chaserVel
+		, std::vector<Vec3>      targetRad
+		, std::vector<Vec3>      targetVel
+		, std::vector<Vec3>      dvImpulses
+		, std::vector<ecs::Time> dvImpulsesTime
+		, std::vector<Vec3>      chaserRadImp
+		, std::vector<Vec3>      chaserVelImp
+		, std::vector<Vec3>      targetRadImp
+		, std::vector<Vec3>      targetVelImp
 		, Float mass)
 	{
 		std::ofstream output(fileName);
@@ -133,16 +134,18 @@ namespace
 		}
 		
 		output << "[[impulses]]" << std::endl;
-		n = dvImpuls.size();
+		n = dvImpulses.size();
 		for(int i = 0; i < n; i++)
 		{
-			auto& dv = dvImpuls[i];
+			auto& dv = dvImpulses[i];
+			auto& t  = dvImpulsesTime[i];
 			auto& crad = chaserRadImp[i];
 			auto& cvel = chaserVelImp[i];
 			auto& trad = targetRadImp[i];
 			auto& tvel = targetVelImp[i];
 
-			output << dv.x << " " << dv.y << " " << dv.z << " "
+			output << ecs::toSeconds<Float>(t).count() << " "
+				<< dv.x   << " " << dv.y   << " " << dv.z   << " "
 				<< crad.x << " " << crad.y << " " << crad.z << " "
 				<< cvel.x << " " << cvel.y << " " << cvel.z << " "
 				<< trad.x << " " << trad.y << " " << trad.z << " "
@@ -222,6 +225,7 @@ namespace sim
 				, std::move(m_targetRadLog)
 				, std::move(m_targetVelLog)
 				, std::move(m_dvImpulses)
+				, std::move(m_dvImpulsesTime)
 				, std::move(m_chaserRadImpLog)
 				, std::move(m_chaserVelImpLog)
 				, std::move(m_targetRadImpLog)
@@ -387,7 +391,7 @@ namespace sim
 		timeSystem->resetTime();
 	}
 
-	void SimulatorState::logDvImpuls(const Vec3& dv)
+	void SimulatorState::logDvImpuls(const Vec3& dv, ecs::Time t)
 	{
 		auto* sysManager = getSystemManager();
 		auto* ecsEngine = sysManager->getECSEngine();
@@ -400,6 +404,7 @@ namespace sim
 			auto& targetSimData = registry.get<comp::SimData>(m_target);
 
 			m_dvImpulses.push_back(dv);
+			m_dvImpulsesTime.push_back(t);
 			m_chaserRadImpLog.push_back(chaserSimData.getRadius());
 			m_chaserVelImpLog.push_back(chaserSimData.getVelocity());
 			m_targetRadImpLog.push_back(targetSimData.getRadius());

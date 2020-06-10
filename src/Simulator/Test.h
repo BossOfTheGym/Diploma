@@ -38,7 +38,7 @@ namespace test
 	const Vec3 TAR_ROT_AXIS = glm::normalize(Vec3{1.0, 1.0, 1.0});
 	const Float TAR_ROT_ANGLE = 1.0;
 
-	const Vec3f32 TAR_SCALE     = Vec3{0.5};
+	const Vec3f32 TAR_SCALE     = Vec3{0.01};
 	const Quatf32 TAR_ROTATION  = glm::angleAxis(0.0, TAR_ROT_AXIS);
 	const Vec3f32 TAR_TRANSLATE = TAR_RAD;
 
@@ -55,7 +55,7 @@ namespace test
 	const Vec3 CHA_ROT_AXIS = glm::normalize(Vec3{1.0, 1.0, 1.0});
 	const Float CHA_ROT_ANGLE = 2.0;
 
-	const Vec3f32 CHA_SCALE     = Vec3{0.5};
+	const Vec3f32 CHA_SCALE     = Vec3{0.01};
 	const Quatf32 CHA_ROTATION  = glm::angleAxis(0.0, CHA_ROT_AXIS);
 	const Vec3f32 CHA_TRANSLATE = CHA_RAD;
 }

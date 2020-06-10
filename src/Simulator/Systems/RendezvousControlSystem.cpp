@@ -124,12 +124,15 @@ namespace sim
 		Vec3 dr0u = dr0 / r0;
 
 		// consts	
-		const Time FIRST_TO    = Time(1'000'000'000); // first timeout, workaround to avoid zero & negative time delta while update
-		const Time FIRST_TR    = Time(2'000'000'000); // first transfer interval
+		const Time FIRST_TO = Time(1'000'000'000); // first timeout, workaround to avoid zero & negative time delta while update
+		const Time FIRST_TR = Time(2'000'000'000); // first transfer interval
+
+		const Time LAST_APPROACH_TIME = Time(10'000'000'000); // last approach time the very final impuls
 
 		const Time ONE_KM_TIME = Time(3'600'000'000'000); // time interval...(TODO : reasonable comment)
 
-		const int ONE_KM_SPLIT_COUNT = 100; // split of final 1km path
+		const int ONE_KM_SPLIT_COUNT = 1000; // split of final 1km path
+
 
 		// rendezvous parameters
 		Vec3 drT            = dr0; // dr travel, distance that spacecraft will travel while rendezvous
@@ -196,20 +199,28 @@ namespace sim
 		}
 
 		//last impuls
-		pushBack<comp::CWImpuls>(chaser, Vec3{}, lastTransfer, Time{}, comp::CWImpuls::Last);
+		pushBack<comp::CWImpuls>(chaser, Vec3{}, lastTransfer, LAST_APPROACH_TIME, comp::CWImpuls::First);
 		if (distLessThanKm)
 		{
 			timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + transferTime);
 
+			// the final one
+			pushBack<comp::CWImpuls>(chaser, Vec3{}, LAST_APPROACH_TIME, Time{}, comp::CWImpuls::Last);
+			timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + transferTime + LAST_APPROACH_TIME);
+
 			// duration
-			rendComp.duration = FIRST_TO + FIRST_TR + transferTime;
+			rendComp.duration = FIRST_TO + FIRST_TR + transferTime + LAST_APPROACH_TIME;
 		}
 		else
 		{	
 			timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + transferTime + ONE_KM_TIME);
 
+			// the final one
+			pushBack<comp::CWImpuls>(chaser, Vec3{}, LAST_APPROACH_TIME, Time{}, comp::CWImpuls::Last);
+			timeSys->addTimeEvent(t + FIRST_TO + FIRST_TR + transferTime + ONE_KM_TIME + LAST_APPROACH_TIME);
+
 			// duration
-			rendComp.duration = FIRST_TO + FIRST_TR + transferTime + ONE_KM_TIME;
+			rendComp.duration = FIRST_TO + FIRST_TR + transferTime + ONE_KM_TIME + LAST_APPROACH_TIME;
 		}
 
 		return true;

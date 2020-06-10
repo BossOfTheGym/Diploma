@@ -185,7 +185,7 @@ namespace sim
 		std::cout << "    tpos x: " << trad.x << " y: " << trad.y << " z: " << trad.z << std::endl;
 		std::cout << "    tvel x: " << tvel.x << " y: " << tvel.y << " z: " << tvel.z << std::endl;
 		// end DEBUG
-		simulatorState->logDvImpuls(dv);
+		simulatorState->logDvImpuls(dv, t);
 
 		auto g0  = planetComp.g0;
 		auto Isp = rendComp.Isp; 

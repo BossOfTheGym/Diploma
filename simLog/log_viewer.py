@@ -10,7 +10,7 @@ def parse_log_file(file_name):
 	# returns chaser, target, impulses
 	# chaser   : list of tuple(vec3, vec3) -> (r, v)
 	# target   : list of tuple(vec3, vec3) -> (r, v)
-	# impulses : list of tuple(vec3, vec3, vec3, vec3, vec3)
+	# impulses : list of tuple(float, vec3, vec3, vec3, vec3, vec3) -> (time, imp_vel, cha_r, cha_v, tar_r, tar_v)
 	# mass     : float 
 	#	-> (impuls_vel, chaser_r, chaser_v, target_r, target_v)
 	
@@ -74,25 +74,27 @@ def parse_log_file(file_name):
 					t_r = np.zeros((3,), np.float64)
 					t_v = np.zeros((3,), np.float64)
 
-					i_v[0] = np.float64(tokens[0])
-					i_v[1] = np.float64(tokens[1])
-					i_v[2] = np.float64(tokens[2])
+					i_t = float(tokens[0])
 
-					c_r[0] = np.float64(tokens[3])
-					c_r[1] = np.float64(tokens[4])
-					c_r[2] = np.float64(tokens[5])
-					c_v[0] = np.float64(tokens[6])
-					c_v[1] = np.float64(tokens[7])
-					c_v[2] = np.float64(tokens[8])
+					i_v[0] = np.float64(tokens[1])
+					i_v[1] = np.float64(tokens[2])
+					i_v[2] = np.float64(tokens[3])
 
-					t_r[0] = np.float64(tokens[9])
-					t_r[1] = np.float64(tokens[10])
-					t_r[2] = np.float64(tokens[11])
-					t_v[0] = np.float64(tokens[12])
-					t_v[1] = np.float64(tokens[13])
-					t_v[2] = np.float64(tokens[14])
+					c_r[0] = np.float64(tokens[4])
+					c_r[1] = np.float64(tokens[5])
+					c_r[2] = np.float64(tokens[6])
+					c_v[0] = np.float64(tokens[7])
+					c_v[1] = np.float64(tokens[8])
+					c_v[2] = np.float64(tokens[9])
 
-					impulses.append((i_v, c_r, c_v, t_r, t_v))
+					t_r[0] = np.float64(tokens[10])
+					t_r[1] = np.float64(tokens[11])
+					t_r[2] = np.float64(tokens[12])
+					t_v[0] = np.float64(tokens[13])
+					t_v[1] = np.float64(tokens[14])
+					t_v[2] = np.float64(tokens[15])
+
+					impulses.append((i_t, i_v, c_r, c_v, t_r, t_v))
 					line = log_file.readline().strip()				
 
 			if line == '[[mass]]':
@@ -150,8 +152,8 @@ def plot_log(chaser, target, impulses):
 		c_v = chaser[i][1]
 
 		q = natural_axes_mat(t_r, t_v)
-
 		r_rel = q @ (c_r - t_r)
+
 		c_x.append(r_rel[0])
 		c_y.append(r_rel[1])
 		c_z.append(r_rel[2])
@@ -159,31 +161,70 @@ def plot_log(chaser, target, impulses):
 	i_x = []
 	i_y = []
 	i_z = []
+
+	i_ts = []
+	i_dv = []
 	for i in range(len(impulses)):
-		i_v = impulses[i][0]
-		c_r = impulses[i][1]
-		c_v = impulses[i][2]
-		t_r = impulses[i][3]
-		t_v = impulses[i][4]
+		i_t = impulses[i][0]
+		i_v = impulses[i][1]
+		c_r = impulses[i][2]
+		c_v = impulses[i][3]
+		t_r = impulses[i][4]
+		t_v = impulses[i][5]
 
 		q = natural_axes_mat(t_r, t_v)
 		r_rel = q @ (c_r - t_r)
+
 		i_x.append(r_rel[0])
 		i_y.append(r_rel[1])
 		i_z.append(r_rel[2])
 
+		i_ts.append(i_t)
+		i_dv.append(length(i_v))
+
 	fig = pyplot.figure()
-	# ax = fig.add_subplot(1, 1, 1, projection='3d')
-	ax = fig.add_subplot(1, 1, 1)
-	ax.plot(c_x, c_z);
-	# ax.scatter3D(i_x, i_y, i_z, s = 5, c = 'r')
+
+	# trajectory
+	ax = fig.add_subplot(1, 2, 1)
 	ax.scatter(i_x, i_z, s = 25, c = 'r')
+	ax.plot(c_x, c_z);
 	ax.set_xlabel('x')
 	ax.set_ylabel('y')
-	# ax.set_xlabel('x')
-	# ax.set_ylabel('y')
-	# ax.set_zlabel('z')
 	ax.legend(['chaser trajectory'])
+
+	# impulses mag
+	ax = fig.add_subplot(1, 2, 2)
+	ax.scatter(i_ts, i_dv, s = 10, c = 'r')
+	ax.plot(i_ts, i_dv);
+	ax.set_xlabel('t')
+	ax.set_ylabel('dv')
+	ax.legend(['impulses mags'])
+
+	pyplot.show()
+
+def plot_velocities(chaser, target, t):
+	n = len(chaser)
+	ts = []
+	vs = []
+	for i in range(len(chaser)):
+		t_r = target[i][0]
+		t_v = target[i][1]
+		c_r = chaser[i][0]
+		c_v = chaser[i][1]
+
+		ts.append(t / (n - 1) * i)
+		vs.append(length(t_v - c_v))
+	
+	fig = pyplot.figure()
+
+	# velocities
+	ax = fig.add_subplot(1, 1, 1)
+	ax.plot(ts, vs);
+	ax.scatter(ts, vs, s = 25, c = 'r')
+	ax.set_xlabel('t')
+	ax.set_ylabel('v')
+	ax.legend(['relative velocity'])
+
 	pyplot.show()
 
 def plot_log_3D():
@@ -256,15 +297,16 @@ def traverse_dir(dir_name):
 	log_data.sort(key = lambda x: len(x[2]))
 
 	print('plotting...')
-	to_plot = [3, 6, 10, 18, 34, 40, 50]
+	to_plot = [6, 11, 26, 51]
 	for chaser, target, impulses, mass in log_data:
-		if len(impulses) in to_plot:
+		if len(impulses) - 2 - 100 in to_plot:
 			plot_log(chaser, target, impulses)
+			plot_velocities(chaser, target, 7300)
 
 	n = []
 	m = []
 	for chaser, target, impulses, mass in log_data:
-		n.append(len(impulses) - 1)
+		n.append(len(impulses) - 2 - 100)
 		m.append(mass)
 	plot_mass_consumption(n, m)
 

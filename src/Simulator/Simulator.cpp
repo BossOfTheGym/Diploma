@@ -68,29 +68,10 @@ namespace sim
 		contextSystem->showWindow();
 		contextSystem->setSwapInterval(1);
 
-		timeSystem->setWarp(100);
-		simulatorState->resume();
-
 		Time t{};
 		Time dt{};
-		Time tod{8'000'000'000'000};
-		Time to{};
-		int count{30};
 		while(!contextSystem->shouldClose())
 		{
-			// TEST
-			if (count > 101)
-			{
-				break;
-			}
-			if (to.count() <= 0)
-			{
-				to = tod;
-				simulatorState->resetTestState(Time(),Time(3'600'000'000'000), count);
-				count+=10;
-			}
-			// END TEST
-
 			contextSystem->pollEvents();
 			timeSystem->tick();
 
@@ -98,10 +79,6 @@ namespace sim
 			{
 				t   = timeSystem->getTime();
 				dt += timeSystem->getDeltaTime();
-
-				// TEST
-				to -= dt;
-				// END TEST
 
 				Time tf = t + dt; // t-ime f-inal
 				while(timeSystem->hasTimeEvents() && timeSystem->peekTimeEvent() < tf)
@@ -191,8 +168,8 @@ namespace sim
 			}
 		};
 		Float fovy = glm::radians(60.0);
-		Float near = 1.0;
-		Float far  = 3000.0;
+		Float near = 0.01;
+		Float far  = 2000.0;
 		systemManager.add<ContextSystem>(info, true, fovy, near, far);
 
 		// CORE : graphics

@@ -63,7 +63,7 @@ namespace sim
 
 		void resetTestState();
 
-		void logDvImpuls(const Vec3& dv);
+		void logDvImpuls(const Vec3& dv, ecs::Time t);
 		// END TEST
 
 
@@ -84,6 +84,7 @@ namespace sim
 		bool m_bindCamToNaturalAxes{false};
 		bool m_lastTimeBind{false};
 		
+		// TODO : move to log system
 		std::string m_baseName;
 		std::vector<Vec3> m_chaserRadLog;
 		std::vector<Vec3> m_chaserVelLog;
@@ -91,6 +92,7 @@ namespace sim
 		std::vector<Vec3> m_targetVelLog;
 		
 		std::vector<Vec3> m_dvImpulses;
+		std::vector<ecs::Time> m_dvImpulsesTime;
 		std::vector<Vec3> m_chaserRadImpLog;
 		std::vector<Vec3> m_chaserVelImpLog;
 		std::vector<Vec3> m_targetRadImpLog;
